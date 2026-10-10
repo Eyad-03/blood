@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   My Profile | BloodLink
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="/css/profile.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <header class="topbar">
+   <a class="brand" href="donorSearch.html">
+    <span class="logo">
+     &hearts;
+    </span>
+    <span>
+     Blood
+     <span>
+      Link
+     </span>
+     <small>
+      Every Second Can Save a Life
+     </small>
+    </span>
+   </a>
+   <nav>
+    <a href="donorSearch.html">
+     Find donors
+    </a>
+    <a href="#requests">
+     My requests
+    </a>
+    <span class="user-chip">
+     E&nbsp; Guest⌄
+    </span>
+   </nav>
+  </header>
+  <main class="shell">
+   <div class="breadcrumb">
+    <a href="donorSearch.html">
+     Home
+    </a>
+    / My profile
+   </div>
+   <section class="welcome">
+    <div>
+     <span class="eyebrow">
+      ● BLOODLINK MEMBER AREA
+     </span>
+     <h1>
+      Your profile,
+      <br/>
+      <em>
+       your peace of mind.
+      </em>
+     </h1>
+     <p>
+      Manage your personal details and keep your blood requests up to date.
+     </p>
+    </div>
+    <div class="hero-drop">
+     &hearts;
+    </div>
+   </section>
+   <div class="layout">
+    <aside class="card sidebar">
+     <div class="cover">
+      <small>
+       SEEKER ACCOUNT
+      </small>
+     </div>
+     <div class="summary">
+      <div class="avatar" id="avatar">
+       EM
+      </div>
+      <h2 id="summaryName">
+       Eyad Mansour
+      </h2>
+      <p class="role">
+       &telrec; Blood seeker
+      </p>
+      <p class="location">
+       &target;
+       <span id="summaryLocation">
+        Irbid, Jordan
+       </span>
+      </p>
+      <div class="completion">
+       <div>
+        <span>
+         Profile completion
+        </span>
+        <b id="completionText">
+         75%
+        </b>
+       </div>
+       <div class="track">
+        <span id="completionBar">
+        </span>
+       </div>
+       <small>
+        Complete your details to make requests easier.
+       </small>
+      </div>
+      <button class="outline full" id="editProfile">
+       ✎ Edit profile
+      </button>
+     </div>
+     <div class="side-links">
+      <a class="active" href="#personal">
+       ◉ &nbsp; Personal information
+      </a>
+      <a href="#requests">
+       ♡ &nbsp; My blood requests
+       <b id="requestBadge">
+        2
+       </b>
+      </a>
+
+     </div>
+     <div class="privacy">
+      <b>
+       ♧ Your privacy matters
+      </b>
+      <p>
+       Your contact details should only be shared with authorized people when necessary.
+      </p>
+     </div>
+    </aside>
+    <div class="content">
+     <section class="card panel" id="personal">
+      <div class="heading">
+       <div>
+        <label>
+         ACCOUNT DETAILS
+        </label>
+        <h2>
+         Personal information
+        </h2>
+        <p>
+         Keep your contact details accurate.
+        </p>
+       </div>
+       <button class="text-button" id="editDetails">
+        Edit details &nearrow;
+       </button>
+      </div>
+      <div class="info-grid">
+       <div class="info">
+        <i>
+         ♙
+        </i>
+        <div>
+         <small>
+          Full name
+         </small>
+         <strong id="nameValue">
+          Eyad Mansour
+         </strong>
+        </div>
+       </div>
+       <div class="info">
+        <i>
+         ✉
+        </i>
+        <div>
+         <small>
+          Email address
+         </small>
+         <strong id="emailValue">
+          eyad@example.com
+         </strong>
+        </div>
+       </div>
+       <div class="info">
+        <i>
+         &phone;
+        </i>
+        <div>
+         <small>
+          Phone number
+         </small>
+         <strong id="phoneValue">
+          Add your phone number
+         </strong>
+        </div>
+       </div>
+       <div class="info">
+        <i>
+         &target;
+        </i>
+        <div>
+         <small>
+          City / area
+         </small>
+         <strong id="locationValue">
+          Irbid, Jordan
+         </strong>
+        </div>
+       </div>
+      </div>
+      <div class="note">
+       &checkmark; &nbsp; Only share information you are comfortable providing.
+
+      </div>
+     </section>
+     <section class="card panel" id="requests">
+      <div class="heading">
+       <div>
+        <label>
+         YOUR ACTIVITY
+        </label>
+        <h2>
+         My blood requests
+         <b class="count" id="requestCount">
+          2
+         </b>
+        </h2>
+        <p>
+         Track the requests you have created.
+        </p>
+       </div>
+       <button class="primary" id="newRequest">
+        ＋ New request
+       </button>
+      </div>
+      <div class="alert">
+       <b>
+        !
+       </b>
+       <div>
+        <strong>
+         Need blood urgently?
+        </strong>
+        <p>
+         Contact a hospital or emergency service directly. This demo page does not send real medical alerts.
+        </p>
+       </div>
+      </div>
+      <div class="request-list" id="requestList">
+      </div>
+     </section>
+    </div>
+   </div>
+   <footer>
+    <span>
+     &copy; 2026 BloodLink
+    </span>
+    <span>
+     Made with
+     <b>
+      &hearts;
+     </b>
+     for a more connected community
+    </span>
+    <a href="donorSearch.html">
+     Find a donor &rarr;
+    </a>
+   </footer>
+  </main>
+  <div class="backdrop" hidden="" id="profileBackdrop">
+   <form class="modal" id="profileForm">
+    <div class="modal-head">
+     <div>
+      <label>
+       YOUR ACCOUNT
+      </label>
+      <h2>
+       Edit profile
+      </h2>
+     </div>
+     <button class="close" data-close="profileBackdrop" type="button">
+      &times;
+     </button>
+    </div>
+    <div class="form-grid">
+     <label>
+      Full name
+      <input id="editName" maxlength="80" required=""/>
+     </label>
+     <label>
+      Email address
+      <input id="editEmail" required="" type="email"/>
+     </label>
+     <label>
+      Phone number
+      <input id="editPhone" placeholder="+962 7X XXX XXXX" type="tel"/>
+     </label>
+     <label>
+      City / area
+      <input id="editLocation" required=""/>
+     </label>
+    </div>
+    <p class="modal-note">
+     Details are saved to this browser only in the demo.
+    </p>
+    <div class="modal-actions">
+     <button class="secondary" data-close="profileBackdrop" type="button">
+      Cancel
+     </button>
+     <button class="primary">
+      Save changes
+     </button>
+    </div>
+   </form>
+  </div>
+  <div class="backdrop" hidden="" id="requestBackdrop">
+   <form class="modal" id="requestForm">
+    <div class="modal-head">
+     <div>
+      <label>
+       BLOOD REQUEST
+      </label>
+      <h2>
+       Create a request
+      </h2>
+     </div>
+     <button class="close" data-close="requestBackdrop" type="button">
+      &times;
+     </button>
+    </div>
+    <div class="form-grid">
+     <label>
+      Blood type needed
+      <select id="bloodType" required="">
+       <option value="">
+        Select blood type
+       </option>
+       <option>
+        A+
+       </option>
+       <option>
+        A-
+       </option>
+       <option>
+        B+
+       </option>
+       <option>
+        B-
+       </option>
+       <option>
+        AB+
+       </option>
+       <option>
+        AB-
+       </option>
+       <option>
+        O+
+       </option>
+       <option>
+        O-
+       </option>
+      </select>
+     </label>
+     <label>
+      Units needed
+      <select id="units">
+       <option>
+        1
+       </option>
+       <option>
+        2
+       </option>
+       <option>
+        3
+       </option>
+       <option>
+        4
+       </option>
+      </select>
+     </label>
+     <label>
+      Hospital / medical center
+      <input id="hospital" placeholder="Hospital name" required=""/>
+     </label>
+     <label>
+      City / area
+      <input id="requestCity" required=""/>
+     </label>
+     <label class="full">
+      Additional details
+      <textarea id="notes" maxlength="300" placeholder="Optional details" rows="3"></textarea>
+     </label>
+    </div>
+    <p class="modal-note">
+     Demo only: this request is stored in your browser; no donor or hospital is notified.
+    </p>
+    <div class="modal-actions">
+     <button class="secondary" data-close="requestBackdrop" type="button">
+      Cancel
+     </button>
+     <button class="primary">
+      Create request
+     </button>
+    </div>
+   </form>
+  </div>
+  <script src="/js/profile.js">
+  </script>
+ </body>
+</html>

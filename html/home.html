@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c91835">
+  <title>BloodLink | Every Second Can Save a Life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('is-ready')},2500);</script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="home.html" aria-label="BloodLink home">
+      <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+      <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a class="active" href="home.html">Home</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#about">About us</a>
+      <div class="nav-mobile-actions"><a href="login.html" class="login-link">Log in</a><a href="register.html" class="nav-cta">Join BloodLink <span>→</span></a></div>
+    </nav>
+    <div class="nav-actions"><a href="login.html" class="login-link">Log in</a><a href="register.html" class="nav-cta">Get started <span>→</span></a></div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-content" id="heroContent">
+        <div class="trust-pill reveal" style="--d:.05s"><span class="pulse-dot"></span> A community connected by compassion</div>
+        <h1 id="hero-title">
+          <span class="line" style="--i:0"><span>Be someone's</span></span>
+          <span class="line" style="--i:1"><span class="accent">reason to live.</span></span>
+        </h1>
+        <p class="hero-copy reveal" style="--d:.45s">Finding a blood donor shouldn't be a race against time. BloodLink brings people who need blood closer to people ready to give it.</p>
+        <div class="hero-actions reveal" style="--d:.58s">
+          <a href="donorSearch.html" class="button button-primary"><span class="button-icon" aria-hidden="true">⌕</span> Find a blood donor <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="donate.html" class="button button-secondary"><span class="heart" aria-hidden="true">♥</span> Become a donor</a>
+        </div>
+
+        <div class="matcher reveal" style="--d:.72s" role="group" aria-labelledby="matcherLabel">
+          <div class="matcher-head">
+            <p class="matcher-label" id="matcherLabel">Pick a blood type to see who can give to it</p>
+            <button type="button" class="demo-toggle" id="demoToggle" aria-label="Pause the demo cycle">Pause</button>
+          </div>
+          <div class="chips">
+            <button type="button" class="chip" data-type="A+" aria-label="A positive" aria-pressed="false">A+</button>
+            <button type="button" class="chip" data-type="A-" aria-label="A negative" aria-pressed="false">A&minus;</button>
+            <button type="button" class="chip" data-type="B+" aria-label="B positive" aria-pressed="false">B+</button>
+            <button type="button" class="chip" data-type="B-" aria-label="B negative" aria-pressed="false">B&minus;</button>
+            <button type="button" class="chip" data-type="AB+" aria-label="AB positive" aria-pressed="false">AB+</button>
+            <button type="button" class="chip" data-type="AB-" aria-label="AB negative" aria-pressed="false">AB&minus;</button>
+            <button type="button" class="chip" data-type="O+" aria-label="O positive" aria-pressed="false">O+</button>
+            <button type="button" class="chip" data-type="O-" aria-label="O negative" aria-pressed="false">O&minus;</button>
+          </div>
+          <p class="matcher-result" id="matcherResult" aria-live="off"></p>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual" aria-hidden="true">
+        <canvas class="hero-canvas" id="heroCanvas"></canvas>
+        <div class="visual-card card-top"><span class="tiny-icon">♥</span><div><b id="cardCount">Donors nearby</b><small id="cardNote">People ready to help</small></div></div>
+        <div class="visual-card card-bottom"><span class="check-icon">✓</span><div><b>Hope is closer</b><small>One connection at a time</small></div></div>
+      </div>
+
+      <a class="scroll-cue" href="#impact"><span class="scroll-line" aria-hidden="true"></span>Scroll to see why</a>
+    </section>
+
+    <section class="quick-stats" id="impact">
+      <div class="stat-intro"><span class="eyebrow">WHY BLOODLINK?</span><h2>Every connection<br>can change a life.</h2></div>
+      <div class="stat"><span class="stat-icon">⌕</span><strong>8</strong><small>Blood types supported</small></div>
+      <div class="stat"><span class="stat-icon">⌖</span><strong>Nearby</strong><small>Discover donors by area</small></div>
+      <div class="stat"><span class="stat-icon">♥</span><strong>One community</strong><small>People helping people</small></div>
+    </section>
+
+    <section class="how-section section-shell" id="how-it-works">
+      <div class="section-intro"><span class="eyebrow">SIMPLE. HUMAN. MEANINGFUL.</span><h2>Help should be easy<br><em>to find.</em></h2><p>Whether you're looking for a donor or ready to donate, BloodLink helps you take the next step.</p></div>
+      <div class="steps-grid">
+        <article class="step-card"><div class="step-number">01</div><div class="step-icon icon-search">⌕</div><h3>Find a match</h3><p>Search for potential donors by blood type and location.</p><a href="donorSearch.html">Find donors <span>↗</span></a></article>
+        <article class="step-card featured"><div class="step-number">02</div><div class="step-icon icon-drop">♥</div><h3>Connect with care</h3><p>Explore donor availability and coordinate the next step.</p><a href="donorSearch.html">Explore donors <span>↗</span></a></article>
+        <article class="step-card"><div class="step-number">03</div><div class="step-icon icon-heart">♡</div><h3>Give hope</h3><p>Offer to donate and let your community know you're available.</p><a href="donate.html">Become a donor <span>↗</span></a></article>
+      </div>
+    </section>
+
+    <section class="mission-section" id="about">
+      <div class="mission-art"><div class="mission-circle circle-1"></div><div class="mission-circle circle-2"></div><div class="mission-heart">♥</div><span class="mission-spark spark-1">✦</span><span class="mission-spark spark-2">✧</span><div class="mission-note"><span>♥</span><div><b>Every donor matters</b><small>Every moment matters, too.</small></div></div></div>
+      <div class="mission-copy"><span class="eyebrow">OUR MISSION</span><h2>When people connect,<br><em>hope travels further.</em></h2><p>In urgent moments, finding the right blood donor can be difficult. BloodLink is designed to make that search more organized by helping seekers discover potential donors by blood type and area.</p><p>We believe technology can help communities come together—one thoughtful connection at a time.</p><a href="register.html" class="text-cta">Be part of the mission <span>→</span></a></div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-decoration">♥</div><div><span class="eyebrow light">YOUR NEXT STEP CAN MATTER</span><h2>Someone out there<br>needs a helping hand.</h2><p>Join BloodLink and be part of a community built around hope.</p></div><div class="cta-buttons"><a class="button button-white" href="donate.html">I'm ready to donate <span>→</span></a><a class="cta-text-link" href="donorSearch.html">I'm looking for a donor ↗</a></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="brand footer-brand" href="home.html"><span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span><span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span></a>
+    <p>Made with <b>♥</b> for a more connected community.</p>
+    <div class="footer-links"><a href="donorSearch.html">Find donors</a><a href="donate.html">Donate</a><a href="register.html">Join us</a></div>
+    <small class="copyright">© 2026 BloodLink. Demo project.</small>
+  </footer>
+  <script src="home.js"></script>
+  <script src="/js/hero.js"></script>
+</body>
+</html>

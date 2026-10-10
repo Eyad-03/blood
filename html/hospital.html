@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#c91835">
+<title>Hospital Dashboard | BloodLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="/css/hospital.css">
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="hospital.html"><span class="brand-mark">♥</span><span>Blood<span>Link</span><small>HOSPITAL PORTAL</small></span></a>
+  <div class="hospital-switch"><div class="hospital-symbol">✚</div><div><b>Al Hayat Hospital</b><small>Verified medical center</small></div><span class="verified">✓</span></div>
+  <div class="nav-caption">WORKSPACE</div>
+  <nav class="side-nav">
+    <a class="nav-item active" href="#overview" data-section="overview"><span>▦</span> Overview</a>
+    <a class="nav-item" href="#donation-records" data-section="donation-records"><span>✓</span> Donation verification <b class="nav-count" id="navRequests">6</b></a>
+    <a class="nav-item" href="#donors" data-section="donors"><span>♙</span> Donor directory</a>
+    <a class="nav-item" href="donorSearch.html" data-external="true"><span>⌕</span> Donor Search</a>
+  </nav>
+  <div class="nav-caption management-caption">MANAGEMENT</div>
+  <nav class="side-nav">
+    <a class="nav-item" href="#profile" data-section="profile"><span>⚙</span> Hospital profile</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="help-card"><span>✦</span><b>Need assistance?</b><p>Our BloodLink team is here to help your hospital.</p><a href="mailto:support@bloodlink.example">Contact support ↗</a></div><button class="logout" id="logoutButton"><span>↪</span> Sign out</button></div>
+</aside>
+
+<main class="main">
+<header class="topbar"><button class="icon-button menu-button" id="menuButton" aria-label="Toggle menu">☰</button><div class="page-crumb"><span>Hospital portal</span><span>/</span><b id="crumbTitle">Overview</b></div><div class="top-actions"><button class="icon-button notification-button" id="notificationButton" aria-label="Notifications">♧<i></i></button><div class="user-divider"></div><div class="user-info"><b>Hospital Admin</b><small>Administrator</small></div><div class="user-avatar">HA</div></div></header>
+
+<div class="page-content">
+<section class="page-section" id="overview">
+  <div class="welcome-row"><div><div class="eyebrow"><i></i> HOSPITAL CONTROL CENTER</div><h1>Good morning, <span>Al Hayat.</span></h1><p>Here's what's happening with your blood bank today.</p></div><div class="date-chip"><span>▦</span><span id="todayDate">Today</span></div></div>
+  <div class="alert-banner"><div class="alert-symbol">!</div><div><b>Attention required</b><p><strong>3 blood types</strong> are running low on stock. Review your inventory and coordinate replenishment.</p></div><a href="#inventory">Review inventory <span>→</span></a><button class="dismiss-alert" id="dismissAlert" aria-label="Dismiss alert">×</button></div>
+  <div class="metrics-grid">
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">TOTAL BLOOD UNITS</span><span class="metric-icon red">♥</span></div><div class="metric-value" id="totalUnits">248 <small>units</small></div><div class="metric-foot"><span class="trend positive">↗ 8.4%</span><span>vs. last month</span></div><div class="mini-bars"><i style="height:30%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:63%"></i><i style="height:55%"></i><i style="height:78%"></i><i style="height:67%"></i><i style="height:100%"></i></div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">VERIFIED DONATIONS</span><span class="metric-icon amber">⌕</span></div><div class="metric-value" id="activeRequests">6</div><div class="metric-foot"><span class="trend warning">6 verified</span><span>this month</span></div><div class="metric-progress"><span style="width:62%"></span></div><small class="metric-hint">Documented donor-recipient transfers</small></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">REGISTERED DONORS</span><span class="metric-icon green">♙</span></div><div class="metric-value">1,284</div><div class="metric-foot"><span class="trend positive">↗ 12.6%</span><span>vs. last month</span></div><div class="metric-progress green-progress"><span style="width:78%"></span></div><small class="metric-hint">78% marked available recently</small></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">DONATIONS DOCUMENTED</span><span class="metric-icon blue">✓</span></div><div class="metric-value">94 <small>this month</small></div><div class="metric-foot"><span class="trend positive">↗ 6.2%</span><span>vs. last month</span></div><div class="metric-progress blue-progress"><span style="width:84%"></span></div><small class="metric-hint">84% fulfillment rate</small></article>
+  </div>
+  <div class="dashboard-grid">
+    <section class="panel chart-panel"><div class="panel-heading"><div><span class="section-kicker">PERFORMANCE</span><h2>Donation verification overview</h2><p>Verified donation records and completed transfers over time.</p></div><select id="chartRange" class="select-control" aria-label="Chart period"><option value="7">Last 7 days</option><option value="6" selected>Last 6 months</option><option value="12">Last 12 months</option></select></div><div class="chart-wrap"><canvas id="requestsChart"></canvas></div><div class="chart-legend"><span><i class="legend-red"></i> Donation records</span><span><i class="legend-green"></i> Fulfilled</span><span class="chart-total">94 fulfilled this month</span></div></section>
+    <section class="panel distribution-panel"><div class="panel-heading"><div><span class="section-kicker">STOCK BREAKDOWN</span><h2>Inventory by blood type</h2><p>Current available units</p></div><a href="#inventory" class="panel-link">View all ↗</a></div><div class="donut-wrap"><canvas id="inventoryChart"></canvas><div class="donut-center"><strong id="donutTotal">248</strong><small>total units</small></div></div><div class="blood-legend" id="bloodLegend"></div></section>
+  </div>
+  <div class="dashboard-grid lower-grid single-panel-grid">
+    <section class="panel low-stock-panel" id="inventory"><div class="panel-heading"><div><span class="section-kicker">STOCK MONITOR</span><h2>Low stock alerts</h2><p>Blood types that may need replenishment.</p></div><span class="stock-alert-count">3 alerts</span></div><div class="low-stock-list" id="lowStockList"></div><button class="full-button" id="manageInventory">Manage inventory <span>→</span></button></section>
+  </div>
+</section>
+
+<section class="page-section hidden-section" id="donation-records"><div class="record-print-heading" style="display:none"><h1>BloodLink Donation Verification Records</h1><p>Hospital: Al Hayat Hospital</p></div>
+  <div class="subpage-heading"><div><span class="section-kicker">DONATION AUDIT TRAIL</span><h1>Donation verification</h1><p>Document each blood donation transfer between a donor and a recipient.</p></div><button class="primary-button" id="newDonationButton">＋ New verification record</button></div>
+  <div class="metrics-grid record-metrics">
+    <article class="metric-card"><div class="metric-label">TOTAL RECORDS</div><div class="metric-value" id="recordTotal">6</div><div class="metric-foot">All documented transfers</div></article>
+    <article class="metric-card"><div class="metric-label">VERIFIED DONATIONS</div><div class="metric-value" id="recordVerified">4</div><div class="metric-foot"><span class="trend positive">✓ Confirmed</span><span>by hospital</span></div></article>
+    <article class="metric-card"><div class="metric-label">UNITS DOCUMENTED</div><div class="metric-value" id="recordUnits">10 <small>units</small></div><div class="metric-foot">Across all records</div></article>
+    <article class="metric-card"><div class="metric-label">PENDING VERIFICATION</div><div class="metric-value" id="recordPending">2</div><div class="metric-foot"><span class="trend warning">Needs review</span></div></article>
+  </div>
+  <section class="panel create-record-panel" id="createRecordPanel">
+    <div class="panel-heading"><div><span class="section-kicker">NEW DOCUMENTATION</span><h2>Verify a donation transfer</h2><p>Enter donor, recipient and donation details. Only mark verified after the hospital confirms the transfer.</p></div><span class="record-shield">✓</span></div>
+    <form id="donationForm" class="donation-form">
+      <label>Donor full name<input name="donor" required placeholder="e.g. Lina Khalil"></label>
+      <label>Recipient / patient name<input name="recipient" required placeholder="e.g. Patient #2841"></label>
+      <label>Donor blood type<select name="type" required><option value="">Select blood type</option><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></label>
+      <label>Units donated<input name="units" type="number" min="1" max="20" value="1" required></label>
+      <label>Donation date<input name="date" type="date" id="donationDate" required></label>
+      <label class="record-wide">Hospital notes<textarea name="notes" rows="2" placeholder="Optional reference number or confirmation notes"></textarea></label>
+      <div class="record-form-actions record-wide"><p>Demo only: use a real backend and authorized staff verification for official records.</p><button class="primary-button" type="submit">Save verification record <span>→</span></button></div>
+    </form>
+  </section>
+  <section class="panel table-panel records-table-panel"><div class="panel-heading"><div><span class="section-kicker">REGISTER</span><h2>Donation records <span class="small-count" id="recordTableCount">6</span></h2><p>Print a record for hospital documentation or audit.</p></div><input id="recordSearch" class="search-input" placeholder="Search donor, recipient or ID…"></div>
+    <div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DATE</th><th>ACTION</th></tr></thead><tbody id="donationRecordsBody"></tbody></table></div>
+  </section>
+</section>
+
+<section class="page-section hidden-section" id="donors">
+  <div class="subpage-heading donor-heading">
+    <div><span class="section-kicker">COMMUNITY</span><h1>Donor directory</h1><p>Past donors and registered donors in one searchable directory.</p></div>
+    <input id="donorSearch" class="search-input" placeholder="Search name, email, location…">
+  </div>
+  <div class="panel donor-tools">
+    <div class="donor-filters">
+      <label>Blood type<select id="donorBloodFilter" class="select-control"><option value="all">All blood types</option><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></label>
+      <label>Availability<select id="donorAvailabilityFilter" class="select-control"><option value="all">All availability</option><option value="Available">Available</option><option value="Not active">Not active</option><option value="Unknown">Unknown</option></select></label>
+      <div class="donor-results-count"><b id="donorResultsCount">0</b><span>donors shown</span></div>
+      <button class="primary-button" id="emailDonorsButton" type="button">✉ Email filtered donors</button>
+    </div>
+    <p class="demo-note">Email addresses and donor details are demo data. The button opens your default email app with recipients in BCC; it does not send automatically.</p>
+  </div>
+  <div class="panel table-panel donor-directory-panel"><div class="table-wrap"><table><thead><tr><th>DONOR</th><th>EMAIL</th><th>BLOOD TYPE</th><th>LOCATION</th><th>LAST DONATION</th><th>AVAILABILITY</th><th>ACTION</th></tr></thead><tbody id="donorTableBody"></tbody></table></div></div>
+</section>
+
+<section class="page-section hidden-section" id="reports"><div class="subpage-heading"><div><span class="section-kicker">DATA & INSIGHTS</span><h1>Reports & analytics</h1><p>Review documented donation transfers and blood stock trends.</p></div><button class="primary-button" id="exportReport">↓ Export CSV report</button></div><div class="metrics-grid report-metrics"><article class="metric-card"><div class="metric-label">FULFILLED THIS MONTH</div><div class="metric-value">94</div><div class="metric-foot"><span class="trend positive">+6.2%</span><span>compared to previous month</span></div></article><article class="metric-card"><div class="metric-label">AVERAGE MATCH TIME</div><div class="metric-value">3.4 <small>hrs</small></div><div class="metric-foot"><span class="trend positive">−12%</span><span>faster than last month</span></div></article><article class="metric-card"><div class="metric-label">URGENT REQUESTS</div><div class="metric-value">17</div><div class="metric-foot"><span class="trend warning">Needs monitoring</span></div></article><article class="metric-card"><div class="metric-label">STOCK UTILIZATION</div><div class="metric-value">76<small>%</small></div><div class="metric-foot"><span>Monthly estimate</span></div></article></div><section class="panel report-chart-panel"><div class="panel-heading"><div><span class="section-kicker">DEMAND TRENDS</span><h2>Monthly donation documentation</h2></div></div><div class="chart-wrap tall"><canvas id="reportChart"></canvas></div></section></section>
+
+<section class="page-section hidden-section" id="profile"><div class="subpage-heading"><div><span class="section-kicker">ORGANIZATION</span><h1>Hospital profile</h1><p>Manage your hospital's public contact information.</p></div><button class="primary-button" id="saveHospitalProfile">Save changes</button></div><form class="panel profile-form" id="hospitalProfileForm"><label>Hospital name<input id="hospitalName" value="Al Hayat Hospital" required></label><label>Contact email<input id="hospitalEmail" type="email" value="bloodbank@alhayat.example" required></label><label>Phone number<input id="hospitalPhone" value="+962 2 700 0000" required></label><label>City / area<input id="hospitalCity" value="Irbid, Jordan" required></label><label class="wide-label">Address<input id="hospitalAddress" value="University Street, Irbid"></label><p class="demo-note">Demo profile information. Connect a backend to save changes securely for your organization.</p></form></section>
+
+<section class="page-section hidden-section" id="settings"><div class="subpage-heading"><div><span class="section-kicker">PREFERENCES</span><h1>Settings</h1><p>Configure dashboard preferences.</p></div></div><div class="panel settings-panel"><label class="setting-row"><span><b>Low-stock alerts</b><small>Show a warning when stock falls below the minimum threshold.</small></span><input type="checkbox" id="lowStockSetting" checked></label><label class="setting-row"><span><b>Urgent request notifications</b><small>Highlight high-priority requests in the dashboard.</small></span><input type="checkbox" id="urgentSetting" checked></label><label class="setting-row"><span><b>Compact tables</b><small>Use a denser layout for request and donor lists.</small></span><input type="checkbox" id="compactSetting"></label><p class="demo-note" id="settingsMessage">Settings are saved in this browser demo.</p></div></section>
+
+<section class="page-section hidden-section" id="all-requests"><div class="subpage-heading"><div><span class="section-kicker">DONATION AUDIT TRAIL</span><h1>Donation verification records</h1><p>Record and print verified donor-to-recipient donation transfers.</p></div></div><div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT / PATIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DONATION DATE</th><th>ACTION</th></tr></thead><tbody id="allRequestsBody"></tbody></table></div></div></section>
+<footer class="footer"><span>© 2026 BloodLink Hospital Portal</span><span>Made for a more connected care community <b>♥</b></span><span class="demo-label">DEMO DATA</span></footer>
+</div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="/js/hospital.js"></script>
+</body></html>

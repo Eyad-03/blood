@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venue Booking | BloodLink Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/hall.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="home.html" aria-label="BloodLink home">
+      <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+      <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+    </a>    <nav><a class="nav-link active" href="#halls">Explore Venues</a><a class="nav-link" href="#steps">How It Works</a></nav>
+    <button class="my-bookings" id="myBookingsBtn">My Requests <span id="requestCount">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i> Book a space that makes an impact</span>
+        <h1>Your next event<br><span>starts with the right space.</span></h1>
+        <p>Discover venues for initiatives, conferences, and workshops. Choose a space, submit the required documents, and track approval and payment in one place.</p>
+        <div class="hero-points"><span>✓ Trusted venue providers</span><span>✓ Approval before payment</span><span>✓ Clear request tracking</span></div>
+        <a class="hero-cta" href="#halls">Explore Venues <span>→</span></a>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=85" alt="Equipped conference hall">
+        <div class="floating-card"><span class="floating-icon">✦</span><div><b>Your space makes a difference</b><small>For initiatives and community events</small></div></div>
+        <div class="hero-stamp"><b>+120</b><small>venues available</small></div>
+      </div>
+    </section>
+
+    <section class="search-section" id="halls">
+      <div class="section-head"><div><span class="eyebrow">Find the right space</span><h2>Find your venue</h2><p>Filter results by governorate, provider, and event type.</p></div><span class="result-pill"><b id="resultsCount">6</b> venues</span></div>
+      <div class="filters">
+        <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Search venue name or location..."></label>
+        <label><span class="filter-label">Governorate</span><select id="governorateFilter"><option value="">All governorates</option><option>Amman</option><option>Irbid</option><option>Zarqa</option><option>Aqaba</option><option>Balqa</option><option>Jerash</option></select></label>
+        <label><span class="filter-label">Venue provider</span><select id="entityFilter"><option value="">All providers</option><option>University</option><option>Community center</option><option>Government institution</option><option>Private institution</option></select></label>
+        <label><span class="filter-label">Event type</span><select id="eventFilter"><option value="">All event types</option><option>Conference</option><option>Initiative</option><option>Workshop</option><option>Training</option></select></label>
+        <label><span class="filter-label">Capacity</span><select id="capacityFilter"><option value="">Any capacity</option><option value="50">50+ people</option><option value="100">100+ people</option><option value="200">200+ people</option></select></label>
+        <button class="reset-btn" id="resetFilters">Reset filters</button>
+      </div>
+      <div class="results-toolbar"><span>Available venues</span><label>Sort by <select id="sortFilter"><option value="recommended">Recommended</option><option value="priceLow">Price: low to high</option><option value="capacity">Capacity: largest first</option></select></label></div>
+      <div class="hall-grid" id="hallGrid"></div>
+      <div class="no-results hidden" id="noResults"><span>⌕</span><b>No matching venues found</b><p>Try changing the governorate or removing some filters.</p><button class="outline-btn" id="resetEmpty">Show all venues</button></div>
+    </section>
+
+    <section class="steps-section" id="steps">
+      <div class="section-head"><div><span class="eyebrow">Simple, clear steps</span><h2>From request to confirmed booking</h2><p>Payment is only available after your request and documents are approved.</p></div></div>
+      <div class="steps-grid">
+        <article class="step-card"><span class="step-number">01</span><div class="step-icon">⌕</div><h3>Choose a venue</h3><p>Use the filters to find a venue by governorate, provider, and capacity.</p></article>
+        <article class="step-card"><span class="step-number">02</span><div class="step-icon">▤</div><h3>Submit your request and documents</h3><p>Enter your event details and upload the request letter and required documents.</p></article>
+        <article class="step-card"><span class="step-number">03</span><div class="step-icon">✓</div><h3>Wait for approval</h3><p>The venue provider reviews your request. Track its status under My Requests.</p></article>
+        <article class="step-card"><span class="step-number">04</span><div class="step-icon">▣</div><h3>Pay and confirm your booking</h3><p>The payment option appears only after approval, allowing you to confirm the venue booking.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+        <a class="brand" href="home.html" aria-label="BloodLink home">
+      <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+      <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+    </a>  
+
+</footer>
+
+  <div class="modal-backdrop hidden" id="bookingModal">
+    <section class="modal booking-modal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+      <button class="close-modal" data-close="bookingModal" aria-label="Close">×</button>
+      <div class="modal-heading"><span class="modal-icon">▤</span><div><span class="eyebrow">New booking request</span><h2 id="bookingTitle">Submit a venue booking request</h2><p id="selectedHallName">—</p></div></div>
+      <div class="notice"><b>Important:</b> You will not be asked to pay now. Your request and documents will be reviewed first. Payment becomes available after approval.</div>
+      <form id="bookingForm">
+        <input type="hidden" id="selectedHallId">
+        <div class="form-grid">
+          <label>Organization / initiative name <input name="organization" required placeholder="e.g. Tomorrow’s Youth Initiative"></label>
+          <label>Contact person <input name="contactName" required placeholder="Full name"></label>
+          <label>Email address <input name="email" type="email" required placeholder="name@example.com"></label>
+          <label>Phone number <input name="phone" type="tel" required placeholder="07XXXXXXXX"></label>
+          <label>Event type <select name="eventType" required><option value="">Select event type</option><option>Conference</option><option>Initiative</option><option>Workshop</option><option>Training</option></select></label>
+          <label>Requested date <input name="eventDate" type="date" required></label>
+          <label>Expected attendees <input name="attendees" type="number" min="1" required placeholder="e.g. 80"></label>
+          <label>Event time <select name="eventTime" required><option value="">Select time</option><option>Morning</option><option>Evening</option><option>All day</option></select></label>
+          <label class="full">Event description <textarea name="description" rows="3" required placeholder="Describe the event goal and target audience..."></textarea></label>
+        </div>
+        <div class="documents">
+          <div class="documents-head"><div><h3>Documents required for review</h3><p>Upload PDF files or images. Maximum size: 10MB per file.</p></div><span>3 documents</span></div>
+          <label class="upload-row"><span class="upload-icon">↑</span><span><b>Official venue booking request letter <em>*</em></b><small>Signed or approved letter from the organizing entity</small></span><input type="file" name="officialLetter" accept=".pdf,.png,.jpg,.jpeg" required><strong class="file-name">Choose a file</strong></label>
+          <label class="upload-row"><span class="upload-icon">↑</span><span><b>Event plan <em>*</em></b><small>Objectives, agenda, and schedule</small></span><input type="file" name="eventPlan" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" required><strong class="file-name">Choose a file</strong></label>
+          <label class="upload-row"><span class="upload-icon">↑</span><span><b>Proof of organization registration <em>*</em></b><small>Registration certificate or organization identification document</small></span><input type="file" name="organizationProof" accept=".pdf,.png,.jpg,.jpeg" required><strong class="file-name">Choose a file</strong></label>
+        </div>
+        <label class="check-line"><input type="checkbox" required> I confirm that the information and documents provided are accurate and agree to the venue usage terms.</label>
+        <div class="modal-actions"><button type="button" class="outline-btn" data-close="bookingModal">Cancel</button><button type="submit" class="primary-btn">Submit for review <span>→</span></button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="requestsModal">
+    <section class="modal requests-modal" role="dialog" aria-modal="true" aria-labelledby="requestsTitle">
+      <button class="close-modal" data-close="requestsModal" aria-label="Close">×</button>
+      <div class="modal-heading"><span class="modal-icon">▣</span><div><span class="eyebrow">Booking tracking</span><h2 id="requestsTitle">My Requests</h2><p>Track request status and the next steps for each booking.</p></div></div>
+      <div id="requestsList" class="requests-list"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="paymentModal">
+    <section class="modal payment-modal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+      <button class="close-modal" data-close="paymentModal" aria-label="Close">×</button>
+      <div class="modal-heading"><span class="modal-icon">▣</span><div><span class="eyebrow">Confirm booking</span><h2 id="paymentTitle">Online payment</h2><p id="paymentHallName">—</p></div></div>
+      <div class="approved-banner"><span>✓</span><div><b>Your request has been approved</b><small>You can now complete payment to confirm your booking.</small></div></div>
+      <div class="payment-summary"><span>Booking fee</span><strong id="paymentAmount">—</strong></div>
+      <div class="payment-methods"><label><input type="radio" name="paymentMethod" value="Bank card" checked><span>▣</span> Bank card</label><label><input type="radio" name="paymentMethod" value="E-wallet"><span>◈</span> E-wallet</label></div>
+      <p class="payment-demo">Demo interface only — no real payment will be charged.</p>
+      <button class="primary-btn full-width" id="confirmPayment">Confirm payment and complete booking</button>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/js/hall.js"></script>
+</body>
+</html>

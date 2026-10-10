@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloodLink | Donor Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/donorRequests.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="home.html" aria-label="BloodLink home">
+    <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+    <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+  </a>
+  <nav><a href="home.html">Home</a><a href="donorSearch.html">Find donors</a><a class="active" href="donorRequests.html">Incoming requests</a></nav>
+  <button class="profile" type="button"><span class="avatar">LK</span><span><b>Lina Khalil</b><small>Blood donor</small></span><span class="chevron">⌄</span></button>
+</header>
+
+<main class="page">
+  <section class="welcome">
+    <div>
+      <span class="eyebrow"><i></i> DONOR CENTER</span>
+      <h1>Incoming blood requests</h1>
+      <p>Review people who have requested your help, then accept or decline each request.</p>
+    </div>
+    <div class="availability">
+      <span class="availability-dot"></span>
+      <div><b id="availabilityText">Available to donate</b><small>Manage your availability</small></div>
+      <label class="switch"><input type="checkbox" id="availabilityToggle" checked><span></span></label>
+    </div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card"><span class="summary-icon red">↙</span><div><small>Total requests</small><strong id="totalCount">4</strong><em>All requests received</em></div></article>
+    <article class="summary-card"><span class="summary-icon amber">◷</span><div><small>Awaiting your response</small><strong id="pendingCount">2</strong><em>Requests needing your attention</em></div></article>
+    <article class="summary-card"><span class="summary-icon green">✓</span><div><small>Accepted</small><strong id="acceptedCount">1</strong><em>You agreed to help</em></div></article>
+    <article class="summary-card"><span class="summary-icon blue">♥</span><div><small>Completed</small><strong id="completedCount">1</strong><em>Donations marked completed</em></div></article>
+  </section>
+
+  <section class="content-grid">
+    <section class="requests-panel">
+      <div class="panel-heading">
+        <div><span class="eyebrow">YOUR INBOX</span><h2>Requests received <span class="count-badge" id="visibleCount">4</span></h2><p>Review the blood type, urgency, and message before responding.</p></div>
+        <label class="search"><span>⌕</span><input type="search" id="searchInput" placeholder="Search name, blood type or ID"></label>
+      </div>
+      <div class="filters">
+        <div class="tabs" role="group" aria-label="Filter requests">
+          <button class="tab active" data-filter="All">All <span id="allTabCount">4</span></button>
+          <button class="tab" data-filter="Pending">Pending</button>
+          <button class="tab" data-filter="Accepted">Accepted</button>
+          <button class="tab" data-filter="Declined">Declined</button>
+          <button class="tab" data-filter="Completed">Completed</button>
+        </div>
+        <label class="sort-label">Sort by <select id="sortSelect"><option value="newest">Newest first</option><option value="urgent">Urgent first</option><option value="oldest">Oldest first</option></select></label>
+      </div>
+      <div class="request-list" id="requestList"></div>
+      <div class="empty-state hidden" id="emptyState"><span>⌕</span><b>No requests found</b><p>Try another search or filter.</p><button class="outline-btn" id="clearFilters">Clear filters</button></div>
+    </section>
+
+    <aside class="side-column">
+      <section class="help-card">
+        <div class="help-icon">♥</div><h3>Your help matters</h3>
+        <p>A timely response can help someone find the support they need. Only accept if you feel well and are able to donate.</p>
+        <a href="#safety">Donor safety tips <span>↗</span></a>
+      </section>
+      <section class="timeline-card">
+        <span class="eyebrow">WHAT HAPPENS NEXT</span><h3>Request journey</h3>
+        <div class="journey">
+          <div class="journey-step done"><span>✓</span><div><b>Receive request</b><small>A recipient sends you a request from the donor map.</small></div></div>
+          <div class="journey-step current"><span>2</span><div><b>Respond to request</b><small>Accept or decline based on your availability.</small></div></div>
+          <div class="journey-step"><span>3</span><div><b>Coordinate safely</b><small>If accepted, coordinate through a licensed hospital.</small></div></div>
+          <div class="journey-step"><span>4</span><div><b>Confirm donation</b><small>Mark it completed only after the donation takes place.</small></div></div>
+        </div>
+      </section>
+      <section class="privacy-card" id="safety"><span class="privacy-icon">ⓘ</span><div><b>Stay safe</b><p>Never share verification codes or financial details. Confirm medical arrangements with a licensed facility.</p></div></section>
+    </aside>
+  </section>
+  <footer><span>© 2026 BloodLink</span><span>Every Second Can Save a Life <b>♥</b></span><span>Demo data</span></footer>
+</main>
+
+<div class="modal-backdrop hidden" id="detailsModal">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+    <button class="close-modal" data-close="detailsModal" aria-label="Close">×</button>
+    <span class="eyebrow">REQUEST DETAILS</span><h2 id="detailsTitle">Request details</h2>
+    <div id="detailsContent"></div>
+    <div class="modal-actions"><button class="outline-btn" data-close="detailsModal">Close</button><button class="outline-btn danger-btn hidden" id="declineDetailBtn">Decline request</button><button class="primary-btn hidden" id="acceptDetailBtn">Accept request</button><button class="primary-btn hidden" id="completeBtn">Mark completed</button></div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="/js/donorRequests.js"></script>
+</body>
+</html>

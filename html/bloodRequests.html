@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloodLink | My Blood Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bloodRequests.css">
+</head>
+<body>
+  <header class="topbar">
+        <a class="brand" href="home.html" aria-label="BloodLink home">
+      <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+      <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+    </a>
+    <nav><a href="#">Home</a><a href="#">Find Donors</a><a class="active" href="#">My Requests</a></nav>
+    <button class="profile"><span class="avatar">E</span><span><b>Guest</b><small>Recipient account</small></span><span class="chevron">⌄</span></button>
+  </header>
+
+  <main class="page">
+    <section class="welcome">
+      <div>
+        <span class="eyebrow"><i></i> REQUEST TRACKER</span>
+        <h1>Track your blood requests</h1>
+        <p>Follow every request you send to a donor from the map, from the first message to the final response.</p>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card"><span class="summary-icon red">⌁</span><div><small>Total requests</small><strong id="totalCount">3</strong><em>All requests you have sent</em></div></article>
+      <article class="summary-card"><span class="summary-icon amber">◷</span><div><small>Waiting for response</small><strong id="pendingCount">1</strong><em>Donors have not responded yet</em></div></article>
+      <article class="summary-card"><span class="summary-icon green">✓</span><div><small>Accepted</small><strong id="acceptedCount">1</strong><em>Donors agreed to help</em></div></article>
+      <article class="summary-card"><span class="summary-icon blue">↗</span><div><small>Completed</small><strong id="completedCount">1</strong><em>Requests marked as completed</em></div></article>
+    </section>
+
+    <section class="content-grid">
+      <div class="requests-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">YOUR ACTIVITY</span><h2>Recent requests <span class="count-badge" id="visibleCount">3</span></h2><p>View status updates and contact donors when a request is accepted.</p></div>
+          <label class="search"><span>⌕</span><input type="search" id="searchInput" placeholder="Search donor or request ID"></label>
+        </div>
+        <div class="filters">
+          <div class="tabs" role="group" aria-label="Filter requests">
+            <button class="tab active" data-filter="All">All requests <span id="allTabCount">3</span></button>
+            <button class="tab" data-filter="Pending">Pending</button>
+            <button class="tab" data-filter="Accepted">Accepted</button>
+            <button class="tab" data-filter="Declined">Declined</button>
+            <button class="tab" data-filter="Completed">Completed</button>
+          </div>
+          <label class="sort-label">Sort by <select id="sortSelect"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
+        </div>
+        <div class="request-list" id="requestList"></div>
+        <div class="empty-state hidden" id="emptyState"><span>⌕</span><b>No requests found</b><p>Try another search or filter.</p><button class="outline-btn" id="clearFilters">Clear filters</button></div>
+      </div>
+
+      <aside class="side-column">
+        <section class="help-card">
+          <div class="help-icon">♥</div><h3>Need blood urgently?</h3>
+          <p>If this is a medical emergency, contact your hospital or local emergency services immediately. Do not rely only on an online request.</p>
+          <a href="#" id="emergencyInfo">Emergency guidance <span>↗</span></a>
+        </section>
+        <section class="timeline-card">
+          <span class="eyebrow">HOW IT WORKS</span><h3>Request journey</h3>
+          <div class="journey">
+            <div class="journey-step done"><span>✓</span><div><b>Send request</b><small>Your request is delivered to the donor.</small></div></div>
+            <div class="journey-step current"><span>2</span><div><b>Wait for a response</b><small>The donor can accept or decline.</small></div></div>
+            <div class="journey-step"><span>3</span><div><b>Coordinate safely</b><small>If accepted, contact the donor to coordinate through the hospital.</small></div></div>
+            <div class="journey-step"><span>4</span><div><b>Mark as completed</b><small>Update the request after the donation is completed.</small></div></div>
+          </div>
+        </section>
+        <section class="privacy-card"><span class="privacy-icon">♧</span><div><b>Your privacy matters</b><p>Only share personal details with trusted people and coordinate donation through a licensed medical facility.</p></div></section>
+      </aside>
+    </section>
+    <footer><span>© 2026 BloodLink</span><span>Every Second Can Save a Life <b>♥</b></span><span>Demo data</span></footer>
+  </main>
+
+  <div class="modal-backdrop hidden" id="detailsModal">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+      <button class="close-modal" data-close="detailsModal" aria-label="Close">×</button>
+      <span class="eyebrow">REQUEST DETAILS</span><h2 id="detailsTitle">Request details</h2>
+      <div id="detailsContent"></div>
+      <div class="modal-actions"><button class="outline-btn" data-close="detailsModal">Close</button><button class="primary-btn hidden" id="completeBtn">Mark as completed</button></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="contactModal">
+    <section class="modal contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+      <button class="close-modal" data-close="contactModal" aria-label="Close">×</button>
+      <div class="contact-modal-head">
+        <span class="contact-avatar" id="contactAvatar">OH</span>
+        <div>
+          <span class="eyebrow">DONOR CONTACT</span>
+          <h2 id="contactTitle">Contact donor</h2>
+          <p class="contact-subtitle" id="contactSubtitle">The donor accepted your request.</p>
+        </div>
+      </div>
+      <div class="contact-details">
+        <div class="contact-detail-row">
+          <span class="contact-detail-icon">✉</span>
+          <div><small>Email address</small><strong id="contactEmail">—</strong></div>
+          <button class="copy-contact" data-copy="contactEmail" type="button">Copy</button>
+        </div>
+        <div class="contact-detail-row">
+          <span class="contact-detail-icon">☎</span>
+          <div><small>Phone number</small><strong id="contactPhone">—</strong></div>
+          <button class="copy-contact" data-copy="contactPhone" type="button">Copy</button>
+        </div>
+        <div class="contact-detail-row">
+          <span class="contact-detail-icon">⌖</span>
+          <div><small>General location</small><strong id="contactLocation">—</strong></div>
+        </div>
+      </div>
+      <div class="contact-notice"><span>ⓘ</span><p>Coordinate the donation through a licensed hospital or medical facility. Please respect the donor’s privacy and do not share their contact details with others.</p></div>
+      <div class="modal-actions contact-actions">
+        <button class="outline-btn" data-close="contactModal">Close</button>
+        <a class="primary-btn hidden" id="emailDonorBtn" href="#">Email donor</a>
+        <a class="primary-btn hidden" id="callDonorBtn" href="#">Call donor</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/js/bloodRequests.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Blood Donors | BloodLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/css/donorSearch.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="BloodLink home">
+      <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/><path d="M11.7 20.1c.3 2.1 1.7 3.4 3.8 3.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+      <span>Blood<span class="brand-accent">Link</span><small>Every Second Can Save a Life</small></span>
+    </a>
+    <nav class="top-actions">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="register.html" class="nav-link">Become a donor</a>
+      <a href="index.html" class="profile-chip"><span class="profile-avatar">E</span><span>Guest</span><span class="chevron">⌄</span></a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <div class="eyebrow"><span class="pulse-dot"></span> BLOOD DONOR DIRECTORY</div>
+      <h1>Find a donor.<br><span>Help save a life.</span></h1>
+      <p>Search by blood type and location to connect with potential donors near you. In an emergency, contact your local hospital or emergency services too.</p>
+      <div class="trust-row"><span><span class="trust-icon">✓</span> Blood-type matching</span><span><span class="trust-icon">⌖</span> Location-based search</span><span><span class="trust-icon">♡</span> Community-powered</span></div>
+    </section>
+
+    <section class="search-card" aria-labelledby="search-title">
+      <div class="search-card-heading">
+        <div><span class="section-kicker">DONOR SEARCH</span><h2 id="search-title">Who do you need?</h2></div>
+        <span class="secure-label"><span>✦</span> Quick & simple</span>
+      </div>
+      <form id="searchForm" class="search-form">
+        <div class="field-group blood-field">
+          <label for="bloodType">Blood type <span class="required">*</span></label>
+          <div class="select-wrap"><span class="field-icon">✚</span>
+            <select id="bloodType" required>
+              <option value="">Select blood type</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select><span class="select-arrow">⌄</span>
+          </div>
+          <small>Choose the type requested by the medical team.</small>
+        </div>
+        <div class="field-group">
+          <label for="city">City / area</label>
+          <div class="input-wrap"><span class="field-icon">⌖</span><input id="city" type="text" placeholder="e.g. Irbid, Amman" autocomplete="address-level2" /></div>
+          <small>Leave blank to search all listed locations.</small>
+        </div>
+        <div class="field-group">
+          <label for="availability">Availability</label>
+          <div class="select-wrap"><span class="field-icon">◷</span>
+            <select id="availability"><option value="all">All donors</option><option value="available">Available now</option></select><span class="select-arrow">⌄</span>
+          </div>
+          <small>Availability is self-reported.</small>
+        </div>
+        <button class="search-button" type="submit"><span>⌕</span> Search donors <span class="button-arrow">→</span></button>
+      </form>
+      <div class="blood-quick-picks"><span class="quick-label">Quick select</span>
+        <div class="blood-types" role="group" aria-label="Quick select blood type">
+          <button type="button" class="type-pill" data-type="A+">A+</button><button type="button" class="type-pill" data-type="A-">A−</button>
+          <button type="button" class="type-pill" data-type="B+">B+</button><button type="button" class="type-pill" data-type="B-">B−</button>
+          <button type="button" class="type-pill" data-type="AB+">AB+</button><button type="button" class="type-pill" data-type="AB-">AB−</button>
+          <button type="button" class="type-pill" data-type="O+">O+</button><button type="button" class="type-pill" data-type="O-">O−</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultsSection">
+      <div class="results-header"><div><span class="section-kicker">MATCHING COMMUNITY</span><h2>Potential donors <span id="resultCount" class="count-badge">6</span></h2><p id="resultsDescription">Showing sample donors to preview the search experience.</p></div>
+        <label class="sort-control" for="sortBy">Sort by <select id="sortBy"><option value="nearby">Closest first</option><option value="name">Name A–Z</option></select></label>
+      </div>
+      <div class="map-heading">
+        <div><span class="section-kicker">MAP VIEW</span><h3>Donors near your search area</h3></div>
+        <span class="map-key"><i></i> Sample donor locations</span>
+      </div>
+      <div id="mapStatus" class="map-status">Loading map…</div>
+      <div id="donorMap" class="donor-map" role="region" aria-label="Map showing matching donor locations"></div>
+      <p class="map-caption">Select a map marker to see the donor's sample details. Map pins use approximate demo coordinates.</p>
+      <div id="donorGrid" class="donor-grid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state" hidden><div class="empty-icon">⌕</div><h3>No donors found</h3><p>Try another blood type or broaden your location search.</p><button id="resetSearch" type="button" class="outline-button">Clear filters</button></div>
+      <p class="demo-note"><span>ⓘ</span> Demo data for design preview only. Donor details and availability are not real; connect this page to your backend before using it for actual requests.</p>
+    </section>
+
+    <section class="urgent-banner"><div class="urgent-symbol">!</div><div><h3>Is this a medical emergency?</h3><p>Do not rely only on an online directory. Contact a hospital or emergency services immediately.</p></div><a href="https://www.moh.gov.jo/" target="_blank" rel="noopener noreferrer">Health Ministry <span>↗</span></a></section>
+    <footer><span>© 2026 BloodLink</span><span>Made with <span class="footer-heart">♥</span> for a more connected community</span><a href="register.html">Join as a donor</a></footer>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/js/donorSearch.js"></script>
+</body>
+</html>

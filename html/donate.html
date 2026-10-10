@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offer to Donate | BloodLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/css/donate.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="donorSearch.html"><span class="logo">♥</span><span>Blood<span>Link</span><small>Every Second Can Save a Life</small></span></a>
+  <nav><a href="donorSearch.html">Find donors</a><a href="profile.html">My profile</a><span class="user-chip"><span class="mini-avatar">E</span> Donor <span class="chevron">⌄</span></span></nav>
+</header>
+<main class="shell">
+  <div class="breadcrumb"><a href="donorSearch.html">Home</a><span>/</span><a href="profile.html">My profile</a><span>/</span><span>Offer to donate</span></div>
+  <section class="hero">
+    <div><span class="eyebrow"><i></i> DONOR VOLUNTEER FORM</span><h1>Your donation can<br><em>give someone more time.</em></h1><p>Tell us when you're available and share an approximate location so nearby people can find a willing donor.</p><div class="hero-points"><span>✓ You choose when to be available</span><span>✓ You control location sharing</span></div></div>
+    <div class="hero-art" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="heart-drop">♥</div><span class="spark s1">✦</span><span class="spark s2">✧</span></div>
+  </section>
+
+  <div class="content-grid">
+    <form id="donorForm" class="form-card">
+      <div class="section-heading"><div><label>STEP 01 · DONOR DETAILS</label><h2>Donation availability</h2><p>Review your details before submitting.</p></div><span class="step-badge">01 / 02</span></div>
+      <div class="fields">
+        <label>Full name <span class="required">*</span><input id="fullName" name="fullName" required maxlength="80" placeholder="Enter your full name" value="Eyad Mansour"></label>
+        <label>Blood type <span class="required">*</span><select id="bloodType" name="bloodType" required><option value="">Select your blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+        <label>Phone number <span class="required">*</span><input id="phone" name="phone" type="tel" required placeholder="+962 7X XXX XXXX"></label>
+        <label>City / area <span class="required">*</span><input id="city" name="city" required placeholder="e.g. Irbid, University Street" value="Irbid, Jordan"></label>
+        <label>When can you donate? <span class="required">*</span><select id="availability" required><option value="">Choose availability</option><option value="today">Available today</option><option value="tomorrow">Available tomorrow</option><option value="week">Within the next 7 days</option><option value="contact">Contact me to arrange a time</option></select></label>
+        <label>Preferred contact method<select id="contactMethod"><option value="phone">Phone call</option><option value="sms">SMS</option><option value="email">Email (when available)</option></select></label>
+        <label class="full">Additional note <span class="optional">(optional)</span><textarea id="notes" rows="3" maxlength="350" placeholder="Add a short note about your availability. Avoid entering private medical details."></textarea></label>
+      </div>
+      <div class="form-divider"></div>
+      <div class="section-heading location-heading"><div><label>STEP 02 · LOCATION</label><h2>Share your location</h2><p>Choose how accurately you want to share where you are.</p></div><span class="pin-icon">⌖</span></div>
+      <div class="location-options">
+        <label class="location-option selected"><input type="radio" name="locationMode" value="approximate" checked><span class="radio-mark"></span><span><b>Approximate location</b><small>Share your selected city / area. Recommended for privacy.</small></span><span class="option-tag">PRIVATE</span></label>
+        <label class="location-option"><input type="radio" name="locationMode" value="precise"><span class="radio-mark"></span><span><b>Current location</b><small>Use your browser's location permission to place a marker on the map.</small></span><span class="option-tag">GPS</span></label>
+      </div>
+      <div class="map-topline"><span><b>Location preview</b><small id="locationLabel">Approximate location · Irbid, Jordan</small></span><button type="button" id="useLocation" class="outline-button">⌖ Use my location</button></div>
+      <div id="mapStatus" class="map-status">Loading map…</div><div id="locationMap" class="map"></div>
+      <p class="map-help"><span>ⓘ</span> You can move the marker to adjust the location. The demo uses sample coordinates until you allow GPS or move the marker.</p>
+      <label class="consent"><input type="checkbox" id="shareConsent" required><span>I agree to share my selected location with authorized BloodLink users so they can find me for donation requests. <b>*</b></span></label>
+      <label class="consent"><input type="checkbox" id="availabilityConsent" required><span>I confirm that my availability status is accurate to the best of my knowledge. <b>*</b></span></label>
+      <div class="submit-row"><button type="button" class="secondary-button" id="cancelButton">Cancel</button><button type="submit" class="primary-button"><span>♥</span> Submit donor offer <b>→</b></button></div>
+      <p class="form-footnote">This is a frontend demo. It does not publish your location or notify real recipients until connected to a backend.</p>
+    </form>
+
+    <aside class="side-column">
+      <section class="side-card impact-card"><div class="impact-icon">♥</div><label>YOUR IMPACT</label><h3>One generous choice<br>can make a difference.</h3><p>By making your availability visible, you may help someone connect with a potential donor faster.</p><div class="impact-stats"><div><b>8</b><small>Blood types</small></div><div><b>1</b><small>Community</small></div><div><b>∞</b><small>Possibilities</small></div></div></section>
+      <section class="side-card privacy-card"><div class="privacy-icon">♧</div><h3>Your location. Your choice.</h3><p>Only share what you're comfortable with. An approximate area is often enough to help someone find nearby donors.</p><ul><li>GPS is optional</li><li>You can change your selection</li><li>Never share your home address publicly</li></ul></section>
+      <section class="side-card checklist-card"><label>BEFORE YOU SUBMIT</label><h3>Quick checklist</h3><p><span>✓</span> Your blood type is correct</p><p><span>✓</span> Your phone number is current</p><p><span>✓</span> Your availability is up to date</p><p><span>✓</span> You have chosen a location-sharing level</p></section>
+    </aside>
+  </div>
+  <footer><span>© 2026 BloodLink</span><span>Made with <b>♥</b> for a more connected community</span><a href="profile.html">My profile →</a></footer>
+</main>
+
+<div class="modal-backdrop" id="successModal" hidden><section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-check">✓</div><span class="eyebrow">DONOR OFFER SAVED</span><h2 id="successTitle">Thank you for stepping up.</h2><p>Your donor offer has been saved in this browser demo. In the live app, this would be sent to BloodLink's backend.</p><div class="success-summary" id="successSummary"></div><button class="primary-button" id="closeSuccess">Back to page</button></section></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="donate.js"></script>
+</body></html>
