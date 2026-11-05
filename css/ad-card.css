@@ -1,0 +1,30 @@
+/* BloodLink — advertisement card (shared by hospital dashboard preview + public ads page) */
+.ad-card{--accent:#d41d3d;position:relative;display:flex;flex-direction:column;gap:10px;min-width:0;padding:18px;border-radius:18px;background:#fff;border:1px solid #ebe9f1;
+  box-shadow:0 1px 2px rgba(20,18,40,.04),0 6px 20px rgba(20,18,40,.045);overflow:hidden;isolation:isolate;
+  transition:transform .4s cubic-bezier(.22,.8,.2,1),box-shadow .4s,border-color .3s}
+.ad-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--accent)}
+.ad-card::after{content:"";position:absolute;right:-60px;top:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%);z-index:-1}
+.ad-card:not(.is-preview):hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--accent) 35%,#ebe9f1);box-shadow:0 2px 4px rgba(20,18,40,.04),0 22px 44px rgba(20,18,40,.1)}
+.ad-card.plan-featured,.ad-card.plan-premium{border-color:color-mix(in srgb,var(--accent) 30%,#ebe9f1)}
+.ad-card-top{display:flex;align-items:flex-start;gap:12px}
+.ad-date{flex:0 0 auto;width:54px;display:grid;justify-items:center;padding:6px 0;border-radius:13px;background:color-mix(in srgb,var(--accent) 10%,#fff);color:var(--accent);line-height:1.1}
+.ad-date b{font:800 22px Manrope,sans-serif;letter-spacing:-.5px}
+.ad-date small{font-size:10px;font-weight:800;letter-spacing:.8px;opacity:.85}
+.ad-tags{display:flex;flex-wrap:wrap;gap:6px;min-width:0;padding-top:2px}
+.ad-cat{font-size:11px;font-weight:800;letter-spacing:.3px;color:var(--accent);padding:4px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 9%,#fff)}
+.ad-featured{font-size:11px;font-weight:800;color:#9a6208;padding:4px 9px;border-radius:999px;background:#fff1d6}
+.ad-badge{margin-left:auto;flex:0 0 auto;padding:6px 10px;border-radius:10px;background:var(--accent);color:#fff;font:800 12.5px Manrope,sans-serif;box-shadow:0 6px 14px color-mix(in srgb,var(--accent) 35%,transparent);transform:rotate(3deg)}
+.ad-card h3{margin:2px 0 0;font:800 18px/1.25 Manrope,sans-serif;letter-spacing:-.4px;color:#1b1c28;overflow-wrap:anywhere}
+.ad-hospital{display:flex;align-items:center;gap:6px;margin:0;font-size:12.5px;font-weight:600;color:#3b3c4c}
+.ad-desc{margin:0;font-size:13.5px;line-height:1.55;color:#6a6b7d;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.ad-facts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.ad-facts li{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#3b3c4c;min-width:0}
+.ad-facts span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-card svg{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;color:#a3a4b4}
+.ad-card-foot{margin-top:auto;padding-top:12px;border-top:1px dashed #ebe9f1;display:flex;align-items:center;gap:8px}
+.sponsored{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#a3a4b4}
+.booking-chip{font-size:11px;font-weight:700;color:#3a72c9;background:#ecf3ff;padding:3px 8px;border-radius:999px}
+.ad-more{margin-left:auto;border:0;background:transparent;color:var(--accent);font-size:13px;font-weight:800;cursor:pointer;padding:6px 4px;font-family:inherit}
+.ad-more span{display:inline-block;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.ad-card:hover .ad-more span{transform:translateX(4px)}
+.ad-card.is-preview .ad-more{pointer-events:none}

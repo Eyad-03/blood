@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3a0a17">
+<meta name="description" content="Send a report to the BloodLink administrators">
+<title>Report an issue | BloodLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/report.css">
+</head>
+<body>
+
+<div class="rp-page" id="page">
+
+  <!-- Left: headline + live specimen ticket -->
+  <aside class="rp-side">
+    <a class="rp-brand" href="home.html">
+      <span class="rp-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5s-6.5 7.2-6.5 11.8a6.5 6.5 0 0013 0C18.5 9.7 12 2.5 12 2.5z"/></svg></span>
+      <span>BloodLink</span>
+    </a>
+
+    <div class="rp-intro">
+      <h1>Something not right? Tell the team.</h1>
+      <p>Your report goes straight to the BloodLink administrators. Give as much detail as you can, and leave out passwords and card numbers.</p>
+    </div>
+
+    <div class="rp-stage">
+      <article class="rp-ticket" id="ticket" data-prio="medium" aria-label="Live preview of your report">
+        <header class="tk-cap">
+          <svg class="tk-cap-art" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle class="ridge" cx="20" cy="20" r="14.5"/><circle class="hub" cx="20" cy="20" r="8"/></svg>
+          <span id="tkPrio">Medium priority</span>
+        </header>
+        <div class="tk-body">
+          <div class="tk-id"><small>Reference</small><b id="tkId">RP-0000</b></div>
+          <dl class="tk-fields">
+            <div><dt>From</dt><dd id="tkFrom" data-empty="Your name and role"></dd></div>
+            <div><dt>Category</dt><dd id="tkCat" data-empty="Pick a category"></dd></div>
+            <div><dt>About</dt><dd id="tkAbout" data-empty="What it concerns"></dd></div>
+          </dl>
+          <h3 class="tk-title" id="tkTitle" data-empty="Your title appears here"></h3>
+          <p class="tk-text" id="tkText" data-empty="What you write below shows up on this ticket as you type."></p>
+        </div>
+        <footer class="tk-foot">
+          <svg class="tk-code" id="tkCode" aria-hidden="true" preserveAspectRatio="none"></svg>
+          <span class="tk-status" id="tkStatus">Not sent yet</span>
+        </footer>
+        <div class="tk-stamp" aria-hidden="true">Received</div>
+      </article>
+    </div>
+  </aside>
+
+  <!-- Right: the form -->
+  <main class="rp-main">
+    <div class="rp-inner">
+      <a class="rp-back" href="home.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        Back to home
+      </a>
+
+      <form id="reportForm" class="rp-form" novalidate>
+
+        <section class="rp-sec">
+          <h2>About you</h2>
+          <div class="row2">
+            <div class="fld" data-field="from">
+              <label class="lbl" for="from">Your name</label>
+              <input class="inp" id="from" name="from" maxlength="60" autocomplete="name" placeholder="Hala Mahmoud" aria-describedby="err-from">
+              <p class="fld-err" id="err-from" hidden></p>
+            </div>
+            <div class="fld" data-field="email">
+              <label class="lbl" for="email">Email <span class="opt">for our reply</span></label>
+              <input class="inp" id="email" name="email" type="email" maxlength="80" autocomplete="email" placeholder="you@example.com" aria-describedby="err-email">
+              <p class="fld-err" id="err-email" hidden></p>
+            </div>
+          </div>
+          <fieldset class="fld grp" data-field="role">
+            <legend class="lbl">I am a</legend>
+            <div class="seg">
+              <label><input class="sr" type="radio" name="role" value="Donor"><span>Donor</span></label>
+              <label><input class="sr" type="radio" name="role" value="Hospital"><span>Hospital</span></label>
+              <label><input class="sr" type="radio" name="role" value="Organization"><span>Organization</span></label>
+              <label><input class="sr" type="radio" name="role" value="Other"><span>Other</span></label>
+            </div>
+            <p class="fld-err" id="err-role" hidden></p>
+          </fieldset>
+        </section>
+
+        <section class="rp-sec">
+          <h2>What happened</h2>
+          <fieldset class="fld grp" data-field="category">
+            <legend class="lbl">Closest category</legend>
+            <div class="cat-grid">
+              <label class="cat"><input class="sr" type="radio" name="category" value="Technical issue"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="13" rx="5"/><path d="M12 11v9M7 13H3M21 13h-4M7 17l-3 2M17 17l3 2M9 7l-2-3M15 7l2-3"/></svg></span><span class="cat-name">Technical issue</span></label>
+              <label class="cat"><input class="sr" type="radio" name="category" value="Donor complaint"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></span><span class="cat-name">Donor complaint</span></label>
+              <label class="cat"><input class="sr" type="radio" name="category" value="Inappropriate content"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span><span class="cat-name">Inappropriate content</span></label>
+              <label class="cat"><input class="sr" type="radio" name="category" value="Booking issue"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="cat-name">Booking issue</span></label>
+              <label class="cat"><input class="sr" type="radio" name="category" value="Hospital issue"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6M10 10h4M12 8v4"/></svg></span><span class="cat-name">Hospital issue</span></label>
+              <label class="cat"><input class="sr" type="radio" name="category" value="Data correction"><span class="cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="cat-name">Data correction</span></label>
+            </div>
+            <p class="fld-err" id="err-category" hidden></p>
+          </fieldset>
+
+          <div class="fld" data-field="related">
+            <label class="lbl" for="related">What is it about? <span class="opt">a hospital, hall, page or profile</span></label>
+            <input class="inp" id="related" name="related" maxlength="80" placeholder="Zaha Cultural Center" aria-describedby="err-related">
+            <p class="fld-err" id="err-related" hidden></p>
+          </div>
+
+          <div class="fld" data-field="title">
+            <label class="lbl" for="title">Title</label>
+            <input class="inp" id="title" name="title" maxlength="90" placeholder="The hall page shows the wrong capacity" aria-describedby="err-title">
+            <p class="fld-err" id="err-title" hidden></p>
+          </div>
+
+          <div class="fld" data-field="body">
+            <label class="lbl" for="body">Details</label>
+            <textarea class="inp" id="body" name="body" rows="6" maxlength="1000" placeholder="What happened, when, and what you expected to see." aria-describedby="err-body"></textarea>
+            <div class="body-foot">
+              <p class="fld-err" id="err-body" hidden></p>
+              <span class="count"><span id="descCount">0</span>/1000</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="rp-sec">
+          <h2>How urgent is it?</h2>
+          <fieldset class="fld grp" data-field="priority">
+            <legend class="sr">Urgency</legend>
+            <div class="caps">
+              <label class="cap-opt" style="--c:var(--low)">
+                <input class="sr" type="radio" name="priority" value="low">
+                <svg class="cap-art" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle class="ridge" cx="20" cy="20" r="14.5"/><circle class="hub" cx="20" cy="20" r="8"/></svg>
+                <span class="cap-txt"><b>Low</b><small>It can wait</small></span>
+              </label>
+              <label class="cap-opt" style="--c:var(--mid)">
+                <input class="sr" type="radio" name="priority" value="medium" checked>
+                <svg class="cap-art" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle class="ridge" cx="20" cy="20" r="14.5"/><circle class="hub" cx="20" cy="20" r="8"/></svg>
+                <span class="cap-txt"><b>Medium</b><small>It affects my use</small></span>
+              </label>
+              <label class="cap-opt" style="--c:var(--high)">
+                <input class="sr" type="radio" name="priority" value="high">
+                <svg class="cap-art" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle class="ridge" cx="20" cy="20" r="14.5"/><circle class="hub" cx="20" cy="20" r="8"/></svg>
+                <span class="cap-txt"><b>High</b><small>Safety or fraud</small></span>
+              </label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="rp-sec">
+          <h2>Attachments <span class="opt">optional</span></h2>
+          <label class="drop" id="dropzone" for="fileInput">
+            <input class="sr" id="fileInput" type="file" multiple accept="image/*,.pdf,.mp4,.doc,.docx">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+            <span><b>Choose files</b> or drop them here</span>
+            <small>Screenshots, PDF, video or Word. Up to 5 files. This demo saves file names only.</small>
+          </label>
+          <ul class="chips" id="fileList"></ul>
+          <p class="file-msg" id="fileMsg" role="status"></p>
+        </section>
+
+        <div class="rp-submit">
+          <p class="rp-form-error" id="formError" role="alert" hidden>Check the highlighted fields and try again.</p>
+          <div class="rp-submit-row">
+            <button class="btn-primary" type="submit">Send report</button>
+            <p>Only BloodLink administrators can read your report.</p>
+          </div>
+        </div>
+      </form>
+
+      <!-- Confirmation -->
+      <section class="rp-done" id="done" tabindex="-1" hidden aria-live="polite">
+        <div class="done-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h2>Report sent</h2>
+        <p>The administrators will review it. Keep your reference number in case you need to follow up.</p>
+        <div class="done-ref">
+          <span id="doneId">RP-0000</span>
+          <button type="button" id="copyId"><span>Copy reference</span></button>
+        </div>
+        <div class="done-actions">
+          <a class="btn-primary" href="home.html">Back to home</a>
+          <button class="btn-ghost" type="button" id="again">Send another report</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="/js/report.js"></script>
+</body>
+</html>

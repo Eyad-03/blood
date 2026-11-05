@@ -12,60 +12,83 @@
   <link href="/css/profile.css" rel="stylesheet"/>
  </head>
  <body>
-  <header class="topbar">
-   <a class="brand" href="donorSearch.html">
-    <span class="logo">
-     &hearts;
-    </span>
-    <span>
-     Blood
-     <span>
-      Link
-     </span>
-     <small>
-      Every Second Can Save a Life
-     </small>
-    </span>
-   </a>
-   <nav>
-    <a href="donorSearch.html">
-     Find donors
-    </a>
-    <a href="#requests">
-     My requests
-    </a>
-    <span class="user-chip">
-     E&nbsp; Guest⌄
-    </span>
-   </nav>
-  </header>
+<header class="topbar">
+  <a class="brand" href="/html/home.html" aria-label="BloodLink home">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/><path d="M11.7 20.1c.3 2.1 1.7 3.4 3.8 3.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+    <span>Blood<span class="brand-accent">Link</span><small>Every second can save a life</small></span>
+  </a>
+
+  <nav class="main-nav" aria-label="Primary">
+    <a href="/html/home.html" class="main-nav-link">Home</a>
+    <a href="/html/donorSearch.html" class="main-nav-link active" aria-current="page">Find Donors</a>
+    <a href="/html/bloodRequests.html" class="main-nav-link">My Requests</a>
+  </nav>
+
+  <nav class="top-actions" aria-label="Account">
+    <div class="profile-menu" id="profileMenu">
+      <button class="profile-chip" id="profileMenuToggle" type="button" aria-expanded="false" aria-controls="profileDropdown">
+        <span class="profile-avatar">G</span>
+        <span class="profile-label"><strong>Guest</strong><small>Welcome to BloodLink</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" hidden>
+        <div class="dropdown-user">
+          <span class="profile-avatar">G</span>
+          <span><strong>Guest account</strong><small>Sign in to manage your profile</small></span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="/html/profile.html" class="dropdown-item"><span class="dropdown-icon">♙</span><span><strong>My profile</strong><small>View your personal details</small></span><span class="dropdown-arrow">›</span></a>
+        <a href="/html/home.html" class="dropdown-item"><span class="dropdown-icon">⌕</span><span><strong>Sign out</strong><small>Search nearby blood donors</small></span><span class="dropdown-arrow">›</span></a>
+      </div>
+    </div>
+  </nav>
+</header>
   <main class="shell">
-   <div class="breadcrumb">
-    <a href="donorSearch.html">
-     Home
-    </a>
-    / My profile
-   </div>
-   <section class="welcome">
-    <div>
-     <span class="eyebrow">
-      ● BLOODLINK MEMBER AREA
-     </span>
-     <h1>
-      Your profile,
-      <br/>
-      <em>
-       your peace of mind.
-      </em>
-     </h1>
-     <p>
-      Manage your personal details and keep your blood requests up to date.
-     </p>
+
+<section class="hero" id="hero">
+  <canvas class="hero-cells" id="heroCells" aria-hidden="true"></canvas>
+ 
+  <div class="welcome">
+    <div class="welcome-copy">
+      <span class="eyebrow"><i class="live-dot"></i>BLOODLINK MEMBER AREA</span>
+      <h1>
+        <span class="line"><span>Your profile,</span></span>
+        <span class="line"><em>your peace of mind.</em></span>
+      </h1>
+      <p>Manage your personal details, track every donation and let people in need know when you're ready to help.</p>
+      <div class="hero-chips">
+        <span class="chip"><b class="chip-ic">🩸</b>Blood type&nbsp;<strong id="heroBlood">—</strong></span>
+        <span class="chip"><b class="chip-ic">♥</b><strong id="heroDonations">0</strong>&nbsp;donations</span>
+        <button class="chip status-chip" id="heroStatus" type="button" aria-pressed="false">
+          <i class="dot"></i><span id="heroStatusText">Unavailable</span>
+        </button>
+      </div>
     </div>
-    <div class="hero-drop">
-     &hearts;
+ 
+    <div class="hero-visual" data-tilt aria-hidden="true">
+      <svg class="ecg" viewBox="0 0 600 140" preserveAspectRatio="none">
+        <path class="ecg-base" pathLength="1" d="M0,70 H90 L102,70 L110,58 L118,70 L128,70 L136,84 L148,18 L160,118 L170,70 L190,70 L204,56 L220,70 H330 L342,70 L350,58 L358,70 L368,70 L376,84 L388,18 L400,118 L410,70 L430,70 L444,56 L460,70 H600"/>
+        <path class="ecg-trace" pathLength="1" d="M0,70 H90 L102,70 L110,58 L118,70 L128,70 L136,84 L148,18 L160,118 L170,70 L190,70 L204,56 L220,70 H330 L342,70 L350,58 L358,70 L368,70 L376,84 L388,18 L400,118 L410,70 L430,70 L444,56 L460,70 H600"/>
+      </svg>
+      <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+      <div class="orbit"><span></span><span></span><span></span></div>
+      <div class="heart-drop">
+        <svg viewBox="0 0 100 120">
+          <defs>
+            <linearGradient id="dropGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff4d6a"/>
+              <stop offset=".55" stop-color="#d11d3c"/>
+              <stop offset="1" stop-color="#8e0b23"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 4C40 22 12 48 12 74a38 38 0 0 0 76 0C88 48 60 22 50 4Z" fill="url(#dropGrad)"/>
+          <ellipse cx="32" cy="58" rx="6" ry="14" fill="#fff" opacity=".28" transform="rotate(22 32 58)"/>
+          <path d="M50 96C36 86 30 78 30 69a10 10 0 0 1 20-5a10 10 0 0 1 20 5c0 9-6 17-20 27Z" fill="#fff" opacity=".95"/>
+        </svg>
+      </div>
     </div>
-   </section>
+  </div>
+</section>
    <div class="layout">
     <aside class="card sidebar">
      <div class="cover">
@@ -114,10 +137,10 @@
       <a class="active" href="#personal">
        ◉ &nbsp; Personal information
       </a>
-      <a href="#requests">
-       ♡ &nbsp; My blood requests
-       <b id="requestBadge">
-        2
+      <a href="#donations">
+       ♥ &nbsp; My donations
+       <b id="donationBadge">
+        0
        </b>
       </a>
 
@@ -208,42 +231,121 @@
 
       </div>
      </section>
-     <section class="card panel" id="requests">
+     <section class="card panel" id="donations">
       <div class="heading">
        <div>
         <label>
-         YOUR ACTIVITY
+         DONOR ACTIVITY
         </label>
         <h2>
-         My blood requests
-         <b class="count" id="requestCount">
-          2
-         </b>
+         My donations
         </h2>
         <p>
-         Track the requests you have created.
+         Track your donations and choose when you are available.
         </p>
        </div>
-       <button class="primary" id="newRequest">
-        ＋ New request
+       <button class="primary" id="addDonation" type="button">
+        ＋ Record donation
        </button>
       </div>
-      <div class="alert">
-       <b>
-        !
-       </b>
-       <div>
-        <strong>
-         Need blood urgently?
-        </strong>
-        <p>
-         Contact a hospital or emergency service directly. This demo page does not send real medical alerts.
-        </p>
+      <div class="donor-card is-off" id="donorCard">
+       <div class="bag-wrap">
+        <svg aria-label="Blood bag showing donation volume" class="bag" id="bagSvg" role="img" viewBox="0 0 200 250">
+         <defs>
+          <clipPath id="bagClip">
+           <path d="M50,52 Q50,42 60,42 H140 Q150,42 150,52 V200 Q150,232 118,236 H82 Q50,232 50,200 Z"></path>
+          </clipPath>
+          <linearGradient id="bloodGrad" x1="0" x2="0" y1="0" y2="1">
+           <stop offset="0" stop-color="#e5304f"></stop>
+           <stop offset="1" stop-color="#a30c28"></stop>
+          </linearGradient>
+         </defs>
+         <!-- tube -->
+         <path class="tube-base" d="M192,24 C150,24 100,2 100,38"></path>
+         <path class="tube-flow" d="M192,24 C150,24 100,2 100,38"></path>
+         <circle class="needle" cx="192" cy="24" r="4"></circle>
+         <!-- bag body -->
+         <path class="bag-body" d="M50,52 Q50,42 60,42 H140 Q150,42 150,52 V200 Q150,232 118,236 H82 Q50,232 50,200 Z"></path>
+         <g clip-path="url(#bagClip)">
+          <g class="liquid" id="liquid">
+           <path class="wave" d="M-80,6 Q-60,-2 -40,6 T0,6 T40,6 T80,6 T120,6 T160,6 T200,6 T240,6 V260 H-80 Z" fill="url(#bloodGrad)"></path>
+          </g>
+          <g class="drops" id="drops">
+           <circle class="drop" cx="100" cy="46" r="3.2"></circle>
+           <circle class="drop d2" cx="100" cy="46" r="3.2"></circle>
+           <circle class="drop d3" cx="100" cy="46" r="3.2"></circle>
+          </g>
+          <path class="shine" d="M62,60 V190"></path>
+         </g>
+         <g class="ticks">
+          <path d="M134,92 H150 M134,139 H150 M134,186 H150"></path>
+         </g>
+         <rect class="port" height="10" rx="3" width="20" x="90" y="32"></rect>
+        </svg>
+       </div>
+       <div class="donor-info">
+        <div class="counter">
+         <span class="counter-num" id="donationCount">
+          0
+         </span>
+         <span class="counter-label">
+          total donations
+         </span>
+        </div>
+        <div class="stats">
+         <div>
+          <small>
+           Volume donated
+          </small>
+          <strong id="donationVolume">
+           0 ml
+          </strong>
+         </div>
+         <div>
+          <small>
+           Last donation
+          </small>
+          <strong id="lastDonation">
+           No donations yet
+          </strong>
+         </div>
+        </div>
+        <div class="bag-progress">
+         <div class="bp-row">
+          <span id="bagText">
+           0 of 10 donations to fill the bag
+          </span>
+          <b id="bagPercent">
+           0%
+          </b>
+         </div>
+         <div class="track">
+          <span id="bagBar" style="width:0"></span>
+         </div>
+        </div>
+        <div class="status-row">
+         <div>
+          <strong id="donorStatusText">
+           Unavailable
+          </strong>
+          <p id="donorStatusHint">
+           Blood flow is stopped. Switch on to become available.
+          </p>
+         </div>
+         <button aria-checked="false" aria-label="Donor availability" class="switch" id="availabilityToggle" role="switch" type="button">
+          <span class="knob"></span>
+         </button>
+        </div>
+        <button class="undo" id="undoDonation" type="button">
+         Undo last donation
+        </button>
        </div>
       </div>
-      <div class="request-list" id="requestList">
-      </div>
+      <p class="settings-note" id="donorMsg" role="status">
+       Each donation is counted as 450 ml. Demo only: stored in this browser.
+      </p>
      </section>
+     
     </div>
    </div>
    <footer>
@@ -308,98 +410,38 @@
     </div>
    </form>
   </div>
-  <div class="backdrop" hidden="" id="requestBackdrop">
-   <form class="modal" id="requestForm">
-    <div class="modal-head">
-     <div>
-      <label>
-       BLOOD REQUEST
-      </label>
-      <h2>
-       Create a request
-      </h2>
-     </div>
-     <button class="close" data-close="requestBackdrop" type="button">
-      &times;
-     </button>
-    </div>
-    <div class="form-grid">
-     <label>
-      Blood type needed
-      <select id="bloodType" required="">
-       <option value="">
-        Select blood type
-       </option>
-       <option>
-        A+
-       </option>
-       <option>
-        A-
-       </option>
-       <option>
-        B+
-       </option>
-       <option>
-        B-
-       </option>
-       <option>
-        AB+
-       </option>
-       <option>
-        AB-
-       </option>
-       <option>
-        O+
-       </option>
-       <option>
-        O-
-       </option>
-      </select>
-     </label>
-     <label>
-      Units needed
-      <select id="units">
-       <option>
-        1
-       </option>
-       <option>
-        2
-       </option>
-       <option>
-        3
-       </option>
-       <option>
-        4
-       </option>
-      </select>
-     </label>
-     <label>
-      Hospital / medical center
-      <input id="hospital" placeholder="Hospital name" required=""/>
-     </label>
-     <label>
-      City / area
-      <input id="requestCity" required=""/>
-     </label>
-     <label class="full">
-      Additional details
-      <textarea id="notes" maxlength="300" placeholder="Optional details" rows="3"></textarea>
-     </label>
-    </div>
-    <p class="modal-note">
-     Demo only: this request is stored in your browser; no donor or hospital is notified.
-    </p>
-    <div class="modal-actions">
-     <button class="secondary" data-close="requestBackdrop" type="button">
-      Cancel
-     </button>
-     <button class="primary">
-      Create request
-     </button>
-    </div>
-   </form>
-  </div>
-  <script src="/js/profile.js">
+<script>
+(() => {
+  const menu = document.getElementById('profileMenu');
+  const toggle = document.getElementById('profileMenuToggle');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!menu || !toggle || !dropdown) return;
+
+  const setOpen = (open) => {
+    dropdown.hidden = !open;
+    menu.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+
+  toggle.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(dropdown.hidden);
+  });
+
+  dropdown.addEventListener('click', (event) => event.stopPropagation());
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+</script>
+<script src="/js/profile.js">
   </script>
  </body>
 </html>

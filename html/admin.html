@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14151f">
+<meta name="description" content="BloodLink platform administration dashboard">
+<title>Admin Dashboard | BloodLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="/css/hospital.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <div class="loader-heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 2.9 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4.7-1.3 2.2-2.4 4.3-2.4 3.8 0 5.8 4.1 4.3 7.4C19.5 16.4 12 21 12 21z"/></svg></div>
+  <svg class="loader-ecg ecg" data-cycles="3" viewBox="0 0 600 100" preserveAspectRatio="none"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+  <span>Loading admin console…</span>
+</div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="admin.html">
+    <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2.5s-6.5 7.2-6.5 11.8a6.5 6.5 0 0013 0C18.5 9.7 12 2.5 12 2.5z"/></svg></span>
+    <span>Blood<span>Link</span><small>ADMIN CONSOLE</small></span>
+  </a>
+  <div class="hospital-switch"><div class="hospital-symbol admin-symbol"><svg viewBox="0 0 24 24"><path d="M12 2l8 3.5v6.2c0 5-3.4 8.6-8 10.3-4.6-1.7-8-5.3-8-10.3V5.5z"/></svg></div><div><b>Platform Administration</b><small>Full access</small></div><span class="verified">✓</span></div>
+
+  <div class="nav-caption">CONTROL</div>
+  <nav class="side-nav">
+    <a class="nav-item active" href="#overview" data-section="overview"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span> Overview</a>
+  </nav>
+  <div class="nav-caption">REVIEW QUEUES</div>
+  <nav class="side-nav">
+    <a class="nav-item" href="#accounts" data-section="accounts"><span><svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6M10 10h4M12 8v4"/></svg></span> Account verification <b class="nav-count" id="navAccounts">0</b></a>
+    <a class="nav-item" href="#bookings" data-section="bookings"><span><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h3"/></svg></span> Hall bookings <b class="nav-count" id="navBookings">0</b></a>
+    <a class="nav-item" href="#reports" data-section="reports"><span><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span> Reports <b class="nav-count" id="navReports">0</b></a>
+  </nav>
+  <div class="nav-caption">SITE</div>
+  <nav class="side-nav">
+    <a class="nav-item" href="hall.html" data-external="true"><span><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h4"/></svg></span> Venue booking page</a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="vitals-card">
+      <div class="vitals-top"><span class="live-dot"></span><b>Platform live</b><small id="sideQueueText">Queues synced</small></div>
+      <svg class="vitals-ecg ecg" data-cycles="3" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+    </div>
+    <button class="logout" id="logoutButton"><span><svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/></svg></span> Sign out</button>
+  </div>
+</aside>
+<div class="sidebar-backdrop" aria-hidden="true"></div>
+
+<main class="main">
+<header class="topbar">
+  <button class="icon-button menu-button" id="menuButton" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  <div class="page-crumb"><span>Admin console</span><span class="crumb-sep">/</span><b id="crumbTitle">Overview</b></div>
+  <div class="top-actions">
+    <button class="icon-button notification-button" id="notificationButton" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0112 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2.2 2.2 0 004 0"/></svg><i></i></button>
+    <div class="user-divider"></div>
+    <div class="user-info"><b>Site Admin</b><small>Super administrator</small></div>
+    <div class="user-avatar">SA</div>
+  </div>
+</header>
+
+<div class="page-content">
+
+<!-- ============ OVERVIEW ============ -->
+<section class="page-section" id="overview">
+  <div class="welcome-row hero">
+    <div class="hero-cells" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <svg class="hero-ecg ecg" data-cycles="6" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+    <div class="hero-copy">
+      <div class="eyebrow"><i></i> PLATFORM CONTROL CENTER</div>
+      <h1 id="adminGreeting">Good morning, <span>Admin.</span></h1>
+      <p id="heroSummary">Checking review queues…</p>
+    </div>
+    <div class="hero-side">
+      <div class="date-chip"><span><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span id="todayDate">Today</span></div>
+      <div class="hero-pulse">
+        <span class="pulse-heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 2.9 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4.7-1.3 2.2-2.4 4.3-2.4 3.8 0 5.8 4.1 4.3 7.4C19.5 16.4 12 21 12 21z"/></svg></span>
+        <div><b id="liveClock">--:--</b><small>Console live</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <article class="metric-card clickable" data-go="accounts"><div class="metric-top"><span class="metric-label">ACCOUNTS AWAITING REVIEW</span><span class="metric-icon red"><svg viewBox="0 0 24 24"><path d="M12 2l8 3.5v6.2c0 5-3.4 8.6-8 10.3-4.6-1.7-8-5.3-8-10.3V5.5z"/></svg></span></div><div class="metric-value" id="kpiAccounts">0</div><div class="metric-foot"><span class="trend warning" id="kpiAccountsOld">0 older than 48h</span></div><div class="metric-progress"><span id="kpiAccountsBar" style="width:0%"></span></div><small class="metric-hint">Hospitals & centers waiting for activation</small></article>
+    <article class="metric-card clickable" data-go="bookings"><div class="metric-top"><span class="metric-label">BOOKINGS TO PROCESS</span><span class="metric-icon amber"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span></div><div class="metric-value" id="kpiBookings">0</div><div class="metric-foot"><span class="trend positive" id="kpiBookingsDone">0 completed</span><span>all time</span></div><div class="metric-progress"><span id="kpiBookingsBar" style="width:0%"></span></div><small class="metric-hint">Pending approval or paid & awaiting completion</small></article>
+    <article class="metric-card clickable" data-go="reports"><div class="metric-top"><span class="metric-label">OPEN REPORTS</span><span class="metric-icon blue"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span></div><div class="metric-value" id="kpiReports">0</div><div class="metric-foot"><span class="trend warning" id="kpiReportsHigh">0 high priority</span></div><div class="metric-progress blue-progress"><span id="kpiReportsBar" style="width:0%"></span></div><small class="metric-hint">New and in-review reports</small></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">ACTIVE ORGANIZATIONS</span><span class="metric-icon green"><svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/></svg></span></div><div class="metric-value" id="kpiActive">0</div><div class="metric-foot"><span class="trend positive">↗ verified</span><span>on the platform</span></div><div class="metric-progress green-progress"><span id="kpiActiveBar" style="width:0%"></span></div><small class="metric-hint" id="kpiActiveHint">Share of all registered organizations</small></article>
+  </div>
+
+  <div class="dashboard-grid">
+    <section class="panel chart-panel"><div class="panel-heading"><div><span class="section-kicker">PLATFORM ACTIVITY</span><h2>Incoming work over time</h2><p>New organization sign-ups, hall booking requests and reports per month.</p></div></div><div class="chart-wrap"><canvas id="activityChart"></canvas></div><div class="chart-legend"><span><i class="legend-red"></i> Sign-ups</span><span><i style="background:#f0a531"></i> Booking requests</span><span><i style="background:#3a72c9"></i> Reports</span></div></section>
+    <section class="panel distribution-panel"><div class="panel-heading"><div><span class="section-kicker">BOOKING PIPELINE</span><h2>Requests by status</h2><p>Live from the venue booking page</p></div><a href="#bookings" class="panel-link" data-go="bookings">Open ↗</a></div><div class="donut-wrap"><canvas id="bookingChart"></canvas><div class="donut-center"><strong id="donutTotal">0</strong><small>booking requests</small></div></div><div class="blood-legend" id="bookingLegend"></div></section>
+  </div>
+
+  <div class="dashboard-grid lower-grid">
+    <section class="panel queue-panel"><div class="panel-heading"><div><span class="section-kicker">ACTION QUEUE</span><h2>Needs your decision</h2><p>Oldest items first across every queue.</p></div><span class="stock-alert-count" id="queueCount">0 items</span></div><div class="queue-list" id="actionQueue"></div></section>
+    <section class="panel"><div class="panel-heading"><div><span class="section-kicker">AUDIT LOG</span><h2>Recent admin activity</h2><p>Every decision is recorded here.</p></div></div><ol class="timeline" id="activityLog"></ol></section>
+  </div>
+</section>
+
+<!-- ============ ACCOUNTS ============ -->
+<section class="page-section hidden-section" id="accounts">
+  <div class="subpage-heading"><div><span class="section-kicker">ONBOARDING</span><h1>Account verification</h1><p>New hospitals and centers stay inactive until their documents are checked and the account is activated.</p></div><input id="accountSearch" class="search-input" placeholder="Search name, city, license…"></div>
+  <div class="tab-bar" id="accountTabs" role="tablist">
+    <button class="tab active" data-filter="Pending">Pending <b data-count="Pending">0</b></button>
+    <button class="tab" data-filter="Active">Active <b data-count="Active">0</b></button>
+    <button class="tab" data-filter="Rejected">Rejected <b data-count="Rejected">0</b></button>
+    <button class="tab" data-filter="all">All <b data-count="all">0</b></button>
+  </div>
+  <section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>ORGANIZATION</th><th>TYPE</th><th>CITY</th><th>REGISTERED</th><th>DOCUMENTS</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="accountsBody"></tbody></table></div></section>
+</section>
+
+<!-- ============ BOOKINGS ============ -->
+<section class="page-section hidden-section" id="bookings">
+  <div class="subpage-heading"><div><span class="section-kicker">VENUES</span><h1>Hall bookings</h1><p>Review booking requests for initiatives and conferences. Status changes appear instantly in the user's “My Requests”.</p></div><input id="bookingSearch" class="search-input" placeholder="Search request, organization, venue…"></div>
+  <div class="pipeline" id="pipeline"></div>
+  <section class="panel table-panel"><div class="panel-heading"><div><span class="section-kicker">REQUESTS</span><h2 id="bookingTableTitle">All requests</h2></div><button class="record-action" id="clearBookingFilter" hidden>Show all ×</button></div><div class="table-wrap"><table><thead><tr><th>REQUEST</th><th>ORGANIZATION</th><th>VENUE</th><th>EVENT DATE</th><th>ATTENDEES</th><th>FEE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="bookingsBody"></tbody></table></div></section>
+</section>
+
+<!-- ============ REPORTS ============ -->
+<section class="page-section hidden-section" id="reports">
+  <div class="subpage-heading"><div><span class="section-kicker">INBOX</span><h1>Incoming reports</h1><p>Issues, complaints and flags sent by users, hospitals and centers.</p></div><input id="reportSearch" class="search-input" placeholder="Search reports…"></div>
+  <div class="tab-bar" id="reportTabs">
+    <button class="tab active" data-filter="open">Open <b data-count="open">0</b></button>
+    <button class="tab" data-filter="New">New <b data-count="New">0</b></button>
+    <button class="tab" data-filter="In review">In review <b data-count="In review">0</b></button>
+    <button class="tab" data-filter="Resolved">Resolved <b data-count="Resolved">0</b></button>
+  </div>
+  <div class="inbox">
+    <div class="panel inbox-list" id="reportList"></div>
+    <article class="panel inbox-detail" id="reportDetail"></article>
+  </div>
+</section>
+
+<footer class="footer"><span>© 2026 BloodLink Admin Console</span><span>Keeping the community safe and verified <b class="footer-heart">♥</b></span><span class="demo-label">DEMO DATA</span></footer>
+</div>
+</main>
+
+<!-- Review drawer (accounts + bookings) -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+  <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+
+<!-- Document preview -->
+<div class="doc-modal" id="docModal" aria-hidden="true"><div class="doc-sheet" id="docSheet"></div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="/js/admin.js"></script>
+</body></html>

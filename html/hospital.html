@@ -2,50 +2,102 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#c91835">
+<meta name="theme-color" content="#14151f">
+<meta name="description" content="BloodLink hospital blood bank operations dashboard">
 <title>Hospital Dashboard | BloodLink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="/css/hospital.css">
+<link rel="stylesheet" href="/css/ad-card.css">
+<link rel="stylesheet" href="/css/hall-bookings.css">
 </head>
 <body>
+
+<!-- Heartbeat intro loader -->
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <div class="loader-heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 2.9 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4.7-1.3 2.2-2.4 4.3-2.4 3.8 0 5.8 4.1 4.3 7.4C19.5 16.4 12 21 12 21z"/></svg></div>
+  <svg class="loader-ecg ecg" data-cycles="3" viewBox="0 0 600 100" preserveAspectRatio="none"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+  <span>Syncing blood bank…</span>
+</div>
+
 <div class="app">
 <aside class="sidebar" id="sidebar">
-  <a class="brand" href="hospital.html"><span class="brand-mark">♥</span><span>Blood<span>Link</span><small>HOSPITAL PORTAL</small></span></a>
-  <div class="hospital-switch"><div class="hospital-symbol">✚</div><div><b>Al Hayat Hospital</b><small>Verified medical center</small></div><span class="verified">✓</span></div>
+  <a class="brand" href="hospital.html">
+    <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2.5s-6.5 7.2-6.5 11.8a6.5 6.5 0 0013 0C18.5 9.7 12 2.5 12 2.5z"/></svg></span>
+    <span>Blood<span>Link</span><small>HOSPITAL PORTAL</small></span>
+  </a>
+  <div class="hospital-switch"><div class="hospital-symbol"><svg viewBox="0 0 24 24"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6z"/></svg></div><div><b>Al Hayat Hospital</b><small>Verified medical center</small></div><span class="verified">✓</span></div>
   <div class="nav-caption">WORKSPACE</div>
   <nav class="side-nav">
-    <a class="nav-item active" href="#overview" data-section="overview"><span>▦</span> Overview</a>
-    <a class="nav-item" href="#donation-records" data-section="donation-records"><span>✓</span> Donation verification <b class="nav-count" id="navRequests">6</b></a>
-    <a class="nav-item" href="#donors" data-section="donors"><span>♙</span> Donor directory</a>
-    <a class="nav-item" href="donorSearch.html" data-external="true"><span>⌕</span> Donor Search</a>
+    <a class="nav-item active" href="#overview" data-section="overview"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span> Overview</a>
+    <a class="nav-item" href="#donation-records" data-section="donation-records"><span><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span> Donation verification <b class="nav-count" id="navRequests">6</b></a>
+    <a class="nav-item" href="#donors" data-section="donors"><span><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 010 6.8M18.5 14.8c1.6.7 2.6 2.4 3 5.2"/></svg></span> Donor directory</a>
+    <a class="nav-item" href="donorSearch.html" data-external="true"><span><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span> Donor Search</a>
   </nav>
   <div class="nav-caption management-caption">MANAGEMENT</div>
   <nav class="side-nav">
-    <a class="nav-item" href="#profile" data-section="profile"><span>⚙</span> Hospital profile</a>
+    <a class="nav-item" href="#hall-bookings" data-section="hall-bookings"><span><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5M9 11h.01M15 11h.01"/></svg></span> Hall bookings <b class="nav-count nav-count-soft" id="navHallBookings">0</b></a>
+    <a class="nav-item" href="#ads" data-section="ads"><span><svg viewBox="0 0 24 24"><path d="M3 10v4a1 1 0 001 1h3l6 4V5L7 9H4a1 1 0 00-1 1z"/><path d="M17 8.5a5 5 0 010 7M19.5 6a8.5 8.5 0 010 12"/></svg></span> Advertisements <b class="nav-count nav-count-soft" id="navAds">0</b></a>
+    <a class="nav-item" href="#profile" data-section="profile"><span><svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6M10 10h4M12 8v4"/></svg></span> Hospital profile</a>
   </nav>
-  <div class="sidebar-bottom"><div class="help-card"><span>✦</span><b>Need assistance?</b><p>Our BloodLink team is here to help your hospital.</p><a href="mailto:support@bloodlink.example">Contact support ↗</a></div><button class="logout" id="logoutButton"><span>↪</span> Sign out</button></div>
+  <div class="sidebar-bottom">
+    <div class="vitals-card">
+      <div class="vitals-top"><span class="live-dot"></span><b>System live</b><small>All units synced</small></div>
+      <svg class="vitals-ecg ecg" data-cycles="3" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+    </div>
+    <button class="logout" id="logoutButton"><span><svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/></svg></span> Sign out</button>
+  </div>
 </aside>
+<div class="sidebar-backdrop" aria-hidden="true"></div>
 
 <main class="main">
-<header class="topbar"><button class="icon-button menu-button" id="menuButton" aria-label="Toggle menu">☰</button><div class="page-crumb"><span>Hospital portal</span><span>/</span><b id="crumbTitle">Overview</b></div><div class="top-actions"><button class="icon-button notification-button" id="notificationButton" aria-label="Notifications">♧<i></i></button><div class="user-divider"></div><div class="user-info"><b>Hospital Admin</b><small>Administrator</small></div><div class="user-avatar">HA</div></div></header>
+<header class="topbar">
+  <button class="icon-button menu-button" id="menuButton" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  <div class="page-crumb"><span>Hospital portal</span><span class="crumb-sep">/</span><b id="crumbTitle">Overview</b></div>
+  <div class="top-actions">
+    <button class="icon-button notification-button" id="notificationButton" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0112 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2.2 2.2 0 004 0"/></svg><i></i></button>
+    <div class="user-divider"></div>
+    <div class="user-info"><b>Hospital Admin</b><small>Administrator</small></div>
+    <div class="user-avatar">HA</div>
+  </div>
+</header>
 
 <div class="page-content">
 <section class="page-section" id="overview">
-  <div class="welcome-row"><div><div class="eyebrow"><i></i> HOSPITAL CONTROL CENTER</div><h1>Good morning, <span>Al Hayat.</span></h1><p>Here's what's happening with your blood bank today.</p></div><div class="date-chip"><span>▦</span><span id="todayDate">Today</span></div></div>
-  <div class="alert-banner"><div class="alert-symbol">!</div><div><b>Attention required</b><p><strong>3 blood types</strong> are running low on stock. Review your inventory and coordinate replenishment.</p></div><a href="#inventory">Review inventory <span>→</span></a><button class="dismiss-alert" id="dismissAlert" aria-label="Dismiss alert">×</button></div>
-  <div class="metrics-grid">
-    <article class="metric-card"><div class="metric-top"><span class="metric-label">TOTAL BLOOD UNITS</span><span class="metric-icon red">♥</span></div><div class="metric-value" id="totalUnits">248 <small>units</small></div><div class="metric-foot"><span class="trend positive">↗ 8.4%</span><span>vs. last month</span></div><div class="mini-bars"><i style="height:30%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:63%"></i><i style="height:55%"></i><i style="height:78%"></i><i style="height:67%"></i><i style="height:100%"></i></div></article>
-    <article class="metric-card"><div class="metric-top"><span class="metric-label">VERIFIED DONATIONS</span><span class="metric-icon amber">⌕</span></div><div class="metric-value" id="activeRequests">6</div><div class="metric-foot"><span class="trend warning">6 verified</span><span>this month</span></div><div class="metric-progress"><span style="width:62%"></span></div><small class="metric-hint">Documented donor-recipient transfers</small></article>
-    <article class="metric-card"><div class="metric-top"><span class="metric-label">REGISTERED DONORS</span><span class="metric-icon green">♙</span></div><div class="metric-value">1,284</div><div class="metric-foot"><span class="trend positive">↗ 12.6%</span><span>vs. last month</span></div><div class="metric-progress green-progress"><span style="width:78%"></span></div><small class="metric-hint">78% marked available recently</small></article>
-    <article class="metric-card"><div class="metric-top"><span class="metric-label">DONATIONS DOCUMENTED</span><span class="metric-icon blue">✓</span></div><div class="metric-value">94 <small>this month</small></div><div class="metric-foot"><span class="trend positive">↗ 6.2%</span><span>vs. last month</span></div><div class="metric-progress blue-progress"><span style="width:84%"></span></div><small class="metric-hint">84% fulfillment rate</small></article>
+  <div class="welcome-row hero">
+    <div class="hero-cells" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <svg class="hero-ecg ecg" data-cycles="6" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+    <div class="hero-copy">
+      <div class="eyebrow"><i></i> HOSPITAL CONTROL CENTER</div>
+      <h1>Good morning, <span>Al Hayat.</span></h1>
+      <p>Here's what's happening with your blood bank today.</p>
+    </div>
+    <div class="hero-side">
+      <div class="date-chip"><span><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span id="todayDate">Today</span></div>
+      <div class="hero-pulse">
+        <span class="pulse-heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 2.9 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4.7-1.3 2.2-2.4 4.3-2.4 3.8 0 5.8 4.1 4.3 7.4C19.5 16.4 12 21 12 21z"/></svg></span>
+        <div><b id="liveClock">--:--</b><small>Blood bank live</small></div>
+      </div>
+    </div>
   </div>
+
+  <div class="alert-banner"><div class="alert-symbol"><svg viewBox="0 0 24 24"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.2v.1"/></svg></div><div><b>Attention required</b><p><strong id="lowStockBannerCount">3 blood types</strong> are running low on stock. Review your inventory and coordinate replenishment.</p></div><a href="#inventory">Review inventory <span>→</span></a><button class="dismiss-alert" id="dismissAlert" aria-label="Dismiss alert">×</button></div>
+
+  <div class="metrics-grid">
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">TOTAL BLOOD UNITS</span><span class="metric-icon red"><svg viewBox="0 0 24 24"><path d="M12 2.5s-6.5 7.2-6.5 11.8a6.5 6.5 0 0013 0C18.5 9.7 12 2.5 12 2.5z"/></svg></span></div><div class="metric-value" id="totalUnits">248 <small>units</small></div><div class="metric-foot"><span class="trend positive">↗ 8.4%</span><span>vs. last month</span></div><div class="mini-bars"><i style="height:30%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:63%"></i><i style="height:55%"></i><i style="height:78%"></i><i style="height:67%"></i><i style="height:100%"></i></div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">VERIFIED DONATIONS</span><span class="metric-icon amber"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div><div class="metric-value" id="activeRequests">6</div><div class="metric-foot"><span class="trend warning">6 verified</span><span>this month</span></div><div class="metric-progress"><span style="width:62%"></span></div><small class="metric-hint">Documented donor-recipient transfers</small></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">REGISTERED DONORS</span><span class="metric-icon green"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 010 6.8M18.5 14.8c1.6.7 2.6 2.4 3 5.2"/></svg></span></div><div class="metric-value">1,284</div><div class="metric-foot"><span class="trend positive">↗ 12.6%</span><span>vs. last month</span></div><div class="metric-progress green-progress"><span style="width:78%"></span></div><small class="metric-hint">78% marked available recently</small></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">DONATIONS DOCUMENTED</span><span class="metric-icon blue"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span></div><div class="metric-value">94 <small>this month</small></div><div class="metric-foot"><span class="trend positive">↗ 6.2%</span><span>vs. last month</span></div><div class="metric-progress blue-progress"><span style="width:84%"></span></div><small class="metric-hint">84% fulfillment rate</small></article>
+  </div>
+
   <div class="dashboard-grid">
     <section class="panel chart-panel"><div class="panel-heading"><div><span class="section-kicker">PERFORMANCE</span><h2>Donation verification overview</h2><p>Verified donation records and completed transfers over time.</p></div><select id="chartRange" class="select-control" aria-label="Chart period"><option value="7">Last 7 days</option><option value="6" selected>Last 6 months</option><option value="12">Last 12 months</option></select></div><div class="chart-wrap"><canvas id="requestsChart"></canvas></div><div class="chart-legend"><span><i class="legend-red"></i> Donation records</span><span><i class="legend-green"></i> Fulfilled</span><span class="chart-total">94 fulfilled this month</span></div></section>
     <section class="panel distribution-panel"><div class="panel-heading"><div><span class="section-kicker">STOCK BREAKDOWN</span><h2>Inventory by blood type</h2><p>Current available units</p></div><a href="#inventory" class="panel-link">View all ↗</a></div><div class="donut-wrap"><canvas id="inventoryChart"></canvas><div class="donut-center"><strong id="donutTotal">248</strong><small>total units</small></div></div><div class="blood-legend" id="bloodLegend"></div></section>
   </div>
-  <div class="dashboard-grid lower-grid single-panel-grid">
+
+  <div class="dashboard-grid lower-grid">
+    <section class="panel vial-panel"><div class="panel-heading"><div><span class="section-kicker">LIVE BLOOD BANK</span><h2>Stock levels by type</h2><p>Each vial fills relative to an 80-unit storage capacity.</p></div><span class="legend-chip"><i></i> Below 15 units</span></div><div class="vial-rack" id="bloodVials"></div></section>
     <section class="panel low-stock-panel" id="inventory"><div class="panel-heading"><div><span class="section-kicker">STOCK MONITOR</span><h2>Low stock alerts</h2><p>Blood types that may need replenishment.</p></div><span class="stock-alert-count">3 alerts</span></div><div class="low-stock-list" id="lowStockList"></div><button class="full-button" id="manageInventory">Manage inventory <span>→</span></button></section>
   </div>
 </section>
@@ -59,7 +111,7 @@
     <article class="metric-card"><div class="metric-label">PENDING VERIFICATION</div><div class="metric-value" id="recordPending">2</div><div class="metric-foot"><span class="trend warning">Needs review</span></div></article>
   </div>
   <section class="panel create-record-panel" id="createRecordPanel">
-    <div class="panel-heading"><div><span class="section-kicker">NEW DOCUMENTATION</span><h2>Verify a donation transfer</h2><p>Enter donor, recipient and donation details. Only mark verified after the hospital confirms the transfer.</p></div><span class="record-shield">✓</span></div>
+    <div class="panel-heading"><div><span class="section-kicker">NEW DOCUMENTATION</span><h2>Verify a donation transfer</h2><p>Enter donor, recipient and donation details. Only mark verified after the hospital confirms the transfer.</p></div><span class="record-shield"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
     <form id="donationForm" class="donation-form">
       <label>Donor full name<input name="donor" required placeholder="e.g. Lina Khalil"></label>
       <label>Recipient / patient name<input name="recipient" required placeholder="e.g. Patient #2841"></label>
@@ -70,8 +122,8 @@
       <div class="record-form-actions record-wide"><p>Demo only: use a real backend and authorized staff verification for official records.</p><button class="primary-button" type="submit">Save verification record <span>→</span></button></div>
     </form>
   </section>
-  <section class="panel table-panel records-table-panel"><div class="panel-heading"><div><span class="section-kicker">REGISTER</span><h2>Donation records <span class="small-count" id="recordTableCount">6</span></h2><p>Print a record for hospital documentation or audit.</p></div><input id="recordSearch" class="search-input" placeholder="Search donor, recipient or ID…"></div>
-    <div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DATE</th><th>ACTION</th></tr></thead><tbody id="donationRecordsBody"></tbody></table></div>
+  <section class="panel table-panel records-table-panel"><div class="panel-heading"><div><span class="section-kicker">REGISTER</span><h2>Donation records <span class="small-count" id="recordTableCount">6</span></h2><p>Verify pending transfers, then print a record for hospital documentation or audit.</p></div><input id="recordSearch" class="search-input" placeholder="Search donor, recipient or ID…"></div>
+    <div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="donationRecordsBody"></tbody></table></div>
   </section>
 </section>
 
@@ -85,7 +137,7 @@
       <label>Blood type<select id="donorBloodFilter" class="select-control"><option value="all">All blood types</option><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></label>
       <label>Availability<select id="donorAvailabilityFilter" class="select-control"><option value="all">All availability</option><option value="Available">Available</option><option value="Not active">Not active</option><option value="Unknown">Unknown</option></select></label>
       <div class="donor-results-count"><b id="donorResultsCount">0</b><span>donors shown</span></div>
-      <button class="primary-button" id="emailDonorsButton" type="button">✉ Email filtered donors</button>
+      <button class="primary-button" id="emailDonorsButton" type="button">✉ Send to All Email</button>
     </div>
     <p class="demo-note">Email addresses and donor details are demo data. The button opens your default email app with recipients in BCC; it does not send automatically.</p>
   </div>
@@ -94,15 +146,209 @@
 
 <section class="page-section hidden-section" id="reports"><div class="subpage-heading"><div><span class="section-kicker">DATA & INSIGHTS</span><h1>Reports & analytics</h1><p>Review documented donation transfers and blood stock trends.</p></div><button class="primary-button" id="exportReport">↓ Export CSV report</button></div><div class="metrics-grid report-metrics"><article class="metric-card"><div class="metric-label">FULFILLED THIS MONTH</div><div class="metric-value">94</div><div class="metric-foot"><span class="trend positive">+6.2%</span><span>compared to previous month</span></div></article><article class="metric-card"><div class="metric-label">AVERAGE MATCH TIME</div><div class="metric-value">3.4 <small>hrs</small></div><div class="metric-foot"><span class="trend positive">−12%</span><span>faster than last month</span></div></article><article class="metric-card"><div class="metric-label">URGENT REQUESTS</div><div class="metric-value">17</div><div class="metric-foot"><span class="trend warning">Needs monitoring</span></div></article><article class="metric-card"><div class="metric-label">STOCK UTILIZATION</div><div class="metric-value">76<small>%</small></div><div class="metric-foot"><span>Monthly estimate</span></div></article></div><section class="panel report-chart-panel"><div class="panel-heading"><div><span class="section-kicker">DEMAND TRENDS</span><h2>Monthly donation documentation</h2></div></div><div class="chart-wrap tall"><canvas id="reportChart"></canvas></div></section></section>
 
+<section class="page-section hidden-section" id="hall-bookings">
+  <div class="subpage-heading">
+    <div><span class="section-kicker">EVENT VENUES</span><h1>Hall bookings</h1><p>Track venue requests for donation campaigns and awareness events, and pay for approved bookings.</p></div>
+    <div class="heading-actions"><a class="primary-button" href="hall.html#halls">＋ Book a hall</a></div>
+  </div>
+
+  <div class="metrics-grid hb-metrics">
+    <article class="metric-card"><div class="metric-label">TOTAL REQUESTS</div><div class="metric-value" id="hbTotal">0</div><div class="metric-foot">All venue requests</div></article>
+    <article class="metric-card"><div class="metric-label">PENDING REVIEW</div><div class="metric-value" id="hbPending">0</div><div class="metric-foot"><span class="trend warning">Awaiting provider</span></div></article>
+    <article class="metric-card hb-metric-pay"><div class="metric-label">PAYMENT AVAILABLE</div><div class="metric-value" id="hbApproved">0</div><div class="metric-foot"><span class="trend pay">● Ready to pay</span><span id="hbDueTotal">0 JOD due</span></div></article>
+    <article class="metric-card"><div class="metric-label">CONFIRMED BOOKINGS</div><div class="metric-value" id="hbPaid">0</div><div class="metric-foot"><span class="trend positive">✓ Paid</span><span>and secured</span></div></article>
+  </div>
+
+  <div class="hb-pay-banner" id="hbPayBanner" hidden>
+    <div class="hb-pay-icon"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg></div>
+    <div><b id="hbPayBannerTitle">Payment is now available</b><p id="hbPayBannerText">An approved booking is waiting for payment.</p></div>
+    <button class="primary-button" type="button" id="hbPayBannerButton">Pay now <span>→</span></button>
+  </div>
+
+  <div class="hb-layout">
+    <section class="panel table-panel hb-table-panel">
+      <div class="panel-heading">
+        <div><span class="section-kicker">REQUEST HISTORY</span><h2>Booking requests <span class="small-count" id="hbVisibleCount">0</span></h2><p>Search, filter and open a request. Approved bookings can be paid right here.</p></div>
+        <input id="hbSearch" class="search-input" type="search" placeholder="Search hall, organization or ID…">
+      </div>
+      <div class="hb-filters">
+        <div class="hb-tabs" role="group" aria-label="Filter by status">
+          <button class="hb-tab active" type="button" data-hb-filter="All">All <span data-hb-count="All">0</span></button>
+          <button class="hb-tab" type="button" data-hb-filter="Pending approval">Pending <span data-hb-count="Pending approval">0</span></button>
+          <button class="hb-tab" type="button" data-hb-filter="Approved">Payment available <span data-hb-count="Approved">0</span></button>
+          <button class="hb-tab" type="button" data-hb-filter="Paid">Confirmed <span data-hb-count="Paid">0</span></button>
+          <button class="hb-tab" type="button" data-hb-filter="Rejected">Rejected <span data-hb-count="Rejected">0</span></button>
+        </div>
+        <select id="hbSort" class="select-control" aria-label="Sort requests"><option value="newest">Newest first</option><option value="eventDate">Event date</option><option value="oldest">Oldest first</option></select>
+      </div>
+      <div class="table-wrap"><table class="hb-table"><thead><tr><th>REQUEST</th><th>HALL &amp; EVENT</th><th>EVENT DATE</th><th>FEE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="hbTableBody"></tbody></table></div>
+    </section>
+
+    <aside class="hb-side">
+      <section class="panel hb-journey-panel">
+        <div class="panel-heading"><div><span class="section-kicker">HOW IT WORKS</span><h2>Booking journey</h2></div></div>
+        <ol class="hb-journey">
+          <li class="done"><span>✓</span><div><b>Submit request</b><small>Event details and documents are sent to the venue.</small></div></li>
+          <li><span>2</span><div><b>Provider review</b><small>The venue provider checks the request and documents.</small></div></li>
+          <li class="pay"><span>3</span><div><b>Payment available</b><small>Once approved, the Pay now button appears on the request.</small></div></li>
+          <li><span>4</span><div><b>Booking confirmed</b><small>The hall is secured as soon as payment succeeds.</small></div></li>
+        </ol>
+      </section>
+      <section class="panel hb-note-panel"><b>Good to know</b><p>Payment opens only after the venue approves a request. Pending requests update automatically when their status changes.</p></section>
+    </aside>
+  </div>
+</section>
+
+<section class="page-section hidden-section" id="ads">
+  <div class="subpage-heading">
+    <div><span class="section-kicker">PROMOTIONS</span><h1>Hospital advertisements</h1><p>Promote consultation days, screenings and campaigns to everyone browsing BloodLink. Posting an ad is a paid service.</p></div>
+    <div class="heading-actions"><a class="secondary-button" href="ads.html" target="_blank" rel="noopener">View public page ↗</a><button class="primary-button" id="newAdButton" type="button">＋ New advertisement</button></div>
+  </div>
+  <div class="metrics-grid ad-metrics">
+    <article class="metric-card"><div class="metric-label">ACTIVE ADS</div><div class="metric-value" id="adActive">0</div><div class="metric-foot"><span class="trend positive">● Live</span><span>on public page</span></div></article>
+    <article class="metric-card"><div class="metric-label">SCHEDULED</div><div class="metric-value" id="adScheduled">0</div><div class="metric-foot">Paid, starting soon</div></article>
+    <article class="metric-card"><div class="metric-label">TOTAL VIEWS</div><div class="metric-value" id="adViews">0</div><div class="metric-foot">Ad detail opens by users</div></article>
+    <article class="metric-card"><div class="metric-label">TOTAL SPENT</div><div class="metric-value" id="adSpent">0 <small>JOD</small></div><div class="metric-foot">Incl. 16% sales tax</div></article>
+  </div>
+
+  <section class="panel ad-plans-panel">
+    <div class="panel-heading"><div><span class="section-kicker">PRICING</span><h2>Choose a posting plan</h2><p>The fee is charged once when the ad is published. Prices exclude 16% sales tax.</p></div></div>
+    <div class="plan-grid" id="planGrid" role="radiogroup" aria-label="Advertisement plan"></div>
+  </section>
+
+  <div class="ad-builder" id="adBuilder">
+    <section class="panel ad-form-panel">
+      <div class="panel-heading"><div><span class="section-kicker">NEW ADVERTISEMENT</span><h2>Ad details</h2><p>What patients will see on the public ads page.</p></div></div>
+      <form id="adForm" class="donation-form ad-form" novalidate>
+        <label class="record-wide">Ad title<input name="title" required maxlength="70" placeholder="e.g. Free orthopedic consultation day"></label>
+        <label>Department<select name="department" id="adDepartment" required></select></label>
+        <label>Ad type<select name="category" id="adCategory" required></select></label>
+        <label>Highlight badge <small class="field-hint">optional</small><input name="badge" maxlength="14" placeholder="e.g. Free, 50% off"></label>
+        <label>Event date<input name="eventDate" type="date" id="adEventDate" required></label>
+        <label>Starts at<input name="startTime" type="time" value="09:00" required></label>
+        <label>Ends at<input name="endTime" type="time" value="14:00" required></label>
+        <label>Location in hospital<input name="location" required maxlength="60" placeholder="e.g. Outpatient clinics, 2nd floor"></label>
+        <label>Contact phone<input name="phone" id="adPhone" required maxlength="20" placeholder="+962 …"></label>
+        <label>Ad goes live on<input name="startDate" type="date" id="adStartDate" required></label>
+        <label class="record-wide">Description <small class="field-hint"><span id="adDescCount">0</span>/300</small><textarea name="description" rows="3" required maxlength="300" placeholder="Who is it for, what's included, what to bring…"></textarea></label>
+        <label class="check-label record-wide"><input type="checkbox" name="booking"> Booking by phone is required</label>
+        <p class="form-error record-wide" id="adFormError" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <aside class="ad-side">
+      <section class="panel ad-preview-panel">
+        <div class="panel-heading"><div><span class="section-kicker">LIVE PREVIEW</span><h2>How users see it</h2></div></div>
+        <div id="adPreview"></div>
+      </section>
+      <section class="panel ad-summary-panel">
+        <div class="panel-heading"><div><span class="section-kicker">ORDER SUMMARY</span><h2 id="summaryPlan">Featured plan</h2><p id="summaryRun">—</p></div></div>
+        <dl class="fee-list">
+          <div><dt>Posting fee</dt><dd id="summaryFee">—</dd></div>
+          <div><dt>Sales tax (16%)</dt><dd id="summaryVat">—</dd></div>
+          <div class="fee-total"><dt>Total due</dt><dd id="summaryTotal">—</dd></div>
+        </dl>
+        <button class="primary-button full-width" id="proceedPayment" type="button">Continue to payment <span>→</span></button>
+        <p class="demo-note">Your ad is published only after payment is confirmed.</p>
+      </section>
+    </aside>
+  </div>
+
+  <section class="panel table-panel records-table-panel">
+    <div class="panel-heading"><div><span class="section-kicker">YOUR CAMPAIGNS</span><h2>Posted advertisements <span class="small-count" id="adTableCount">0</span></h2><p>Track status, views and what you've paid for each ad.</p></div>
+      <select id="adStatusFilter" class="select-control" aria-label="Filter by status"><option value="all">All statuses</option><option>Active</option><option>Scheduled</option><option>Expired</option><option>Stopped</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>AD ID</th><th>ADVERTISEMENT</th><th>PLAN</th><th>RUNS</th><th>STATUS</th><th>VIEWS</th><th>PAID</th><th>ACTION</th></tr></thead><tbody id="adTableBody"></tbody></table></div>
+  </section>
+</section>
+
 <section class="page-section hidden-section" id="profile"><div class="subpage-heading"><div><span class="section-kicker">ORGANIZATION</span><h1>Hospital profile</h1><p>Manage your hospital's public contact information.</p></div><button class="primary-button" id="saveHospitalProfile">Save changes</button></div><form class="panel profile-form" id="hospitalProfileForm"><label>Hospital name<input id="hospitalName" value="Al Hayat Hospital" required></label><label>Contact email<input id="hospitalEmail" type="email" value="bloodbank@alhayat.example" required></label><label>Phone number<input id="hospitalPhone" value="+962 2 700 0000" required></label><label>City / area<input id="hospitalCity" value="Irbid, Jordan" required></label><label class="wide-label">Address<input id="hospitalAddress" value="University Street, Irbid"></label><p class="demo-note">Demo profile information. Connect a backend to save changes securely for your organization.</p></form></section>
 
 <section class="page-section hidden-section" id="settings"><div class="subpage-heading"><div><span class="section-kicker">PREFERENCES</span><h1>Settings</h1><p>Configure dashboard preferences.</p></div></div><div class="panel settings-panel"><label class="setting-row"><span><b>Low-stock alerts</b><small>Show a warning when stock falls below the minimum threshold.</small></span><input type="checkbox" id="lowStockSetting" checked></label><label class="setting-row"><span><b>Urgent request notifications</b><small>Highlight high-priority requests in the dashboard.</small></span><input type="checkbox" id="urgentSetting" checked></label><label class="setting-row"><span><b>Compact tables</b><small>Use a denser layout for request and donor lists.</small></span><input type="checkbox" id="compactSetting"></label><p class="demo-note" id="settingsMessage">Settings are saved in this browser demo.</p></div></section>
 
-<section class="page-section hidden-section" id="all-requests"><div class="subpage-heading"><div><span class="section-kicker">DONATION AUDIT TRAIL</span><h1>Donation verification records</h1><p>Record and print verified donor-to-recipient donation transfers.</p></div></div><div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT / PATIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DONATION DATE</th><th>ACTION</th></tr></thead><tbody id="allRequestsBody"></tbody></table></div></div></section>
-<footer class="footer"><span>© 2026 BloodLink Hospital Portal</span><span>Made for a more connected care community <b>♥</b></span><span class="demo-label">DEMO DATA</span></footer>
+<section class="page-section hidden-section" id="all-requests"><div class="subpage-heading"><div><span class="section-kicker">DONATION AUDIT TRAIL</span><h1>Donation verification records</h1><p>Record and print verified donor-to-recipient donation transfers.</p></div></div><div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT / PATIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DONATION DATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="allRequestsBody"></tbody></table></div></div></section>
+<footer class="footer"><span>© 2026 BloodLink Hospital Portal</span><span>Made for a more connected care community <b class="footer-heart">♥</b></span><span class="demo-label">DEMO DATA</span></footer>
 </div>
 </main>
+<dialog class="checkout" id="checkoutDialog" aria-labelledby="checkoutTitle">
+  <form method="dialog" class="checkout-inner" id="checkoutForm" novalidate>
+    <div class="checkout-step" data-step="pay">
+      <header class="checkout-head"><div><span class="section-kicker">SECURE CHECKOUT</span><h2 id="checkoutTitle">Pay to publish your ad</h2></div><button class="checkout-close" type="button" data-close aria-label="Close">×</button></header>
+      <div class="checkout-order"><div><b id="coTitle">—</b><small id="coMeta">—</small></div><strong id="coTotal">—</strong></div>
+      <fieldset class="pay-methods"><legend>Payment method</legend>
+        <label class="pay-method"><input type="radio" name="method" value="card" checked><span><b>Credit / debit card</b><small>Visa, Mastercard</small></span></label>
+        <label class="pay-method"><input type="radio" name="method" value="cliq"><span><b>CliQ transfer</b><small>Instant bank transfer</small></span></label>
+        <label class="pay-method"><input type="radio" name="method" value="invoice"><span><b>Invoice hospital account</b><small>Added to monthly bill</small></span></label>
+      </fieldset>
+      <div class="pay-fields" data-method="card">
+        <label class="record-wide">Name on card<input id="cardName" autocomplete="off" placeholder="Al Hayat Hospital"></label>
+        <label class="record-wide">Card number<input id="cardNumber" inputmode="numeric" autocomplete="off" placeholder="1234 5678 9012 3456" maxlength="19"></label>
+        <label>Expiry<input id="cardExpiry" inputmode="numeric" autocomplete="off" placeholder="MM/YY" maxlength="5"></label>
+        <label>CVC<input id="cardCvc" inputmode="numeric" autocomplete="off" placeholder="123" maxlength="4"></label>
+      </div>
+      <div class="pay-fields" data-method="cliq" hidden><p class="pay-info">Send the total to CliQ alias <b>BLOODLINKADS</b> with reference <b id="cliqRef">—</b>, then confirm below.</p><label class="record-wide">Transfer reference number<input id="cliqTxn" autocomplete="off" placeholder="e.g. 4F82KQ19"></label></div>
+      <div class="pay-fields" data-method="invoice" hidden><p class="pay-info">The total will be added to the hospital's next monthly BloodLink invoice. The ad goes live on the selected date.</p></div>
+      <p class="form-error" id="payError" role="alert" hidden></p>
+      <label class="check-label terms"><input type="checkbox" id="adTerms"> I confirm this ad is accurate and agree that the posting fee is non-refundable once the ad is live.</label>
+      <button class="primary-button full-width" id="payButton" type="button">Pay <span id="payAmount">—</span></button>
+      <p class="demo-note center">Demo checkout — no real payment is processed and card details are never stored. Connect a payment gateway before going live.</p>
+    </div>
+    <div class="checkout-step processing" data-step="processing" hidden><div class="spinner-drop"></div><b>Processing payment…</b><small>Please don't close this window.</small></div>
+    <div class="checkout-step success" data-step="success" hidden>
+      <div class="success-mark"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Your ad is booked</h2>
+      <p id="successText">—</p>
+      <dl class="receipt"><div><dt>Receipt</dt><dd id="rcptId">—</dd></div><div><dt>Amount paid</dt><dd id="rcptAmount">—</dd></div><div><dt>Method</dt><dd id="rcptMethod">—</dd></div></dl>
+      <div class="success-actions"><a class="secondary-button" id="viewPublicAd" href="ads.html" target="_blank" rel="noopener">View on public page ↗</a><button class="primary-button" type="button" data-close>Done</button></div>
+    </div>
+  </form>
+</dialog>
+<!-- Hall booking: request details -->
+<dialog class="checkout hb-dialog" id="hbDetailsDialog" aria-labelledby="hbDetailsTitle">
+  <div class="checkout-inner">
+    <header class="checkout-head"><div><span class="section-kicker">BOOKING REQUEST</span><h2 id="hbDetailsTitle">Request details</h2></div><button class="checkout-close" type="button" data-hb-close aria-label="Close">×</button></header>
+    <div id="hbDetailsBody"></div>
+    <div class="hb-dialog-actions"><button class="secondary-button" type="button" data-hb-close>Close</button><button class="primary-button" type="button" id="hbDetailsPay" hidden>Pay now <span>→</span></button></div>
+  </div>
+</dialog>
+
+<!-- Hall booking: payment form -->
+<dialog class="checkout hb-dialog" id="hbPayDialog" aria-labelledby="hbPayTitle">
+  <form method="dialog" class="checkout-inner" novalidate>
+    <div class="checkout-step" data-hb-step="pay">
+      <header class="checkout-head"><div><span class="section-kicker">SECURE CHECKOUT</span><h2 id="hbPayTitle">Pay for hall booking</h2></div><button class="checkout-close" type="button" data-hb-close aria-label="Close">×</button></header>
+      <div class="checkout-order"><div><b id="hbCoTitle">—</b><small id="hbCoMeta">—</small></div><strong id="hbCoTotal">—</strong></div>
+      <fieldset class="pay-methods"><legend>Payment method</legend>
+        <label class="pay-method"><input type="radio" name="hbMethod" value="card" checked><span><b>Credit / debit card</b><small>Visa, Mastercard</small></span></label>
+        <label class="pay-method"><input type="radio" name="hbMethod" value="cliq"><span><b>CliQ transfer</b><small>Instant bank transfer</small></span></label>
+        <label class="pay-method"><input type="radio" name="hbMethod" value="invoice"><span><b>Invoice hospital account</b><small>Added to monthly bill</small></span></label>
+      </fieldset>
+      <div class="pay-fields" data-hb-method="card">
+        <label class="record-wide">Name on card<input id="hbCardName" autocomplete="off" placeholder="Al Hayat Hospital"></label>
+        <label class="record-wide">Card number<input id="hbCardNumber" inputmode="numeric" autocomplete="off" placeholder="1234 5678 9012 3456" maxlength="23"></label>
+        <label>Expiry<input id="hbCardExpiry" inputmode="numeric" autocomplete="off" placeholder="MM/YY" maxlength="5"></label>
+        <label>CVC<input id="hbCardCvc" inputmode="numeric" autocomplete="off" placeholder="123" maxlength="4"></label>
+      </div>
+      <div class="pay-fields" data-hb-method="cliq" hidden><p class="pay-info">Send the total to CliQ alias <b>BLOODLINKHALLS</b> with reference <b id="hbCliqRef">—</b>, then confirm below.</p><label class="record-wide">Transfer reference number<input id="hbCliqTxn" autocomplete="off" placeholder="e.g. 4F82KQ19"></label></div>
+      <div class="pay-fields" data-hb-method="invoice" hidden><p class="pay-info">The booking fee will be added to the hospital's next monthly BloodLink invoice and the hall is confirmed right away.</p></div>
+      <p class="form-error" id="hbPayError" role="alert" hidden></p>
+      <label class="check-label terms"><input type="checkbox" id="hbTerms"> I confirm the booking details and accept the venue's cancellation policy.</label>
+      <button class="primary-button full-width" id="hbPayButton" type="button">Pay <span id="hbPayAmount">—</span></button>
+      <p class="demo-note center">Demo checkout — no real payment is processed and card details are never stored.</p>
+    </div>
+    <div class="checkout-step processing" data-hb-step="processing" hidden><div class="spinner-drop"></div><b>Processing payment…</b><small>Please don't close this window.</small></div>
+    <div class="checkout-step success" data-hb-step="success" hidden>
+      <div class="success-mark"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Booking confirmed</h2>
+      <p id="hbSuccessText">—</p>
+      <dl class="receipt"><div><dt>Receipt</dt><dd id="hbRcptId">—</dd></div><div><dt>Amount paid</dt><dd id="hbRcptAmount">—</dd></div><div><dt>Method</dt><dd id="hbRcptMethod">—</dd></div></dl>
+      <div class="success-actions"><button class="primary-button" type="button" data-hb-close>Done</button></div>
+    </div>
+  </form>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
+<script src="/js/ads-data.js"></script>
+<script src="/js/hall-bookings.js"></script>
 <script src="/js/hospital.js"></script>
 </body></html>

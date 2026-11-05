@@ -1,98 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f9fc">
   <title>Find Blood Donors | BloodLink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <link rel="stylesheet" href="/css/donorSearch.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="/css/donorSearch.css">
 </head>
 <body>
+  <!-- Blood-vessel scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+
   <header class="topbar">
-    <a class="brand" href="index.html" aria-label="BloodLink home">
-      <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/><path d="M11.7 20.1c.3 2.1 1.7 3.4 3.8 3.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/></svg></span>
-      <span>Blood<span class="brand-accent">Link</span><small>Every Second Can Save a Life</small></span>
+    <a class="brand" href="/html/home.html" aria-label="BloodLink home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/><path d="M11.7 20.1c.3 2.1 1.7 3.4 3.8 3.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+      <span>Blood<span class="brand-accent">Link</span><small>Every second can save a life</small></span>
     </a>
-    <nav class="top-actions">
-      <a href="home.html" class="nav-link">Home</a>
-      <a href="register.html" class="nav-link">Become a donor</a>
-      <a href="index.html" class="profile-chip"><span class="profile-avatar">E</span><span>Guest</span><span class="chevron">⌄</span></a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/html/home.html" class="main-nav-link">Home</a>
+      <a href="/html/donorSearch.html" class="main-nav-link active" aria-current="page">Find Donors</a>
+      <a href="/html/bloodRequests.html" class="main-nav-link">My Requests</a>
+    </nav>
+
+    <nav class="top-actions" aria-label="Main navigation">
+      <div class="profile-menu" id="profileMenu">
+        <button class="profile-chip" id="profileMenuToggle" type="button" aria-expanded="false" aria-controls="profileDropdown">
+          <span class="profile-avatar">G</span>
+          <span class="profile-label"><strong>Guest</strong><small>Welcome to BloodLink</small></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown" hidden>
+          <div class="dropdown-user">
+            <span class="profile-avatar">G</span>
+            <span><strong>Guest account</strong><small>Sign in to manage your profile</small></span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="profile.html" class="dropdown-item"><span class="dropdown-icon">♙</span><span><strong>My profile</strong><small>View your personal details</small></span><span class="dropdown-arrow">›</span></a>
+          <a href="/html/home.html" class="dropdown-item"><span class="dropdown-icon">⌕</span><span><strong>Sign out</strong><small>Search nearby blood donors</small></span><span class="dropdown-arrow">›</span></a>
+        </div>
+      </div>
     </nav>
   </header>
 
   <main class="page-shell">
+    <!-- ================= HERO ================= -->
     <section class="intro">
-      <div class="eyebrow"><span class="pulse-dot"></span> BLOOD DONOR DIRECTORY</div>
-      <h1>Find a donor.<br><span>Help save a life.</span></h1>
-      <p>Search by blood type and location to connect with potential donors near you. In an emergency, contact your local hospital or emergency services too.</p>
-      <div class="trust-row"><span><span class="trust-icon">✓</span> Blood-type matching</span><span><span class="trust-icon">⌖</span> Location-based search</span><span><span class="trust-icon">♡</span> Community-powered</span></div>
+      <canvas id="cellCanvas" class="cell-canvas" aria-hidden="true"></canvas>
+      <div class="eyebrow"><span class="pulse-dot"></span> THE BLOODLINK COMMUNITY</div>
+      <div class="intro-layout">
+        <div class="intro-copy">
+          <h1 class="hero-title">
+            <span class="line"><span class="word">Find</span> <span class="word">a</span> <span class="word">donor.</span></span>
+            <span class="line"><span class="word grad">Be</span> <span class="word grad">someone's</span> <span class="word grad">hope.</span></span>
+          </h1>
+
+          <!-- Heartbeat line -->
+          <div class="ecg" aria-hidden="true">
+            <svg viewBox="0 0 600 70" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="ecgGrad" x1="0" x2="1">
+                  <stop offset="0" stop-color="#e3294b" stop-opacity="0"/>
+                  <stop offset=".25" stop-color="#e3294b" stop-opacity=".85"/>
+                  <stop offset="1" stop-color="#a91c61"/>
+                </linearGradient>
+              </defs>
+              <path class="ecg-base" d="M0 38 H140 L156 38 L166 22 L176 38 L196 38 L208 6 L222 64 L234 30 L246 38 H330 L346 38 L356 22 L366 38 L386 38 L398 6 L412 64 L424 30 L436 38 H600"/>
+              <path class="ecg-line" pathLength="1" d="M0 38 H140 L156 38 L166 22 L176 38 L196 38 L208 6 L222 64 L234 30 L246 38 H330 L346 38 L356 22 L366 38 L386 38 L398 6 L412 64 L424 30 L436 38 H600"/>
+            </svg>
+            <span class="ecg-bpm"><b id="bpmValue">72</b> BPM</span>
+          </div>
+
+          <p>Discover potential blood donors around your area. Search by blood type, explore the map, and take the next step toward helping someone in need.</p>
+          <div class="trust-row"><span><i>✓</i> Blood-type search</span><span><i>⌖</i> Explore nearby</span><span><i>♡</i> Community powered</span></div>
+        </div>
+
+        <div class="radar-stage" aria-hidden="true">
+          <div class="radar-card" id="radarCard">
+            <svg id="radarSvg" class="radar-svg" viewBox="0 0 520 360" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <defs>
+                <pattern id="rGrid" width="80" height="72" patternUnits="userSpaceOnUse"><path d="M80 0H0V72" fill="none" stroke="#dde2f0" stroke-width="1"/></pattern>
+                <radialGradient id="rGlow"><stop offset="0" stop-color="#e3294b" stop-opacity=".34"/><stop offset="1" stop-color="#e3294b" stop-opacity="0"/></radialGradient>
+                <filter id="rShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#b8183a" flood-opacity=".35"/></filter>
+              </defs>
+              <rect width="520" height="360" fill="url(#rGrid)"/>
+              <g class="r-blocks">
+                <rect x="30" y="40" width="70" height="46" rx="8"/><rect x="214" y="22" width="64" height="40" rx="8"/><rect x="420" y="150" width="62" height="54" rx="8"/>
+                <rect x="40" y="276" width="80" height="48" rx="8"/><rect x="330" y="290" width="70" height="42" rx="8"/><rect x="440" y="30" width="56" height="44" rx="8"/>
+              </g>
+              <g class="r-roads" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path class="road" pathLength="1" style="--i:0" d="M-10 258 L84 220 L130 240 L196 188 L250 210 L300 168 L352 150 L398 176 L470 128 L530 112"/>
+                <path class="road" pathLength="1" style="--i:1" d="M120 -10 L148 60 L178 104 L214 152 L206 214 L226 300 L254 370"/>
+                <path class="road" pathLength="1" style="--i:2" d="M330 -10 L318 52 L352 96 L342 150 L392 214 L380 270 L420 300 L440 370"/>
+                <path class="road alt" pathLength="1" style="--i:3" d="M-10 120 L60 100 L120 120 L182 92 L240 112"/>
+                <path class="road alt" pathLength="1" style="--i:4" d="M290 370 L322 322 L388 340 L470 292 L530 304"/>
+                <path class="road" pathLength="1" style="--i:5" d="M400 -10 L430 40 L474 70 L520 60"/>
+              </g>
+              <circle class="radar-breathe" cx="260" cy="180" r="135" fill="url(#rGlow)"/>
+              <circle class="ripple" style="--d:0s" cx="260" cy="180" r="150"/>
+              <circle class="ripple" style="--d:1.4s" cx="260" cy="180" r="150"/>
+              <circle class="ripple" style="--d:2.8s" cx="260" cy="180" r="150"/>
+              <g class="radar-sweep">
+                <path d="M260 180 L590 180 A330 330 0 0 0 425 -105.8 Z" fill="#e3294b" fill-opacity=".05"/>
+                <path d="M260 180 L590 180 A330 330 0 0 0 512.8 -32.1 Z" fill="#e3294b" fill-opacity=".06"/>
+                <path d="M260 180 L590 180 A330 330 0 0 0 570.1 67.1 Z" fill="#e3294b" fill-opacity=".08"/>
+                <line x1="260" y1="180" x2="590" y2="180" stroke="#e3294b" stroke-opacity=".5" stroke-width="1.4"/>
+              </g>
+              <g id="radarLinks"></g>
+              <g id="radarPins"></g>
+              <g class="radar-core" filter="url(#rShadow)">
+                <circle class="core-halo" cx="260" cy="180" r="34"/>
+                <circle cx="260" cy="180" r="25" fill="#fff"/>
+                <circle cx="260" cy="180" r="29" fill="none" stroke="#e3294b" stroke-opacity=".28" stroke-width="1.5"/>
+                <path class="core-heart" d="M260 192 C246 182 246 170 253 168 C257 167 259 170 260 172 C261 170 263 167 267 168 C274 170 274 182 260 192 Z" fill="#e3294b"/>
+              </g>
+            </svg>
+            <div class="radar-chip chip-match"><span class="rc-dot"></span><span>Matching locations</span><b id="radarType" class="rc-type">O+</b></div>
+          </div>
+          <div class="radar-tags"><span class="rt rt-grey">Location-based</span><span class="rt rt-purple">Smart matching</span><span class="rt rt-green">Live map concept</span></div>
+        </div>
+      </div>
+
+      <!-- Live stats strip 
+      <div class="stats-strip" data-reveal>
+        <div class="stat"><span class="stat-icon">♥</span><div><b data-count="donors">0</b><small>Registered donors</small></div></div>
+        <div class="stat"><span class="stat-icon ok">●</span><div><b data-count="available">0</b><small>Available now</small></div></div>
+        <div class="stat"><span class="stat-icon">⌖</span><div><b data-count="cities">0</b><small>Cities covered</small></div></div>
+        <div class="stat"><span class="stat-icon">✚</span><div><b data-count="types">0</b><small>Blood types</small></div></div>
+      </div>
+      -->
     </section>
 
-    <section class="search-card" aria-labelledby="search-title">
-      <div class="search-card-heading">
-        <div><span class="section-kicker">DONOR SEARCH</span><h2 id="search-title">Who do you need?</h2></div>
-        <span class="secure-label"><span>✦</span> Quick & simple</span>
-      </div>
+    <!-- ================= SEARCH ================= -->
+    <section class="search-card" aria-labelledby="search-title" data-reveal>
+      <div class="search-card-heading"><div><span class="section-kicker">SMART SEARCH</span><h2 id="search-title">Find your match</h2><p>Choose your requirements to explore matching donors.</p></div><span class="secure-label"><span>✦</span> Simple · Fast · Connected</span></div>
       <form id="searchForm" class="search-form">
-        <div class="field-group blood-field">
-          <label for="bloodType">Blood type <span class="required">*</span></label>
-          <div class="select-wrap"><span class="field-icon">✚</span>
-            <select id="bloodType" required>
-              <option value="">Select blood type</option>
-              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
-            </select><span class="select-arrow">⌄</span>
-          </div>
-          <small>Choose the type requested by the medical team.</small>
-        </div>
-        <div class="field-group">
-          <label for="city">City / area</label>
-          <div class="input-wrap"><span class="field-icon">⌖</span><input id="city" type="text" placeholder="e.g. Irbid, Amman" autocomplete="address-level2" /></div>
-          <small>Leave blank to search all listed locations.</small>
-        </div>
-        <div class="field-group">
-          <label for="availability">Availability</label>
-          <div class="select-wrap"><span class="field-icon">◷</span>
-            <select id="availability"><option value="all">All donors</option><option value="available">Available now</option></select><span class="select-arrow">⌄</span>
-          </div>
-          <small>Availability is self-reported.</small>
-        </div>
-        <button class="search-button" type="submit"><span>⌕</span> Search donors <span class="button-arrow">→</span></button>
+        <div class="field-group blood-field"><label for="bloodType">Patient blood type <span class="required">*</span></label><div class="select-wrap"><span class="field-icon">✚</span><select id="bloodType" required><option value="">Select blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select><span class="select-arrow">⌄</span></div><small>Use the blood type requested by the medical team.</small></div>
+        <div class="field-group"><label for="city">City or area</label><div class="input-wrap"><span class="field-icon">⌖</span><input id="city" type="text" placeholder="Try Irbid, Amman…" autocomplete="address-level2"></div><small>Leave blank to search all locations.</small></div>
+        <div class="field-group"><label for="availability">Availability</label><div class="select-wrap"><span class="field-icon">◷</span><select id="availability"><option value="all">All donors</option><option value="available">Available now</option></select><span class="select-arrow">⌄</span></div><small>Availability is self-reported.</small></div>
+        <button class="search-button" type="submit"><span class="sb-icon">⌕</span> <span class="sb-label">Search donors</span> <b>↗</b></button>
       </form>
-      <div class="blood-quick-picks"><span class="quick-label">Quick select</span>
-        <div class="blood-types" role="group" aria-label="Quick select blood type">
-          <button type="button" class="type-pill" data-type="A+">A+</button><button type="button" class="type-pill" data-type="A-">A−</button>
-          <button type="button" class="type-pill" data-type="B+">B+</button><button type="button" class="type-pill" data-type="B-">B−</button>
-          <button type="button" class="type-pill" data-type="AB+">AB+</button><button type="button" class="type-pill" data-type="AB-">AB−</button>
-          <button type="button" class="type-pill" data-type="O+">O+</button><button type="button" class="type-pill" data-type="O-">O−</button>
+
+      <div class="search-extras">
+        <label class="compat-toggle">
+          <input type="checkbox" id="compatToggle">
+          <span class="switch" aria-hidden="true"><span></span></span>
+          <span><strong>Include compatible donors</strong><small>Show every blood type that can safely donate to the patient</small></span>
+        </label>
+        <div class="compat-panel" id="compatPanel" aria-live="polite">
+          <span class="compat-hint">Pick a blood type to see who can donate</span>
         </div>
       </div>
+
+      <div class="blood-quick-picks"><span class="quick-label">QUICK SELECT</span><div class="blood-types" role="group" aria-label="Quick select blood type"><button type="button" class="type-pill" data-type="A+">A+</button><button type="button" class="type-pill" data-type="A-">A−</button><button type="button" class="type-pill" data-type="B+">B+</button><button type="button" class="type-pill" data-type="B-">B−</button><button type="button" class="type-pill" data-type="AB+">AB+</button><button type="button" class="type-pill" data-type="AB-">AB−</button><button type="button" class="type-pill" data-type="O+">O+</button><button type="button" class="type-pill" data-type="O-">O−</button></div></div>
     </section>
 
+    <!-- ================= RESULTS ================= -->
     <section class="results-section" id="resultsSection">
-      <div class="results-header"><div><span class="section-kicker">MATCHING COMMUNITY</span><h2>Potential donors <span id="resultCount" class="count-badge">6</span></h2><p id="resultsDescription">Showing sample donors to preview the search experience.</p></div>
-        <label class="sort-control" for="sortBy">Sort by <select id="sortBy"><option value="nearby">Closest first</option><option value="name">Name A–Z</option></select></label>
+      <div class="results-header" data-reveal><div><span class="section-kicker">YOUR COMMUNITY</span><h2>Potential donors <span id="resultCount" class="count-badge">12</span></h2><p id="resultsDescription">Explore sample donors and their approximate locations.</p></div><label class="sort-control" for="sortBy">Sort by <select id="sortBy"><option value="nearby">Closest first</option><option value="name">Name A–Z</option></select></label></div>
+      <div class="map-panel" data-reveal>
+        <div class="map-heading"><div><span class="section-kicker">LIVE MAP EXPERIENCE</span><h3>Explore donors on the map</h3><p>Choose a pin to preview donor information.</p></div><div class="map-badge"><span></span> Interactive map</div></div>
+        <div id="mapStatus" class="map-status">Preparing your map…</div>
+        <div class="map-wrap"><div id="donorMap" class="donor-map" role="region" aria-label="Map showing matching donor locations"></div><div class="map-overlay-label"><span class="map-overlay-dot"></span> <span id="mapShown">Donor locations</span> <small>Demo data</small></div><div class="map-scan" id="mapScan" aria-hidden="true"></div></div>
+        <div class="map-footer"><span><i class="legend-dot available-dot"></i> Available</span><span><i class="legend-dot away-dot"></i> Not currently available</span><span class="map-caption">Pins use approximate demo coordinates.</span></div>
       </div>
-      <div class="map-heading">
-        <div><span class="section-kicker">MAP VIEW</span><h3>Donors near your search area</h3></div>
-        <span class="map-key"><i></i> Sample donor locations</span>
-      </div>
-      <div id="mapStatus" class="map-status">Loading map…</div>
-      <div id="donorMap" class="donor-map" role="region" aria-label="Map showing matching donor locations"></div>
-      <p class="map-caption">Select a map marker to see the donor's sample details. Map pins use approximate demo coordinates.</p>
-      <div id="donorGrid" class="donor-grid" aria-live="polite"></div>
-      <div id="emptyState" class="empty-state" hidden><div class="empty-icon">⌕</div><h3>No donors found</h3><p>Try another blood type or broaden your location search.</p><button id="resetSearch" type="button" class="outline-button">Clear filters</button></div>
-      <p class="demo-note"><span>ⓘ</span> Demo data for design preview only. Donor details and availability are not real; connect this page to your backend before using it for actual requests.</p>
+      <div class="donor-grid" id="donorGrid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state" hidden><div class="empty-icon">⌕</div><h3>No donors found</h3><p>Try another blood type, turn on compatible donors, or broaden your location search.</p><button id="resetSearch" type="button" class="outline-button">Clear filters</button></div>
+      <p class="demo-note"><span>ⓘ</span> <span><strong>Preview mode:</strong> Donor names, availability, and locations are sample data, not real donor records. Connect this page to your backend before using it for actual requests.</span></p>
     </section>
 
-    <section class="urgent-banner"><div class="urgent-symbol">!</div><div><h3>Is this a medical emergency?</h3><p>Do not rely only on an online directory. Contact a hospital or emergency services immediately.</p></div><a href="https://www.moh.gov.jo/" target="_blank" rel="noopener noreferrer">Health Ministry <span>↗</span></a></section>
-    <footer><span>© 2026 BloodLink</span><span>Made with <span class="footer-heart">♥</span> for a more connected community</span><a href="register.html">Join as a donor</a></footer>
+    <section class="urgent-banner" data-reveal>
+      <div class="urgent-symbol">!</div>
+      <div><h3>Need blood urgently?</h3><p>This directory is not an emergency service. Contact a hospital or local emergency services immediately.</p></div>
+      <svg class="urgent-ecg" viewBox="0 0 160 40" aria-hidden="true"><path pathLength="1" d="M0 22 H50 L58 22 L64 10 L70 22 L78 22 L86 2 L94 38 L100 16 L106 22 H160"/></svg>
+      <a href="https://www.moh.gov.jo/" target="_blank" rel="noopener noreferrer">Health Ministry <span>↗</span></a>
+    </section>
+    <footer><span>© 2026 BloodLink</span><span>Made with <b class="footer-heart">♥</b> for a more connected community</span><a href="register.html">Join as a donor ↗</a></footer>
   </main>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="/js/donorSearch.js"></script>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/donorSearch.js"></script>
+<script>
+(() => {
+  const menu = document.getElementById('profileMenu');
+  const toggle = document.getElementById('profileMenuToggle');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!menu || !toggle || !dropdown) return;
+
+  const setOpen = (open) => {
+    dropdown.hidden = !open;
+    menu.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+
+  toggle.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(dropdown.hidden);
+  });
+  dropdown.addEventListener('click', (event) => event.stopPropagation());
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+</script>
 </body>
 </html>

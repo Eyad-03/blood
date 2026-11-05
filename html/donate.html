@@ -10,25 +10,62 @@
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="donorSearch.html"><span class="logo">♥</span><span>Blood<span>Link</span><small>Every Second Can Save a Life</small></span></a>
-  <nav><a href="donorSearch.html">Find donors</a><a href="profile.html">My profile</a><span class="user-chip"><span class="mini-avatar">E</span> Donor <span class="chevron">⌄</span></span></nav>
+  <a class="brand" href="/html/home.html" aria-label="BloodLink home">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/><path d="M11.7 20.1c.3 2.1 1.7 3.4 3.8 3.7" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/></svg></span>
+    <span>Blood<span class="brand-accent">Link</span><small>Every second can save a life</small></span>
+  </a>
+
+<nav class="main-nav" aria-label="Primary">
+  <a href="/html/home.html" class="main-nav-link">Home</a>
+  <a href="/html/donorSearch.html" class="main-nav-link">Find Donors</a>
+  <a href="/html/donate.html" class="main-nav-link active" aria-current="page">Donate</a>
+</nav>
+
+  <nav class="top-actions" aria-label="Account">
+    <div class="profile-menu" id="profileMenu">
+      <button class="profile-chip" id="profileMenuToggle" type="button" aria-expanded="false" aria-controls="profileDropdown">
+        <span class="profile-avatar">G</span>
+        <span class="profile-label"><strong>Guest</strong><small>Welcome to BloodLink</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" hidden>
+        <div class="dropdown-user">
+          <span class="profile-avatar">G</span>
+          <span><strong>Guest account</strong><small>Sign in to manage your profile</small></span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="/html/profile.html" class="dropdown-item"><span class="dropdown-icon">♙</span><span><strong>My profile</strong><small>View your personal details</small></span><span class="dropdown-arrow">›</span></a>
+        <a href="/html/donorRequests.html" class="dropdown-item"><span class="dropdown-icon">♡</span><span><strong>My Requests</strong><small>View my blood requests</small></span><span class="dropdown-arrow">›</span></a>
+        <a href="/html/home.html" class="dropdown-item"><span class="dropdown-icon">⌕</span><span><strong>Sign out</strong><small>Search nearby blood donors</small></span><span class="dropdown-arrow">›</span></a>
+      </div>
+    </div>
+  </nav>
 </header>
 <main class="shell">
-  <div class="breadcrumb"><a href="donorSearch.html">Home</a><span>/</span><a href="profile.html">My profile</a><span>/</span><span>Offer to donate</span></div>
   <section class="hero">
     <div><span class="eyebrow"><i></i> DONOR VOLUNTEER FORM</span><h1>Your donation can<br><em>give someone more time.</em></h1><p>Tell us when you're available and share an approximate location so nearby people can find a willing donor.</p><div class="hero-points"><span>✓ You choose when to be available</span><span>✓ You control location sharing</span></div></div>
-    <div class="hero-art" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="heart-drop">♥</div><span class="spark s1">✦</span><span class="spark s2">✧</span></div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="art-glow"></div>
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+        <img class="hero-hand-image" src="/html/hand-donation.png" alt="" draggable="false">
+        <div class="blood-drop drop-main"><span>♥</span></div>
+        <div class="blood-drop drop-small drop-one"></div>
+        <div class="blood-drop drop-small drop-two"></div>
+        <div class="blood-drop drop-small drop-three"></div>
+        <span class="spark s1">✦</span><span class="spark s2">✧</span>
+        <span class="art-caption">GIVE LIFE</span>
+      </div>
   </section>
 
   <div class="content-grid">
     <form id="donorForm" class="form-card">
       <div class="section-heading"><div><label>STEP 01 · DONOR DETAILS</label><h2>Donation availability</h2><p>Review your details before submitting.</p></div><span class="step-badge">01 / 02</span></div>
       <div class="fields">
-        <label>Full name <span class="required">*</span><input id="fullName" name="fullName" required maxlength="80" placeholder="Enter your full name" value="Eyad Mansour"></label>
-        <label>Blood type <span class="required">*</span><select id="bloodType" name="bloodType" required><option value="">Select your blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
-        <label>Phone number <span class="required">*</span><input id="phone" name="phone" type="tel" required placeholder="+962 7X XXX XXXX"></label>
-        <label>City / area <span class="required">*</span><input id="city" name="city" required placeholder="e.g. Irbid, University Street" value="Irbid, Jordan"></label>
-        <label>When can you donate? <span class="required">*</span><select id="availability" required><option value="">Choose availability</option><option value="today">Available today</option><option value="tomorrow">Available tomorrow</option><option value="week">Within the next 7 days</option><option value="contact">Contact me to arrange a time</option></select></label>
+        <label>Full name <span class="required"></span><input id="fullName" name="fullName" required maxlength="80" placeholder="Enter your full name" value="Eyad Mansour"></label>
+        <label>Blood type <span class="required"></span><select id="bloodType" name="bloodType" required><option value="">Select your blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+        <label>Phone number <span class="required"></span><input id="phone" name="phone" type="tel" required placeholder="+962 7X XXX XXXX"></label>
+        <label>City / area <span class="required"></span><input id="city" name="city" required placeholder="e.g. Irbid, University Street" value="Irbid, Jordan"></label>
+        <label>When can you donate? <span class="required"></span><select id="availability" required><option value="">Choose availability</option><option value="today">Available today</option><option value="tomorrow">Available tomorrow</option><option value="week">Within the next 7 days</option><option value="contact">Contact me to arrange a time</option></select></label>
         <label>Preferred contact method<select id="contactMethod"><option value="phone">Phone call</option><option value="sms">SMS</option><option value="email">Email (when available)</option></select></label>
         <label class="full">Additional note <span class="optional">(optional)</span><textarea id="notes" rows="3" maxlength="350" placeholder="Add a short note about your availability. Avoid entering private medical details."></textarea></label>
       </div>
@@ -58,5 +95,35 @@
 
 <div class="modal-backdrop" id="successModal" hidden><section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-check">✓</div><span class="eyebrow">DONOR OFFER SAVED</span><h2 id="successTitle">Thank you for stepping up.</h2><p>Your donor offer has been saved in this browser demo. In the live app, this would be sent to BloodLink's backend.</p><div class="success-summary" id="successSummary"></div><button class="primary-button" id="closeSuccess">Back to page</button></section></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="donate.js"></script>
+<script src="/js/donate.js"></script>
+<script>
+(() => {
+  const menu = document.getElementById('profileMenu');
+  const toggle = document.getElementById('profileMenuToggle');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!menu || !toggle || !dropdown) return;
+
+  const setOpen = (open) => {
+    dropdown.hidden = !open;
+    menu.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+
+  toggle.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(dropdown.hidden);
+  });
+  dropdown.addEventListener('click', (event) => event.stopPropagation());
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+</script>
 </body></html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#b91c1c" />
+  <meta name="color-scheme" content="light" />
   <title>Create account | BloodLink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,29 +13,80 @@
 </head>
 <body>
   <main class="page-shell">
+    <!-- ================= Visual panel ================= -->
     <section class="visual-panel" id="visualPanel" aria-label="BloodLink introduction">
-      <a class="brand brand-light" href="index.html" aria-label="BloodLink home">
-        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#B91C1C" stroke-width="2.3" stroke-linecap="round"/></svg></span>
+      <canvas class="network" id="network" aria-hidden="true"></canvas>
+      <div class="aurora" aria-hidden="true"></div>
+
+      <a class="brand brand-light" href="/html/home.html" aria-label="BloodLink home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg></span>
         <span>Blood<span class="brand-accent">Link</span></span>
       </a>
 
       <div class="visual-copy">
         <span class="eyebrow"><span class="pulse-dot"></span> Your kindness can make a difference</span>
-        <h1>Be someone's<br><span>reason to hope.</span></h1>
+        <h1 class="headline">
+          <span class="line"><span class="word" style="--i:0">Be</span> <span class="word" style="--i:1">someone's</span></span>
+          <span class="line line-accent"><span class="word" style="--i:2">reason</span> <span class="word" style="--i:3">to</span> <span class="word" style="--i:4">hope.</span></span>
+        </h1>
         <p>Join a caring community that helps connect people in need with potential blood donors. One simple step can help make a meaningful connection.</p>
+        <ol class="steps" id="journeySteps">
+          <li style="--i:0" data-step="role"><b>1</b>Choose your role</li>
+          <li style="--i:1" data-step="details"><b>2</b>Add your details</li>
+          <li style="--i:2" data-step="secure"><b>3</b>Secure your account</li>
+        </ol>
       </div>
 
       <div class="blood-scene" aria-hidden="true">
-        <div class="orbit orbit-one"><i class="orbit-dot"></i></div>
-        <div class="orbit orbit-two"><i class="orbit-dot orbit-dot-b"></i></div>
-        <div class="connection connection-one"></div><div class="connection connection-two"></div>
+        <div class="type-orbit">
+          <span class="type-chip" style="--k:0">A+</span>
+          <span class="type-chip" style="--k:1">B−</span>
+          <span class="type-chip is-universal" style="--k:2">O−</span>
+          <span class="type-chip" style="--k:3">AB+</span>
+          <span class="type-chip" style="--k:4">A−</span>
+          <span class="type-chip" style="--k:5">O+</span>
+          <span class="type-chip" style="--k:6">B+</span>
+          <span class="type-chip" style="--k:7">AB−</span>
+        </div>
 
         <svg class="ecg" viewBox="0 0 520 110" preserveAspectRatio="none" fill="none">
           <path class="ecg-base" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
           <path class="ecg-pulse" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
         </svg>
 
-        <div class="depth" style="--d:16"><div class="blood-cell cell-large"><span></span></div></div>
+        <!-- the drop fills as the profile is completed -->
+        <div class="depth" style="--d:14">
+          <div class="core" id="core">
+            <span class="core-glow"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <svg class="drop" viewBox="0 0 120 150" fill="none">
+              <defs>
+                <linearGradient id="liqFront" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#ff5a5f"/><stop offset=".45" stop-color="#d0202d"/><stop offset="1" stop-color="#6e0b17"/>
+                </linearGradient>
+                <radialGradient id="shellFill" cx=".35" cy=".3" r=".9">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity=".16"/><stop offset="1" stop-color="#ffffff" stop-opacity=".03"/>
+                </radialGradient>
+                <clipPath id="dropClip"><path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z"/></clipPath>
+              </defs>
+              <path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z" fill="url(#shellFill)"/>
+              <g clip-path="url(#dropClip)">
+                <g class="liquid" id="liquid">
+                  <path class="wave wave-back" fill="#ff8a8a" d="M0 12Q15 18 30 12T60 12T90 12T120 12T150 12T180 12T210 12T240 12V260H0Z"/>
+                  <path class="wave wave-front" fill="url(#liqFront)" d="M0 16Q15 10 30 16T60 16T90 16T120 16T150 16T180 16T210 16T240 16V260H0Z"/>
+                </g>
+                <circle class="bubble" cx="48" cy="128" r="2.6"/>
+                <circle class="bubble" cx="70" cy="132" r="1.8" style="animation-delay:-1.2s"/>
+                <circle class="bubble" cx="60" cy="122" r="1.4" style="animation-delay:-2.3s"/>
+              </g>
+              <path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z" stroke="#ffffff55" stroke-width="1.4"/>
+              <ellipse cx="39" cy="74" rx="6" ry="15" fill="#ffffff66" transform="rotate(22 39 74)"/>
+              <circle cx="46" cy="52" r="2.6" fill="#ffffff80"/>
+            </svg>
+            <span class="fill-badge"><i></i>Profile <b id="fillValue">0%</b></span>
+          </div>
+        </div>
+
         <div class="depth" style="--d:30"><div class="blood-cell cell-small cell-a"><span></span></div></div>
         <div class="depth" style="--d:24"><div class="blood-cell cell-small cell-b"><span></span></div></div>
         <div class="depth" style="--d:38"><div class="blood-cell cell-medium cell-c"><span></span></div></div>
@@ -42,159 +94,230 @@
         <div class="depth" style="--d:34"><div class="map-pin pin-two"><i></i></div></div>
         <div class="depth" style="--d:12"><div class="map-pin pin-three"><i></i></div></div>
 
-        <div class="map-card">
-          <div class="map-card-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 10.2c0 5.1-8 11-8 11s-8-5.9-8-11a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg></div>
-          <div><strong>Every donor makes a difference</strong><span>Join the BloodLink community</span></div>
-          <span class="mini-check">♥</span>
-        </div>
+
       </div>
 
       <div class="visual-footer"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5.5c0 4.6-3 7.7-7 9.5-4-1.8-7-4.9-7-9.5V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Your information deserves care and privacy.</span></div>
       <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
     </section>
 
+    <!-- ================= Form panel ================= -->
     <section class="form-panel">
+      <span class="blob blob-a" aria-hidden="true"></span>
+      <span class="blob blob-b" aria-hidden="true"></span>
+
       <div class="mobile-brand">
-        <a class="brand" href="index.html" aria-label="BloodLink home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg></span><span>Blood<span class="brand-accent">Link</span></span></a>
+        <a class="brand" href="/html/home.html" aria-label="BloodLink home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg></span><span>Blood<span class="brand-accent">Link</span></span></a>
+        <svg class="mobile-ecg" viewBox="0 0 520 110" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <path class="ecg-base" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
+          <path class="ecg-pulse" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
+        </svg>
       </div>
 
-      <div class="form-content">
-        <div class="form-heading">
-          <span class="welcome-label">JOIN THE COMMUNITY</span>
-          <h2>Create your account</h2>
-          <p>Start your BloodLink journey. It only takes a few minutes.</p>
+      <div class="form-content" id="formContent">
+        <div class="form-stage" id="formStage">
+          <div class="form-heading">
+            <span class="welcome-label reveal" style="--i:0"><span class="label-dot"></span>JOIN THE COMMUNITY</span>
+            <h2 class="reveal" style="--i:1">Create your account</h2>
+            <p class="reveal" style="--i:2">Start your BloodLink journey. It only takes a few minutes.</p>
+            <div class="progress reveal" style="--i:3" aria-hidden="true">
+              <span class="progress-track"><i id="progressBar"></i></span>
+              <span class="progress-label"><span id="progressText">0%</span> complete</span>
+            </div>
+          </div>
+
+          <form id="registerForm" novalidate>
+            <!-- Account type -->
+            <fieldset class="field-group role-field reveal" style="--i:4">
+              <legend>Account type <span class="required-mark">*</span></legend>
+              <div class="role-options" id="roleOptions">
+                <span class="role-indicator" aria-hidden="true"></span>
+                <label class="role-option selected" for="roleDonor" onclick="navigateToDonor()">
+                  <input type="radio" id="roleDonor" name="role" value="donor" checked required>
+                  <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-8-4.8-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.2-8 11-8 11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8v7m-3.5-3.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                  <span class="role-copy"><strong>Blood Donor</strong><small>I want to donate blood</small></span>
+                  <span class="role-radio"></span>
+                </label>
+                <label class="role-option" for="roleRequester" onclick="navigateToNeed()">
+                  <input type="radio" id="roleRequester" name="role" value="requester">
+                  <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5c-2.8 4.1-6.5 7.7-6.5 11.4a6.5 6.5 0 0 0 13 0c0-3.7-3.7-7.3-6.5-11.4Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 14.5h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                  <span class="role-copy"><strong>Need Blood</strong><small>I'm looking for a donor</small></span>
+                  <span class="role-radio"></span>
+                </label>
+                <label class="role-option" for="roleHospital" onclick="navigateToHospital()">
+                  <input type="radio" id="roleHospital" name="role" value="hospital">
+                  <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M2 21h20M9 7h6m-3-3v6M8 13h2m4 0h2M8 17h2m4 0h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span class="role-copy"><strong>Hospital / Center</strong><small>We coordinate donations</small></span>
+                  <span class="role-radio"></span>
+                </label>
+              </div>
+              <small class="field-error" id="roleError"></small>
+            </fieldset>
+
+            <!-- Requester details -->
+            <div class="collapse" id="requesterFields" inert>
+              <div class="collapse-inner">
+                <div class="role-specific">
+                  <div class="role-section-heading"><span class="section-dot"></span><span>Blood request details</span></div>
+                  <fieldset class="field-group nested-field">
+                    <legend>Required blood type</legend>
+                    <div class="type-picker" id="typePicker">
+                      <label><input type="radio" name="requiredBloodType" value="A+" disabled><span>A+</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="A-" disabled><span>A−</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="B+" disabled><span>B+</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="B-" disabled><span>B−</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="AB+" disabled><span>AB+</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="AB-" disabled><span>AB−</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="O+" disabled><span>O+</span></label>
+                      <label><input type="radio" name="requiredBloodType" value="O-" disabled><span>O−</span></label>
+                      <label class="type-unsure"><input type="radio" name="requiredBloodType" value="Not sure" disabled><span>Not sure</span></label>
+                    </div>
+                    <small class="field-error" id="bloodTypeError"></small>
+                  </fieldset>
+                  <div class="field-group nested-field">
+                    <label for="requestCity">Request city</label>
+                    <div class="select-wrap">
+                      <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.7"/></svg>
+                      <select id="requestCity" name="requestCity" disabled>
+                        <option value="">Select city</option><option>Irbid</option><option>Amman</option><option>Zarqa</option><option>Aqaba</option><option>Salt</option><option>Madaba</option><option>Jerash</option><option>Ajloun</option><option>Mafraq</option><option>Karak</option><option>Tafilah</option><option>Ma'an</option><option>Other</option>
+                      </select>
+                      <svg class="select-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <small class="field-error" id="requestCityError"></small>
+                  </div>
+                  <p class="role-hint">You can create and submit a blood request after signing in.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hospital details -->
+            <div class="collapse" id="hospitalFields" inert>
+              <div class="collapse-inner">
+                <div class="role-specific">
+                  <div class="role-section-heading"><span class="section-dot"></span><span>Institution details</span></div>
+                  <div class="field-group nested-field">
+                    <label for="institutionName">Hospital / blood center name</label>
+                    <div class="input-wrap">
+                      <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M2 21h20M9 7h6m-3-3v6M8 13h2m4 0h2m-6 4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <input id="institutionName" name="institutionName" type="text" placeholder="Enter institution name" autocomplete="organization" disabled>
+                      <svg class="valid-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12.5 3.2 3.2L17 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+                    </div>
+                    <small class="field-error" id="institutionError"></small>
+                  </div>
+                  <div class="field-group nested-field">
+                    <label for="institutionCity">Institution city</label>
+                    <div class="select-wrap">
+                      <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.7"/></svg>
+                      <select id="institutionCity" name="institutionCity" disabled>
+                        <option value="">Select city</option><option>Irbid</option><option>Amman</option><option>Zarqa</option><option>Aqaba</option><option>Salt</option><option>Madaba</option><option>Jerash</option><option>Ajloun</option><option>Mafraq</option><option>Karak</option><option>Tafilah</option><option>Ma'an</option><option>Other</option>
+                      </select>
+                      <svg class="select-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <small class="field-error" id="institutionCityError"></small>
+                  </div>
+                  <p class="role-hint"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5.5c0 4.6-3 7.7-7 9.5-4-1.8-7-4.9-7-9.5V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Institution accounts should be verified by BloodLink administration before receiving institutional permissions.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Personal details -->
+            <div class="field-group reveal" style="--i:5">
+              <label for="fullName">Full name</label>
+              <div class="input-wrap">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c.5-3.5 3.1-5.5 7-5.5s6.5 2 7 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" autocomplete="name" minlength="2" required aria-describedby="nameError" />
+                <svg class="valid-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12.5 3.2 3.2L17 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+              </div>
+              <small class="field-error" id="nameError"></small>
+            </div>
+
+            <div class="field-group reveal" style="--i:6">
+              <label for="email">Email address</label>
+              <div class="input-wrap">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-describedby="emailError" />
+                <svg class="valid-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12.5 3.2 3.2L17 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+              </div>
+              <small class="field-error" id="emailError"></small>
+            </div>
+
+            <div class="field-group reveal" style="--i:7">
+              <label for="password">Create password</label>
+              <div class="input-wrap">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required aria-describedby="strengthText passwordError capsHint" />
+                <button type="button" class="password-toggle" data-target="password" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle class="pupil" cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/><path class="slash" d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" pathLength="1"/></svg></button>
+              </div>
+              <div class="password-strength" id="strength" data-score="0">
+                <span class="strength-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                <span class="strength-text" id="strengthText" aria-live="polite">Use 8+ characters</span>
+              </div>
+              <ul class="rules" id="passwordRules" aria-label="Password tips">
+                <li data-rule="length"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 8.5 2.6 2.6L12 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>8+ characters</li>
+                <li data-rule="case"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 8.5 2.6 2.6L12 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>Upper &amp; lower case</li>
+                <li data-rule="number"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 8.5 2.6 2.6L12 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>A number</li>
+                <li data-rule="symbol"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 8.5 2.6 2.6L12 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>A symbol</li>
+              </ul>
+              <small class="caps-hint" id="capsHint" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4 4 12h4.5v7h7v-7H20L12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Caps Lock is on</small>
+              <small class="field-error" id="passwordError"></small>
+            </div>
+
+            <div class="field-group reveal" style="--i:8">
+              <label for="confirmPassword">Confirm password</label>
+              <div class="input-wrap">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter your password" autocomplete="new-password" required aria-describedby="confirmError" />
+                <svg class="valid-mark with-toggle" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12.5 3.2 3.2L17 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+                <button type="button" class="password-toggle" data-target="confirmPassword" aria-label="Show confirm password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle class="pupil" cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/><path class="slash" d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" pathLength="1"/></svg></button>
+              </div>
+              <small class="field-error" id="confirmError"></small>
+            </div>
+
+            <div class="reveal" style="--i:9">
+              <label class="consent-row">
+                <input id="consent" type="checkbox" aria-describedby="consentError" />
+                <span class="custom-check"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg></span>
+                <span>I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#" id="privacyLink">Privacy Policy</a>.</span>
+              </label>
+              <small class="field-error consent-error" id="consentError"></small>
+            </div>
+
+            <div class="reveal" style="--i:10">
+              <button class="submit-button" id="submitButton" type="submit">
+                <span class="button-fill" aria-hidden="true"></span>
+                <span class="button-spinner" aria-hidden="true"></span>
+                <span class="button-label">Create account</span>
+                <svg class="button-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
+          </form>
+
+          <p class="signup-prompt reveal" style="--i:11">Already have an account? <a href="/html/login.html">Sign in <span>↗</span></a></p>
         </div>
 
-
-        <form id="registerForm" novalidate>
-
-          <div class="field-group role-field">
-            <label>Account type <span class="required-mark">*</span></label>
-            <div class="role-options" role="radiogroup" aria-label="Choose account type">
-              <label class="role-option selected" for="roleDonor">
-                <input type="radio" id="roleDonor" name="role" value="donor" checked required>
-                <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-8-4.8-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.2-8 11-8 11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8v7m-3.5-3.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-                <span class="role-copy"><strong>Blood Donor</strong><small>I want to donate blood</small></span>
-                <span class="role-radio"></span>
-              </label>
-              <label class="role-option" for="roleRequester">
-                <input type="radio" id="roleRequester" name="role" value="requester">
-                <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5c-2.8 4.1-6.5 7.7-6.5 11.4a6.5 6.5 0 0 0 13 0c0-3.7-3.7-7.3-6.5-11.4Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 14.5h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-                <span class="role-copy"><strong>Need Blood</strong><small>I'm looking for a donor</small></span>
-                <span class="role-radio"></span>
-              </label>
-              <label class="role-option" for="roleHospital">
-                <input type="radio" id="roleHospital" name="role" value="hospital">
-                <span class="role-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M2 21h20M9 7h6m-3-3v6M8 13h2m4 0h2M8 17h2m4 0h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="role-copy"><strong>Hospital / Blood Center</strong><small>We coordinate donations</small></span>
-                <span class="role-radio"></span>
-              </label>
-            </div>
-            <small class="field-error" id="roleError"></small>
+        <!-- success state -->
+        <div class="success-view" id="successView" hidden tabindex="-1">
+          <div class="success-badge" aria-hidden="true">
+            <span class="ring"></span><span class="ring"></span>
+            <svg viewBox="0 0 52 52" fill="none"><circle class="success-circle" cx="26" cy="26" r="24" stroke="currentColor" stroke-width="2.5" pathLength="1"/><path class="success-check" d="m15 27 7.5 7.5L38 19" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+            <span class="burst" id="burst"></span>
           </div>
+          <span class="welcome-label"><span class="label-dot"></span>YOU'RE IN</span>
+          <h2 id="successTitle">Welcome to BloodLink!</h2>
+          <p id="successText">Your account has been created. Thank you for being part of a community that cares.</p>
+          <a class="submit-button success-cta" href="/html/login.html">
+            <span class="button-label">Continue to sign in</span>
+            <svg class="button-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <small class="success-note" id="successNote"></small>
+        </div>
 
-
-          <div class="field-group role-specific" id="requesterFields" hidden>
-            <div class="role-section-heading"><span class="section-dot"></span><span>Blood request details</span></div>
-            <div class="field-row">
-              <div class="field-group nested-field">
-                <label for="requiredBloodType">Required blood type</label>
-                <div class="select-wrap">
-                  <select id="requiredBloodType" name="requiredBloodType" disabled>
-                    <option value="">Select type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Not sure</option>
-                  </select><span class="select-chevron">⌄</span>
-                </div>
-              </div>
-              <div class="field-group nested-field">
-                <label for="requestCity">Request city</label>
-                <div class="select-wrap">
-                  <select id="requestCity" name="requestCity" disabled>
-                    <option value="">Select city</option><option>Irbid</option><option>Amman</option><option>Zarqa</option><option>Aqaba</option><option>Salt</option><option>Madaba</option><option>Jerash</option><option>Ajloun</option><option>Mafraq</option><option>Karak</option><option>Tafilah</option><option>Ma'an</option><option>Other</option>
-                  </select><span class="select-chevron">⌄</span>
-                </div>
-              </div>
-            </div>
-            <p class="role-hint">You can create and submit a blood request after signing in.</p>
-          </div>
-
-          <div class="field-group role-specific" id="hospitalFields" hidden>
-            <div class="role-section-heading"><span class="section-dot"></span><span>Institution details</span></div>
-            <div class="field-group nested-field">
-              <label for="institutionName">Hospital / blood center name</label>
-              <div class="input-wrap">
-                <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16M2 21h20M9 7h6m-3-3v6M8 13h2m4 0h2m-6 4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <input id="institutionName" name="institutionName" type="text" placeholder="Enter institution name" autocomplete="organization" disabled>
-              </div>
-              <small class="field-error" id="institutionError"></small>
-            </div>
-            <div class="field-group nested-field">
-              <label for="institutionCity">Institution city</label>
-              <div class="select-wrap">
-                <select id="institutionCity" name="institutionCity" disabled>
-                  <option value="">Select city</option><option>Irbid</option><option>Amman</option><option>Zarqa</option><option>Aqaba</option><option>Salt</option><option>Madaba</option><option>Jerash</option><option>Ajloun</option><option>Mafraq</option><option>Karak</option><option>Tafilah</option><option>Ma'an</option><option>Other</option>
-                </select><span class="select-chevron">⌄</span>
-              </div>
-            </div>
-            <p class="role-hint">Institution accounts should be verified by BloodLink administration before receiving institutional permissions.</p>
-          </div>
-
-          <div class="field-group">
-            <label for="fullName">Full name</label>
-            <div class="input-wrap">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c.5-3.5 3.1-5.5 7-5.5s6.5 2 7 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" autocomplete="name" minlength="2" required />
-            </div>
-            <small class="field-error" id="nameError"></small>
-          </div>
-
-          <div class="field-group">
-            <label for="email">Email address</label>
-            <div class="input-wrap">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-            </div>
-            <small class="field-error" id="emailError"></small>
-          </div>
-
-          <div class="field-group">
-            <label for="password">Create password</label>
-            <div class="input-wrap">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required />
-              <button type="button" class="password-toggle" data-target="password" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/></svg></button>
-            </div>
-            <div class="password-strength" aria-live="polite"><span class="strength-track"><i id="strengthBar"></i></span><span id="strengthText">Use 8+ characters</span></div>
-            <small class="field-error" id="passwordError"></small>
-          </div>
-
-          <div class="field-group">
-            <label for="confirmPassword">Confirm password</label>
-            <div class="input-wrap">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter your password" autocomplete="new-password" required />
-              <button type="button" class="password-toggle" data-target="confirmPassword" aria-label="Show confirm password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/></svg></button>
-            </div>
-            <small class="field-error" id="confirmError"></small>
-          </div>
-
-          <label class="consent-row">
-            <input id="consent" type="checkbox" />
-            <span class="custom-check"></span>
-            <span>I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#" id="privacyLink">Privacy Policy</a>.</span>
-          </label>
-          <small class="field-error consent-error" id="consentError"></small>
-
-          <button class="submit-button" id="submitButton" type="submit"><span class="button-label">Create account</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
-        </form>
-
-        <p class="signup-prompt">Already have an account? <a href="/html/login.html">Sign in <span>↗</span></a></p>
-        <div class="form-bottom"><span>© 2026 BloodLink</span><span><i></i> People first. Always.</span></div>
+        <div class="form-bottom reveal" style="--i:12"><span>© 2026 BloodLink</span><span><i></i> People first. Always.</span></div>
       </div>
     </section>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="/js/register.js"></script>
-  <script src="/js/visual-panel.js"></script>
 </body>
 </html>

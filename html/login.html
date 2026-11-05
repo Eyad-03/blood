@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#b91c1c" />
+  <meta name="color-scheme" content="light" />
   <title>Sign in | BloodLink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,29 +13,81 @@
 </head>
 <body>
   <main class="page-shell">
+    <!-- ================= Visual panel ================= -->
     <section class="visual-panel" id="visualPanel" aria-label="BloodLink introduction">
-      <a class="brand brand-light" href="#" aria-label="BloodLink home">
-        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#B91C1C" stroke-width="2.3" stroke-linecap="round"/></svg></span>
+      <canvas class="network" id="network" aria-hidden="true"></canvas>
+      <div class="aurora" aria-hidden="true"></div>
+
+      <a class="brand brand-light" href="/html/home.html" aria-label="BloodLink home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg></span>
         <span>Blood<span class="brand-accent">Link</span></span>
       </a>
 
       <div class="visual-copy">
         <span class="eyebrow"><span class="pulse-dot"></span> A community that cares</span>
-        <h1>Every second matters.<br><span>Every donor counts.</span></h1>
+        <h1 class="headline">
+          <span class="line"><span class="word" style="--i:0">Every</span> <span class="word" style="--i:1">second</span> <span class="word" style="--i:2">matters.</span></span>
+          <span class="line line-accent"><span class="word" style="--i:3">Every</span> <span class="word" style="--i:4">donor</span> <span class="word" style="--i:5">counts.</span></span>
+        </h1>
         <p>Bringing people together to help make finding potential blood donors simpler, faster, and more connected.</p>
+        <ul class="features">
+          <li style="--i:0"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.8"/></svg>Nearby matching</li>
+          <li style="--i:1"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Real-time alerts</li>
+          <li style="--i:2"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Privacy-first</li>
+        </ul>
       </div>
 
       <div class="blood-scene" aria-hidden="true">
-        <div class="orbit orbit-one"><i class="orbit-dot"></i></div>
-        <div class="orbit orbit-two"><i class="orbit-dot orbit-dot-b"></i></div>
-        <div class="connection connection-one"></div><div class="connection connection-two"></div>
+        <!-- blood types orbiting the core -->
+        <div class="type-orbit">
+          <span class="type-chip" style="--k:0">A+</span>
+          <span class="type-chip" style="--k:1">B−</span>
+          <span class="type-chip is-universal" style="--k:2">O−</span>
+          <span class="type-chip" style="--k:3">AB+</span>
+          <span class="type-chip" style="--k:4">A−</span>
+          <span class="type-chip" style="--k:5">O+</span>
+          <span class="type-chip" style="--k:6">B+</span>
+          <span class="type-chip" style="--k:7">AB−</span>
+        </div>
 
+        <!-- heartbeat line -->
         <svg class="ecg" viewBox="0 0 520 110" preserveAspectRatio="none" fill="none">
           <path class="ecg-base" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
           <path class="ecg-pulse" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
         </svg>
 
-        <div class="depth" style="--d:16"><div class="blood-cell cell-large"><span></span></div></div>
+        <!-- beating, filling drop -->
+        <div class="depth" style="--d:14">
+          <div class="core">
+            <span class="core-glow"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <svg class="drop" viewBox="0 0 120 150" fill="none">
+              <defs>
+                <linearGradient id="liqFront" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#ff5a5f"/><stop offset=".5" stop-color="#d0202d"/><stop offset="1" stop-color="#6e0b17"/>
+                </linearGradient>
+                <radialGradient id="shellFill" cx=".35" cy=".3" r=".9">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity=".16"/><stop offset="1" stop-color="#ffffff" stop-opacity=".03"/>
+                </radialGradient>
+                <clipPath id="dropClip"><path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z"/></clipPath>
+              </defs>
+              <path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z" fill="url(#shellFill)"/>
+              <g clip-path="url(#dropClip)">
+                <g class="liquid">
+                  <path class="wave wave-back" fill="#ff8a8a" d="M0 52Q15 58 30 52T60 52T90 52T120 52T150 52T180 52T210 52T240 52V150H0Z"/>
+                  <path class="wave wave-front" fill="url(#liqFront)" d="M0 56Q15 50 30 56T60 56T90 56T120 56T150 56T180 56T210 56T240 56V150H0Z"/>
+                </g>
+                <circle class="bubble" cx="48" cy="128" r="2.6"/>
+                <circle class="bubble" cx="70" cy="132" r="1.8" style="animation-delay:-1.2s"/>
+                <circle class="bubble" cx="60" cy="122" r="1.4" style="animation-delay:-2.3s"/>
+              </g>
+              <path d="M60 6C50 26 14 56 14 92a46 46 0 0 0 92 0C106 56 70 26 60 6Z" stroke="#ffffff55" stroke-width="1.4"/>
+              <ellipse cx="39" cy="74" rx="6" ry="15" fill="#ffffff66" transform="rotate(22 39 74)"/>
+              <circle cx="46" cy="52" r="2.6" fill="#ffffff80"/>
+            </svg>
+          </div>
+        </div>
+
         <div class="depth" style="--d:30"><div class="blood-cell cell-small cell-a"><span></span></div></div>
         <div class="depth" style="--d:24"><div class="blood-cell cell-small cell-b"><span></span></div></div>
         <div class="depth" style="--d:38"><div class="blood-cell cell-medium cell-c"><span></span></div></div>
@@ -42,66 +95,78 @@
         <div class="depth" style="--d:34"><div class="map-pin pin-two"><i></i></div></div>
         <div class="depth" style="--d:12"><div class="map-pin pin-three"><i></i></div></div>
 
-        <div class="map-card">
-          <div class="map-card-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 10.2c0 5.1-8 11-8 11s-8-5.9-8-11a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg></div>
-          <div><strong>Connections that matter</strong><span>One community. One shared purpose.</span></div>
-          <span class="mini-check">✓</span>
-        </div>
+        <!-- live match notification (illustrative) -->
+
       </div>
 
       <div class="visual-footer"><div class="trust-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5.5c0 4.6-3 7.7-7 9.5-4-1.8-7-4.9-7-9.5V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Built around community, care, and privacy.</span></div>
       <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
     </section>
 
+    <!-- ================= Form panel ================= -->
     <section class="form-panel">
+      <span class="blob blob-a" aria-hidden="true"></span>
+      <span class="blob blob-b" aria-hidden="true"></span>
+
       <div class="mobile-brand">
-        <a class="brand" href="#" aria-label="BloodLink home">
+        <a class="brand" href="/html/home.html" aria-label="BloodLink home">
           <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C16.4 10.1 8.7 17.2 8.7 24.1a11.3 11.3 0 0 0 22.6 0C31.3 17.2 23.6 10.1 20 4.5Z" fill="currentColor"/><path d="M14.2 24.3c.3 3.4 2.5 5.4 5.5 5.8" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg></span>
           <span>Blood<span class="brand-accent">Link</span></span>
         </a>
+        <svg class="mobile-ecg" viewBox="0 0 520 110" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <path class="ecg-base" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
+          <path class="ecg-pulse" pathLength="100" d="M0 55H150l12-10 10 10h30l10 10 14-52 16 86 12-44h42l10-8 10 8h214"/>
+        </svg>
       </div>
-      <div class="form-content">
+
+      <div class="form-content" id="formContent">
         <div class="form-heading">
-          <span class="welcome-label">WELCOME BACK</span>
-          <h2>Sign in to your account</h2>
-          <p>Good to see you again. Let's make a difference together.</p>
+          <span class="welcome-label reveal" style="--i:0"><span class="label-dot"></span>WELCOME BACK</span>
+          <h2 class="reveal" style="--i:1">Sign in to your account</h2>
+          <p class="reveal" style="--i:2">Good to see you again. Let's make a difference together.</p>
         </div>
 
-
         <form id="loginForm" novalidate>
-          <div class="field-group">
+          <div class="field-group reveal" style="--i:3">
             <label for="email">Email address</label>
             <div class="input-wrap">
               <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-describedby="emailError" />
+              <svg class="valid-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12.5 3.2 3.2L17 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
             </div>
             <small class="field-error" id="emailError"></small>
           </div>
 
-          <div class="field-group">
+          <div class="field-group reveal" style="--i:4">
             <div class="label-row"><label for="password">Password</label><a href="#" id="forgotLink">Forgot password?</a></div>
             <div class="input-wrap">
               <svg class="field-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              <input id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required minlength="6" />
+              <input id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required minlength="6" aria-describedby="passwordError capsHint" />
               <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password" aria-pressed="false">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6.2 9.5-6.2 9.5 6.2 9.5 6.2-3.4 6.2-9.5 6.2S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/><circle class="pupil" cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7"/><path class="slash" d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" pathLength="1"/></svg>
               </button>
             </div>
+            <small class="caps-hint" id="capsHint" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4 4 12h4.5v7h7v-7H20L12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Caps Lock is on</small>
             <small class="field-error" id="passwordError"></small>
           </div>
 
-          <label class="remember-row"><input id="remember" type="checkbox" /><span class="custom-check"></span><span>Remember me</span></label>
+          <label class="remember-row reveal" style="--i:5"><input id="remember" type="checkbox" /><span class="custom-check"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg></span><span>Remember me</span></label>
 
-          <button class="submit-button" id="submitButton" type="submit">
-            <span class="button-label">Sign in</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <div class="reveal" style="--i:6">
+            <button class="submit-button" id="submitButton" type="submit">
+              <span class="button-fill" aria-hidden="true"></span>
+              <span class="button-spinner" aria-hidden="true"></span>
+              <span class="button-label">Sign in</span>
+              <svg class="button-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="button-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12.5 4 4L18 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+            </button>
+          </div>
           <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
         </form>
 
-        <div class="separator"><span></span><small>YOUR JOURNEY STARTS HERE</small><span></span></div>
-        <p class="signup-prompt">New to BloodLink? <a href="/html/register.html" id="signupLink">Create an account <span>↗</span></a></p>
-        <div class="form-bottom"><span>© 2026 BloodLink</span><span><i></i> People first. Always.</span></div>
+        <div class="separator reveal" style="--i:7"><span></span><small>YOUR JOURNEY STARTS HERE</small><span></span></div>
+        <p class="signup-prompt reveal" style="--i:8">New to BloodLink? <a href="/html/register.html" id="signupLink">Create an account <span>↗</span></a></p>
+        <div class="form-bottom reveal" style="--i:9"><span>© 2026 BloodLink</span><span><i></i> People first. Always.</span></div>
       </div>
     </section>
   </main>

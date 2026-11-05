@@ -29,6 +29,13 @@ function renderSummary(rows){
   $("acceptedCount").textContent=rows.filter(r=>r.status==="Accepted").length;
   $("completedCount").textContent=rows.filter(r=>r.status==="Completed").length;
   $("allTabCount").textContent=rows.length;
+  document.querySelectorAll(".tab[data-filter]").forEach(tab=>{
+    const filter=tab.dataset.filter;
+    const count=filter==="All"?rows.length:rows.filter(r=>r.status===filter).length;
+    let badge=tab.querySelector(".tab-count");
+    if(filter!=="All"&&!badge){badge=document.createElement("span");badge.className="tab-count";tab.appendChild(badge);}
+    if(filter!=="All"&&badge)badge.textContent=count;
+  });
 }
 function renderRequests(){
   const all=readRequests(); renderSummary(all);
@@ -38,7 +45,7 @@ function renderRequests(){
   rows.sort((a,b)=>sort==="urgent"?({Urgent:0,High:1,Normal:2}[a.priority]??3)-({Urgent:0,High:1,Normal:2}[b.priority]??3):sort==="newest"?new Date(b.dateValue)-new Date(a.dateValue):new Date(a.dateValue)-new Date(b.dateValue));
   $("visibleCount").textContent=rows.length;
   $("requestList").innerHTML=rows.map(r=>`
-    <article class="request-card">
+    <article class="request-card" style="--item-index:${rows.indexOf(r)}">
       <div class="request-main">
         <div class="request-avatar">${esc(r.initials||r.recipientName.split(" ").map(n=>n[0]).join("").slice(0,2))}</div>
         <div class="request-info">

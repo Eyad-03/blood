@@ -1,0 +1,102 @@
+/* =====================================================================
+   Hall bookings — hospital dashboard section
+   Builds on hospital.css tokens (--red, --line, --green, etc.)
+   ===================================================================== */
+#hall-bookings a.primary-button{display:inline-flex;align-items:center;gap:6px}
+.hb-metrics{margin-bottom:18px}
+.hb-metrics .metric-card::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 3px 3px 0;background:var(--red)}
+.hb-metrics .metric-card:nth-child(2)::before{background:#f0a531}
+.hb-metrics .metric-card:nth-child(3)::before{background:var(--blue)}
+.hb-metrics .metric-card:nth-child(4)::before{background:var(--green)}
+.hb-metric-pay{border-color:#d6e3fb}
+.trend.pay{background:var(--blue-soft);color:var(--blue)}
+
+/* Sidebar badge lights up when something is payable */
+.nav-count-soft.hb-nav-due{background:#3a72c9;color:#fff;animation:hbPing 2.4s infinite}
+
+/* "Payment is now available" banner */
+.hb-pay-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:18px;border-radius:16px;
+  background:linear-gradient(100deg,#eef4ff,#fbfdff);border:1px solid #d3e1fa;box-shadow:0 8px 24px rgba(58,114,201,.08);animation:riseIn .6s var(--ease) both}
+.hb-pay-banner[hidden]{display:none}
+.hb-pay-banner::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#3a72c9,#8bb4ef)}
+.hb-pay-icon{position:relative;flex:0 0 auto;width:42px;height:42px;padding:10px;border-radius:12px;background:#dbe8ff;color:var(--blue)}
+.hb-pay-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hb-pay-icon::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid #8bb4ef;animation:ringOut 2s ease-out infinite}
+.hb-pay-banner>div:nth-child(3){flex:1;min-width:0}
+.hb-pay-banner b{display:block;font-size:14px;color:#1f3f78}
+.hb-pay-banner p{margin:2px 0 0;font-size:13px;color:#4b628c}
+
+/* Layout */
+.hb-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:start;margin-bottom:20px}
+.hb-table-panel .panel-heading{align-items:center}
+.hb-filters{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 22px 16px}
+.hb-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.hb-tab{border:1px solid transparent;background:transparent;color:var(--muted);padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.hb-tab:hover{background:#f6f4f8;color:var(--ink-2)}
+.hb-tab.active{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+.hb-tab span{margin-left:4px;font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.hb-table{white-space:normal}
+.hb-table td{vertical-align:top}
+.hb-table th,.hb-table td{padding-left:14px;padding-right:14px}
+.hb-table .hb-nowrap,.hb-table .request-id,.hb-table td:nth-child(4),.hb-table .status-pill,.hb-table .record-actions{white-space:nowrap}
+.hb-table td:nth-child(2){min-width:190px}
+.hb-next{max-width:190px;white-space:normal;line-height:1.45;margin-top:6px}
+
+/* Status pills */
+.status-pill.payable{background:var(--blue-soft);color:var(--blue)}
+.status-pill.payable::before{animation:dotBlink 1.4s ease-in-out infinite}
+.status-pill.rejected{background:#fff0f1;color:var(--red)}
+tr.hb-row-payable td{background:#f8fbff}
+tr.hb-row-payable td:first-child{box-shadow:inset 3px 0 var(--blue)}
+
+/* Pay now button in rows */
+.record-action.hb-pay-action{color:#fff;border-color:transparent;background:linear-gradient(135deg,#5b8fe0,var(--blue));box-shadow:0 6px 14px rgba(58,114,201,.25)}
+.record-action.hb-pay-action:hover{box-shadow:0 10px 20px rgba(58,114,201,.3)}
+
+/* Side column */
+.hb-side{display:grid;gap:16px;position:sticky;top:88px}
+.hb-journey{list-style:none;margin:0;padding:0;display:grid}
+.hb-journey li{position:relative;display:flex;gap:12px;padding-bottom:18px}
+.hb-journey li:last-child{padding-bottom:0}
+.hb-journey li:not(:last-child)::after{content:"";position:absolute;left:14px;top:32px;bottom:2px;width:2px;background:var(--line)}
+.hb-journey li>span{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#f3f1f6;color:var(--muted);font-size:12px;font-weight:800;z-index:1}
+.hb-journey li.done>span{background:var(--green-soft);color:var(--green)}
+.hb-journey li.pay>span{background:var(--blue);color:#fff;box-shadow:0 0 0 5px rgba(58,114,201,.12)}
+.hb-journey b{display:block;font-size:13px;margin:4px 0 2px}
+.hb-journey small{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+.hb-note-panel{background:linear-gradient(145deg,#f7f9ff,#eef3ff);border-color:#e0e8f8;box-shadow:none}
+.hb-note-panel b{font-size:13px}
+.hb-note-panel p{margin:6px 0 0;font-size:12.5px;color:#5d6d8c;line-height:1.6}
+
+/* Dialogs */
+.hb-dialog{width:min(560px,calc(100vw - 28px))}
+#hbPayDialog{width:min(480px,calc(100vw - 28px))}
+.hb-dialog .checkout-head{margin-bottom:14px}
+.hb-status-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;margin-bottom:14px;background:#faf9fc;border:1px solid var(--line)}
+.hb-status-strip.payable{background:var(--blue-soft);border-color:#d3e1fa}
+.hb-status-strip.verified{background:var(--green-soft);border-color:#cdeedd}
+.hb-status-strip p{margin:0;font-size:13px;color:var(--ink-2)}
+.hb-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hb-detail-grid div{padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fcfbfd;min-width:0}
+.hb-detail-grid small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.hb-detail-grid b{display:block;font-size:13.5px;overflow-wrap:anywhere}
+.hb-detail-note{margin-top:12px;padding:13px 14px;border-radius:12px;background:#faf9fc;border:1px solid var(--line);font-size:13px}
+.hb-detail-note p{margin:3px 0 10px;color:var(--muted);overflow-wrap:anywhere}
+.hb-detail-note p:last-child{margin-bottom:0}
+.hb-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap}
+.hb-dialog-actions [hidden]{display:none}
+
+@keyframes hbPing{0%{box-shadow:0 0 0 0 rgba(58,114,201,.55)}70%,100%{box-shadow:0 0 0 8px rgba(58,114,201,0)}}
+
+@media(max-width:1180px){.hb-layout{grid-template-columns:1fr}.hb-side{position:static;grid-template-columns:1fr 1fr}}
+@media(max-width:760px){
+  .hb-side{grid-template-columns:1fr}
+  .hb-pay-banner{flex-wrap:wrap}
+  .hb-pay-banner .primary-button{width:100%}
+  .hb-table-panel .panel-heading{flex-direction:column;align-items:stretch}
+  .hb-filters{padding:0 16px 14px}
+  .hb-filters .select-control{max-width:none;width:100%}
+}
+@media(max-width:520px){.hb-detail-grid{grid-template-columns:1fr}.hb-dialog-actions>*{flex:1}}
+.hb-table .record-actions{flex-direction:column;align-items:stretch;gap:6px}
+.hb-table .record-action{text-align:center}

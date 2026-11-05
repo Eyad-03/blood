@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#c91835">
+  <meta name="description" content="BloodLink brings people who need blood closer to people ready to give it.">
   <title>BloodLink | Every Second Can Save a Life</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,22 +13,28 @@
   <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('is-ready')},2500);</script>
 </head>
 <body>
-  <header class="navbar">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
+  <header class="navbar" id="navbar">
     <a class="brand" href="home.html" aria-label="BloodLink home">
       <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
       <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
     </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
-    <nav class="nav-links" id="navLinks">
-      <a class="active" href="home.html">Home</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#about">About us</a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a class="active" href="#hero" data-target="hero">Home</a>
+      <a href="#blood-types" data-target="blood-types">Blood types</a>
+      <a href="#venues" data-target="venues">Venues</a>
+      <a href="ads.html">Announcements</a>
+      <a href="#about" data-target="about">About us</a>
       <div class="nav-mobile-actions"><a href="login.html" class="login-link">Log in</a><a href="register.html" class="nav-cta">Join BloodLink <span>→</span></a></div>
     </nav>
-    <div class="nav-actions"><a href="login.html" class="login-link">Log in</a><a href="register.html" class="nav-cta">Get started <span>→</span></a></div>
+    <div class="nav-actions"><a href="register.html" class="nav-cta" data-magnetic>Get started <span>→</span></a></div>
   </header>
 
-  <main>
+  <main id="main">
+    <!-- ================= HERO ================= -->
     <section class="hero" id="hero" aria-labelledby="hero-title">
       <div class="hero-glow" aria-hidden="true"></div>
 
@@ -39,8 +46,8 @@
         </h1>
         <p class="hero-copy reveal" style="--d:.45s">Finding a blood donor shouldn't be a race against time. BloodLink brings people who need blood closer to people ready to give it.</p>
         <div class="hero-actions reveal" style="--d:.58s">
-          <a href="donorSearch.html" class="button button-primary"><span class="button-icon" aria-hidden="true">⌕</span> Find a blood donor <span class="arrow" aria-hidden="true">→</span></a>
-          <a href="donate.html" class="button button-secondary"><span class="heart" aria-hidden="true">♥</span> Become a donor</a>
+          <a href="donorSearch.html" class="button button-primary" data-magnetic><span class="button-icon" aria-hidden="true">⌕</span> Find a blood donor <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="donate.html" class="button button-secondary" data-magnetic><span class="heart" aria-hidden="true">♥</span> Become a donor</a>
         </div>
 
         <div class="matcher reveal" style="--d:.72s" role="group" aria-labelledby="matcherLabel">
@@ -65,45 +72,323 @@
       <div class="hero-visual" id="heroVisual" aria-hidden="true">
         <canvas class="hero-canvas" id="heroCanvas"></canvas>
         <div class="visual-card card-top"><span class="tiny-icon">♥</span><div><b id="cardCount">Donors nearby</b><small id="cardNote">People ready to help</small></div></div>
-        <div class="visual-card card-bottom"><span class="check-icon">✓</span><div><b>Hope is closer</b><small>One connection at a time</small></div></div>
       </div>
 
       <a class="scroll-cue" href="#impact"><span class="scroll-line" aria-hidden="true"></span>Scroll to see why</a>
     </section>
 
-    <section class="quick-stats" id="impact">
-      <div class="stat-intro"><span class="eyebrow">WHY BLOODLINK?</span><h2>Every connection<br>can change a life.</h2></div>
-      <div class="stat"><span class="stat-icon">⌕</span><strong>8</strong><small>Blood types supported</small></div>
-      <div class="stat"><span class="stat-icon">⌖</span><strong>Nearby</strong><small>Discover donors by area</small></div>
-      <div class="stat"><span class="stat-icon">♥</span><strong>One community</strong><small>People helping people</small></div>
+    <!-- ================= IMPACT ================= -->
+    <section class="impact-band" id="impact" data-inview>
+      <div class="ecg" aria-hidden="true">
+        <svg viewBox="0 0 1200 140" preserveAspectRatio="xMidYMid slice">
+          <path class="ecg-base" pathLength="1" d="M0 70h120l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h134"/>
+          <path class="ecg-scan" pathLength="1" d="M0 70h120l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h150l10 -8l10 8h16l6 8l10 -60l10 80l8 -28h22l16 -14l16 14h134"/>
+        </svg>
+      </div>
+      <div class="impact-heading reveal-section">
+        <span class="eyebrow light">Small action, big impact</span>
+        <h2 class="display" data-split>One community.<br><em>Countless chances.</em></h2>
+        <p class="lead">BloodLink makes the first step clearer, so people can focus on helping one another.</p>
+      </div>
+      <div class="impact-metrics">
+        <article class="metric-card reveal-section" data-spotlight data-tilt>
+          <span class="metric-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-2 3.2-6 7.3-6 11a6 6 0 0 0 12 0c0-3.7-4-7.8-6-11Z"/></svg></span>
+          <strong><span data-count="8">8</span></strong>
+          <span class="metric-label">blood types to explore</span>
+          <small>Find the type you need</small>
+        </article>
+        <article class="metric-card reveal-section" data-spotlight data-tilt>
+          <span class="metric-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></span>
+          <strong>Up to <span data-count="3">3</span></strong>
+          <span class="metric-label">people one donation can help</span>
+          <small>Red cells, plasma and platelets</small>
+        </article>
+        <article class="metric-card reveal-section" data-spotlight data-tilt>
+          <span class="metric-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11Z"/><circle cx="12" cy="10" r="2.2"/></svg></span>
+          <strong>Nearby</strong>
+          <span class="metric-label">connections made easier</span>
+          <small>Search by area</small>
+        </article>
+      </div>
+      <div class="impact-footnote"><span class="live-dot"></span> Built to bring people closer, one connection at a time</div>
     </section>
 
-    <section class="how-section section-shell" id="how-it-works">
-      <div class="section-intro"><span class="eyebrow">SIMPLE. HUMAN. MEANINGFUL.</span><h2>Help should be easy<br><em>to find.</em></h2><p>Whether you're looking for a donor or ready to donate, BloodLink helps you take the next step.</p></div>
-      <div class="steps-grid">
-        <article class="step-card"><div class="step-number">01</div><div class="step-icon icon-search">⌕</div><h3>Find a match</h3><p>Search for potential donors by blood type and location.</p><a href="donorSearch.html">Find donors <span>↗</span></a></article>
-        <article class="step-card featured"><div class="step-number">02</div><div class="step-icon icon-drop">♥</div><h3>Connect with care</h3><p>Explore donor availability and coordinate the next step.</p><a href="donorSearch.html">Explore donors <span>↗</span></a></article>
-        <article class="step-card"><div class="step-number">03</div><div class="step-icon icon-heart">♡</div><h3>Give hope</h3><p>Offer to donate and let your community know you're available.</p><a href="donate.html">Become a donor <span>↗</span></a></article>
+    <!-- ================= JOURNEY ================= -->
+    <section class="journey-section section-shell" id="how-it-works">
+      <div class="section-heading reveal-section">
+        <span class="eyebrow">Your journey with BloodLink</span>
+        <h2 class="display" data-split>Three steps.<br><em>A world of difference.</em></h2>
+        <p class="lead">Whether you need a donor or want to help, getting started is simple.</p>
+      </div>
+      <div class="journey-track" id="journeyTrack">
+        <div class="journey-vein" aria-hidden="true"><span class="journey-vein-fill"></span><i class="journey-vein-head"></i></div>
+        <article class="journey-card reveal-section" data-spotlight data-tilt>
+          <span class="journey-node" aria-hidden="true"></span>
+          <div class="journey-top"><span>01 · Discover</span><span class="journey-icon">⌕</span></div>
+          <h3>Tell us what you need</h3>
+          <p>Choose a blood type and explore potential donors in your area.</p>
+          <a href="donorSearch.html">Find a donor <span>↗</span></a>
+          <div class="journey-watermark" aria-hidden="true">01</div>
+        </article>
+        <article class="journey-card journey-card-active reveal-section" data-spotlight data-tilt>
+          <span class="journey-node" aria-hidden="true"></span>
+          <div class="journey-top"><span>02 · Connect</span><span class="journey-icon">⌁</span></div>
+          <h3>Make a connection</h3>
+          <p>Review donor information and reach out to coordinate the next step.</p>
+          <a href="donorSearch.html">Explore matches <span>↗</span></a>
+          <div class="journey-watermark" aria-hidden="true">02</div>
+        </article>
+        <article class="journey-card reveal-section" data-spotlight data-tilt>
+          <span class="journey-node" aria-hidden="true"></span>
+          <div class="journey-top"><span>03 · Give</span><span class="journey-icon">♥</span></div>
+          <h3>Become someone's hope</h3>
+          <p>Register your willingness to donate and let others discover you.</p>
+          <a href="donate.html">Become a donor <span>↗</span></a>
+          <div class="journey-watermark" aria-hidden="true">03</div>
+        </article>
       </div>
     </section>
 
-    <section class="mission-section" id="about">
-      <div class="mission-art"><div class="mission-circle circle-1"></div><div class="mission-circle circle-2"></div><div class="mission-heart">♥</div><span class="mission-spark spark-1">✦</span><span class="mission-spark spark-2">✧</span><div class="mission-note"><span>♥</span><div><b>Every donor matters</b><small>Every moment matters, too.</small></div></div></div>
-      <div class="mission-copy"><span class="eyebrow">OUR MISSION</span><h2>When people connect,<br><em>hope travels further.</em></h2><p>In urgent moments, finding the right blood donor can be difficult. BloodLink is designed to make that search more organized by helping seekers discover potential donors by blood type and area.</p><p>We believe technology can help communities come together—one thoughtful connection at a time.</p><a href="register.html" class="text-cta">Be part of the mission <span>→</span></a></div>
+    <!-- ================= URGENT ================= -->
+    <section class="urgent-section" data-inview>
+      <canvas class="cells-canvas" id="cellsCanvas" aria-hidden="true"></canvas>
+      <div class="urgent-copy reveal-section">
+        <span class="eyebrow light">When every moment matters</span>
+        <h2 class="display" data-split>Make finding help<br><em>feel less overwhelming.</em></h2>
+        <p>Start with the blood type and area, then explore possible donor connections. BloodLink is a community tool, not a replacement for emergency services or medical advice.</p>
+        <a href="donorSearch.html" class="button button-white" data-magnetic>Explore potential donors <span>→</span></a>
+      </div>
+      <ol class="urgent-side reveal-section">
+        <li class="urgent-mini"><span class="mini-icon">01</span><div><b>Search with purpose</b><small>Use blood type and location to narrow your search.</small></div></li>
+        <li class="urgent-mini"><span class="mini-icon">02</span><div><b>Connect respectfully</b><small>Confirm availability and details directly.</small></div></li>
+        <li class="urgent-mini"><span class="mini-icon">03</span><div><b>Follow medical guidance</b><small>Always coordinate through qualified healthcare professionals.</small></div></li>
+      </ol>
     </section>
 
-    <section class="cta-section">
-      <div class="cta-decoration">♥</div><div><span class="eyebrow light">YOUR NEXT STEP CAN MATTER</span><h2>Someone out there<br>needs a helping hand.</h2><p>Join BloodLink and be part of a community built around hope.</p></div><div class="cta-buttons"><a class="button button-white" href="donate.html">I'm ready to donate <span>→</span></a><a class="cta-text-link" href="donorSearch.html">I'm looking for a donor ↗</a></div>
+    <!-- ================= BLOOD TYPES ================= -->
+    <section class="blood-type-section section-shell" id="blood-types">
+      <div class="section-heading reveal-section">
+        <span class="eyebrow">A little knowledge goes a long way</span>
+        <h2 class="display" data-split>Every blood type<br><em>has a part to play.</em></h2>
+        <p class="lead">Tap a type to see its red cell matches. Real compatibility is always confirmed by clinical testing.</p>
+      </div>
+
+      <div class="compat reveal-section" id="compat">
+        <div class="compat-toolbar">
+          <div class="compat-mode" aria-label="Compatibility direction">
+            <span class="pill" aria-hidden="true"></span>
+            <button type="button" data-mode="receive" aria-pressed="true">Can receive from</button>
+            <button type="button" data-mode="give" aria-pressed="false">Can give to</button>
+          </div>
+          <p class="compat-readout" id="compatReadout" aria-live="polite">Pick a blood type below.</p>
+        </div>
+
+        <div class="blood-type-grid" aria-label="Blood types">
+          <button type="button" class="blood-type-tile" data-type="A+" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>A+</b><small>A positive</small></button>
+          <button type="button" class="blood-type-tile" data-type="A-" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>A−</b><small>A negative</small></button>
+          <button type="button" class="blood-type-tile" data-type="B+" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>B+</b><small>B positive</small></button>
+          <button type="button" class="blood-type-tile" data-type="B-" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>B−</b><small>B negative</small></button>
+          <button type="button" class="blood-type-tile" data-type="AB+" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>AB+</b><small>AB positive</small></button>
+          <button type="button" class="blood-type-tile" data-type="AB-" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>AB−</b><small>AB negative</small></button>
+          <button type="button" class="blood-type-tile" data-type="O+" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>O+</b><small>O positive</small></button>
+          <button type="button" class="blood-type-tile" data-type="O-" data-spotlight aria-pressed="false"><svg class="tile-drop" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1C9 6 2 13 2 19a10 10 0 0 0 20 0C22 13 15 6 12 1Z"/></svg><b>O−</b><small>O negative</small></button>
+        </div>
+
+        <div class="compat-foot">
+          <small>Shows red cell compatibility only. Plasma and platelets follow different rules.</small>
+          <a id="compatLink" href="donorSearch.html" class="text-cta"><span class="label">Explore donors</span> <span>→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MISSION ================= -->
+    <section class="mission-reimagined" id="about">
+      <div class="mission-visual reveal-section" aria-hidden="true">
+        <div class="mission-visual-ring ring-a"></div>
+        <div class="mission-visual-ring ring-b"></div>
+        <div class="mission-drop">
+          <svg viewBox="0 0 144 180">
+            <defs>
+              <clipPath id="dropClip"><path d="M72 4C54 40 6 88 6 120a66 54 0 0 0 132 0C138 88 90 40 72 4Z"/></clipPath>
+              <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ee3a55"/><stop offset="1" stop-color="#a50b29"/></linearGradient>
+            </defs>
+            <path class="drop-shell" d="M72 4C54 40 6 88 6 120a66 54 0 0 0 132 0C138 88 90 40 72 4Z"/>
+            <g clip-path="url(#dropClip)">
+              <g class="drop-liquid">
+                <path class="wave wave-back" d="M0 12Q36 0 72 12T144 12T216 12T288 12V220H0Z"/>
+                <path class="wave wave-front" d="M0 12Q36 24 72 12T144 12T216 12T288 12V220H0Z"/>
+              </g>
+            </g>
+            <path class="drop-shine" d="M34 96c-7 10-10 21-8 32"/>
+            <path class="drop-heart" d="M72 138 50 117a13 13 0 0 1 22-18 13 13 0 0 1 22 18Z"/>
+          </svg>
+        </div>
+        <span class="floating-label label-a">Care in action <b>✦</b></span>
+        <span class="floating-label label-b"><b>1</b> donation, many hopes</span>
+        <span class="visual-cross cross-a">+</span><span class="visual-cross cross-b">+</span>
+      </div>
+      <div class="mission-text reveal-section">
+        <span class="eyebrow">Why we exist</span>
+        <h2 class="display" data-split>Technology with<br><em>a human heartbeat.</em></h2>
+        <p>In difficult moments, a clear path to potential donors can make a difference. BloodLink brings search and community into one thoughtful experience.</p>
+        <p>Our goal is simple: make it easier to discover, connect, and take the next step, with care, respect, and guidance from healthcare professionals.</p>
+        <a href="register.html" class="text-cta">Join the BloodLink community <span>→</span></a>
+      </div>
+    </section>
+
+    <!-- ================= VENUES ================= -->
+    <section class="venue-section section-shell" id="venues" aria-labelledby="venues-title">
+      <div class="venue-layout">
+        <div class="venue-intro reveal-section">
+          <span class="eyebrow">Spaces for good causes</span>
+          <h2 class="display" id="venues-title" data-split>Planning a blood drive?<br><em>Book the right venue.</em></h2>
+          <p class="lead">Find halls for donation campaigns, awareness workshops and community initiatives across Jordan. Send your documents once, and pay only after your request is approved.</p>
+          <ol class="venue-steps">
+            <li><span>1</span><div><b>Choose a venue</b><small>Filter by governorate, provider and capacity.</small></div></li>
+            <li><span>2</span><div><b>Send your request</b><small>Add event details and upload the required documents.</small></div></li>
+            <li><span>3</span><div><b>Get approved</b><small>The venue provider reviews your request.</small></div></li>
+            <li><span>4</span><div><b>Pay and confirm</b><small>Payment opens only after approval.</small></div></li>
+          </ol>
+          <div class="venue-actions">
+            <a class="button button-primary" href="hall.html" data-magnetic>Explore venues <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="text-cta" href="hall.html#steps">How booking works <span>→</span></a>
+          </div>
+        </div>
+
+        <div class="venue-showcase reveal-section">
+          <div class="venue-badge" aria-hidden="true"><span class="ok">✓</span><div><b>Approval before payment</b><small>No charge until you're confirmed</small></div></div>
+
+          <a class="venue-card venue-card-lg" href="hall.html#halls">
+            <figure class="venue-media">
+              <img src="https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=1100&q=80" alt="Irbid Innovation Center meeting space" loading="lazy">
+              <span class="venue-tag green">Budget friendly</span>
+              <figcaption class="venue-overlay"><h3>Irbid Innovation Center</h3><p>University Street, Irbid · Government institution</p></figcaption>
+            </figure>
+            <div class="venue-body">
+              <div class="venue-meta">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 5.5a3 3 0 0 1 0 5.6M18 19a5 5 0 0 0-2.4-4.3"/></svg>90 people</span>
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Initiatives · Workshops</span>
+                <span class="venue-price"><b>70</b> <small>JOD / day</small></span>
+              </div>
+              <span class="venue-go">Request booking <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+
+          <a class="venue-card" href="hall.html#halls">
+            <figure class="venue-media">
+              <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=700&q=80" alt="Zaha Cultural Center hall" loading="lazy">
+              <span class="venue-tag green">Great for initiatives</span>
+            </figure>
+            <div class="venue-body">
+              <h3>Zaha Cultural Center</h3>
+              <p class="venue-loc">Khalda, Amman</p>
+              <div class="venue-meta"><span>120 people</span><span class="venue-price"><b>95</b> <small>JOD</small></span></div>
+            </div>
+          </a>
+
+          <a class="venue-card" href="hall.html#halls">
+            <figure class="venue-media">
+              <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=700&q=80" alt="University of Jordan Conference Hall" loading="lazy">
+              <span class="venue-tag">Popular choice</span>
+            </figure>
+            <div class="venue-body">
+              <h3>University of Jordan Conference Hall</h3>
+              <p class="venue-loc">Jubeiha, Amman</p>
+              <div class="venue-meta"><span>250 people</span><span class="venue-price"><b>180</b> <small>JOD</small></span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ANNOUNCEMENTS ================= -->
+    <section class="news-band" id="announcements" aria-labelledby="news-title">
+      <div class="section-shell">
+        <div class="news-head reveal-section">
+          <div>
+            <span class="eyebrow">Announcements</span>
+            <h2 class="display" id="news-title" data-split>What's happening<br><em>near you.</em></h2>
+            <p class="lead">Blood drives, free screening days and consultation campaigns from verified hospitals.</p>
+          </div>
+          <div class="news-head-side">
+            <span class="news-count" id="newsCount" hidden></span>
+            <a class="button button-secondary" href="ads.html">View all announcements <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <div class="news-grid reveal-section" id="newsGrid">
+          <a class="news-card" href="ads.html" style="--accent:#c91835" data-spotlight>
+            <div class="news-top"><span class="news-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-2 3.2-6 7.3-6 11a6 6 0 0 0 12 0c0-3.7-4-7.8-6-11Z"/></svg></span></div>
+            <span class="news-cat">Blood drives</span>
+            <h3>Donation campaigns</h3>
+            <p>Hospitals and blood banks announce donation days and where they're held.</p>
+            <div class="news-foot"><span>See upcoming dates</span><span class="go" aria-hidden="true">↗</span></div>
+          </a>
+          <a class="news-card" href="ads.html" style="--accent:#17866f" data-spotlight>
+            <div class="news-top"><span class="news-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h3l2-5 4 10 2-5h5"/></svg></span></div>
+            <span class="news-cat">Free screenings</span>
+            <h3>Check-up days</h3>
+            <p>Screening campaigns open to the public, often free of charge.</p>
+            <div class="news-foot"><span>Browse screenings</span><span class="go" aria-hidden="true">↗</span></div>
+          </a>
+          <a class="news-card" href="ads.html" style="--accent:#3a67c9" data-spotlight>
+            <div class="news-top"><span class="news-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v6a4 4 0 0 0 8 0V3M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></svg></span></div>
+            <span class="news-cat">Consultation days</span>
+            <h3>Meet a specialist</h3>
+            <p>Specialist consultations by department, with booking details for each.</p>
+            <div class="news-foot"><span>Find a department</span><span class="go" aria-hidden="true">↗</span></div>
+          </a>
+        </div>
+        <p class="news-note">Sponsored listings are marked. Always confirm details with the hospital before visiting.</p>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="faq-section section-shell">
+      <div class="section-heading reveal-section">
+        <span class="eyebrow">Good to know</span>
+        <h2 class="display" data-split>Questions, answered.</h2>
+        <p class="lead">A few things to know before you start.</p>
+      </div>
+      <div class="faq-list reveal-section">
+        <details><summary>How do I find a potential blood donor?<span aria-hidden="true">+</span></summary><div class="faq-body"><p>Open Find a blood donor, choose the required blood type, and use the available search options to explore potential donors.</p></div></details>
+        <details><summary>Can I register as a donor?<span aria-hidden="true">+</span></summary><div class="faq-body"><p>Yes. Use Become a donor to get started and share your willingness to help through the available registration flow.</p></div></details>
+        <details><summary>Does a search result guarantee compatibility?<span aria-hidden="true">+</span></summary><div class="faq-body"><p>No. Results are only a starting point. A healthcare professional must assess suitability and confirm compatibility using appropriate testing.</p></div></details>
+        <details><summary>What should I do in a medical emergency?<span aria-hidden="true">+</span></summary><div class="faq-body"><p>Contact local emergency services or the treating healthcare facility immediately. Do not rely on a website search for emergency medical care.</p></div></details>
+      </div>
+    </section>
+
+    <!-- ================= FINAL CTA ================= -->
+    <section class="final-cta" data-inview>
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="cta-bubbles" id="ctaBubbles" aria-hidden="true"></div>
+      <div class="cta-liquid" aria-hidden="true">
+        <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+          <path class="cta-wave cta-wave-back" d="M0 40Q180 0 360 40T720 40T1080 40T1440 40T1800 40T2160 40T2520 40T2880 40V200H0Z"/>
+          <path class="cta-wave cta-wave-front" d="M0 50Q180 90 360 50T720 50T1080 50T1440 50T1800 50T2160 50T2520 50T2880 50V200H0Z"/>
+        </svg>
+      </div>
+      <div class="final-cta-content reveal-section">
+        <span class="eyebrow light">Be the reason hope moves forward</span>
+        <h2 data-split>Your next step<br>could mean everything.</h2>
+        <p>Join a community that believes a little care can travel a long way.</p>
+        <div class="final-cta-actions">
+          <a class="button button-white" href="donate.html" data-magnetic>Become a donor <span>→</span></a>
+          <a class="final-cta-link" href="donorSearch.html">I'm looking for a donor <span>↗</span></a>
+        </div>
+      </div>
+      <div class="cta-heart-field" aria-hidden="true"><span>♥</span><i>♥</i><b>♥</b><em>♥</em></div>
     </section>
   </main>
 
   <footer class="footer">
     <a class="brand footer-brand" href="home.html"><span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span><span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span></a>
     <p>Made with <b>♥</b> for a more connected community.</p>
-    <div class="footer-links"><a href="donorSearch.html">Find donors</a><a href="donate.html">Donate</a><a href="register.html">Join us</a></div>
+    <div class="footer-links"><a href="donorSearch.html">Find donors</a><a href="donate.html">Donate</a><a href="hall.html">Venues</a><a href="report.html">Report</a></div>
     <small class="copyright">© 2026 BloodLink. Demo project.</small>
   </footer>
-  <script src="home.js"></script>
-  <script src="/js/hero.js"></script>
+
+  <script src="/js/ads-data.js" defer></script>
+  <script src="/js/home.js" defer></script>
 </body>
 </html>

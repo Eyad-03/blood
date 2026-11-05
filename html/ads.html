@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#b3132f">
+<meta name="description" content="Free consultation days, health screenings and hospital events near you — on BloodLink">
+<title>Health Events & Offers | BloodLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/ad-card.css">
+<link rel="stylesheet" href="/css/ads.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="home.html">
+      <span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2.5s-6.5 7.2-6.5 11.8a6.5 6.5 0 0013 0C18.5 9.7 12 2.5 12 2.5z"/></svg></span>
+      <span>Blood<span>Link</span></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a class="active" href="ads.html" aria-current="page">Health events</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-cells" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow"><i></i> HEALTH EVENTS & OFFERS</span>
+      <h1>Free consultations, screenings &amp; hospital events <span>near you.</span></h1>
+      <p>Browse current announcements from verified hospitals — consultation days, check-up campaigns, discounted services and blood drives.</p>
+      <label class="hero-search"><span class="sr-only">Search events</span>
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="adSearch" type="search" placeholder="Search e.g. orthopedics, free, screening, hospital…" autocomplete="off">
+      </label>
+      <div class="hero-stats"><span><b id="statAds">0</b> live events</span><span><b id="statHospitals">0</b> hospitals</span><span><b id="statFree">0</b> free</span></div>
+    </div>
+  </section>
+
+  <section class="wrap spotlight-wrap" id="spotlightWrap" hidden>
+    <div class="section-head"><div><span class="kicker">SPOTLIGHT</span><h2>Don't miss these</h2></div></div>
+    <div class="spotlight" id="spotlight"></div>
+  </section>
+
+  <section class="wrap browse">
+    <div class="section-head"><div><span class="kicker">ALL EVENTS</span><h2>Browse by department</h2></div>
+      <div class="filter-controls">
+        <select id="typeFilter" class="select" aria-label="Filter by ad type"><option value="all">All types</option></select>
+        <select id="sortBy" class="select" aria-label="Sort"><option value="soon">Soonest first</option><option value="new">Newest first</option><option value="popular">Most viewed</option></select>
+      </div>
+    </div>
+    <div class="chips" id="deptChips" role="toolbar" aria-label="Filter by department"></div>
+    <p class="results-line" id="resultsLine" aria-live="polite"></p>
+    <div class="ad-grid" id="adGrid"></div>
+    <div class="empty" id="emptyState" hidden>
+      <div class="empty-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+      <b>No events match your search</b><p>Try another department or clear the filters.</p>
+      <button class="btn ghost" id="clearFilters" type="button">Clear filters</button>
+    </div>
+  </section>
+
+  <section class="wrap advertise">
+    <div><span class="kicker light">FOR HOSPITALS</span><h2>Have a consultation day or campaign coming up?</h2><p>Reach patients and donors across BloodLink. Plans start at 25 JOD for 7 days.</p></div>
+    <a class="btn light" href="hospital.html#ads">Post an advertisement →</a>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap"><span>© 2026 BloodLink</span><span>Listings marked “Sponsored” are paid placements by hospitals. Always confirm details with the hospital before visiting.</span></div></footer>
+
+<dialog class="ad-dialog" id="adDialog" aria-labelledby="dlgTitle">
+  <div class="dlg-inner" id="dlgBody"></div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/ads-data.js"></script>
+<script src="/js/ads.js"></script>
+</body>
+</html>

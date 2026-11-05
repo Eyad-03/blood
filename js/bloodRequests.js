@@ -35,8 +35,8 @@ function renderRequests(){
   let rows=all.filter(r=>(activeFilter==="All"||r.status===activeFilter)&&(!query||[r.donorName,r.id,r.location,r.bloodType].some(v=>String(v||"").toLowerCase().includes(query))));
   rows.sort((a,b)=>$("sortSelect").value==="newest"?new Date(b.dateValue)-new Date(a.dateValue):new Date(a.dateValue)-new Date(b.dateValue));
   $("visibleCount").textContent=rows.length;
-  $("requestList").innerHTML=rows.map(r=>`
-    <article class="request-card">
+  $("requestList").innerHTML=rows.map((r,index)=>`
+    <article class="request-card" style="animation-delay:${Math.min(index*70,350)}ms">
       <div class="request-main">
         <div class="donor-avatar">${escapeHTML(r.donorInitials||r.donorName.split(" ").map(n=>n[0]).join("").slice(0,2))}</div>
         <div class="request-info">
@@ -120,3 +120,35 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelect
 $("findDonorsBtn").addEventListener("click",e=>{e.preventDefault();showToast("Connect this button to your donorSearch.html page.");});
 $("emergencyInfo").addEventListener("click",e=>{e.preventDefault();showToast("For emergencies, contact your hospital or local emergency services immediately.");});
 renderRequests();
+
+
+/* Motion polish: sticky-glass header, accessible reveal, and keyboard-friendly modals */
+(() => {
+  const header = document.querySelector(".topbar");
+  const updateHeader = () => {
+    if (header) header.classList.toggle("scrolled", window.scrollY > 8);
+  };
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".summary-card, .side-column > section").forEach((item, index) => {
+      item.classList.add("motion-ready");
+      item.style.setProperty("--motion-delay", `${Math.min(index * 65, 260)}ms`);
+      observer.observe(item);
+    });
+  }
+
+  document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+    backdrop.addEventListener("transitionend", () => {});
+  });
+})();

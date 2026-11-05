@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloodLink | My Hall Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/hallRequests.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="home.html" aria-label="BloodLink home">
+    <span class="brand-logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5C13 8.1 7.1 14.1 7.1 19.5a8.9 8.9 0 0 0 17.8 0C24.9 14.1 19 8.1 16 3.5Z" fill="currentColor"/></svg></span>
+    <span class="brand-name">Blood<span>Link</span><small>Every Second Can Save a Life</small></span>
+  </a>
+  <nav class="top-actions" aria-label="Main navigation">
+    <a class="nav-link" href="hall.html">Explore halls</a>
+    <div class="profile-menu" id="profileMenu">
+      <button class="profile-chip" id="profileMenuToggle" type="button" aria-expanded="false" aria-controls="profileDropdown">
+        <span class="profile-avatar">G</span>
+        <span class="profile-label"><strong>Guest</strong><small>Booking dashboard</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" hidden>
+        <div class="dropdown-user">
+          <span class="profile-avatar">G</span>
+          <span><strong>Guest account</strong><small>Manage your hall bookings</small></span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="profile.html" class="dropdown-item"><span class="dropdown-icon">♙</span><span><strong>My profile</strong><small>View your personal details</small></span><span class="dropdown-arrow">›</span></a>
+        <a href="hall.html" class="dropdown-item"><span class="dropdown-icon">▦</span><span><strong>Explore halls</strong><small>Find a venue for your event</small></span><span class="dropdown-arrow">›</span></a>
+        <a href="myHallRequests.html" class="dropdown-item"><span class="dropdown-icon">▤</span><span><strong>My hall requests</strong><small>Track booking status</small></span><span class="dropdown-arrow">›</span></a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="page">
+  <section class="welcome">
+    <div>
+      <span class="eyebrow"><i></i> BOOKING CENTER</span>
+      <h1>My hall booking requests</h1>
+      <p>Track your venue requests, check approval progress, and see what you need to do next.</p>
+    </div>
+    <a class="primary-btn" href="hall.html#halls">＋ Find a hall</a>
+  </section>
+
+  <section class="summary-grid" aria-label="Booking request summary">
+    <article class="summary-card"><span class="summary-icon red">▤</span><div><small>Total requests</small><strong id="totalCount">0</strong><em>All your hall requests</em></div></article>
+    <article class="summary-card"><span class="summary-icon amber">◷</span><div><small>Pending review</small><strong id="pendingCount">0</strong><em>Waiting for provider review</em></div></article>
+    <article class="summary-card"><span class="summary-icon green">✓</span><div><small>Approved</small><strong id="approvedCount">0</strong><em>Ready for the next step</em></div></article>
+    <article class="summary-card"><span class="summary-icon blue">▣</span><div><small>Confirmed bookings</small><strong id="paidCount">0</strong><em>Payment completed</em></div></article>
+  </section>
+
+  <section class="content-grid">
+    <section class="requests-panel">
+      <div class="panel-heading">
+        <div><span class="eyebrow">YOUR BOOKINGS</span><h2>Request history <span class="count-badge" id="visibleCount">0</span></h2><p>Search, filter, and open a request to view its details.</p></div>
+        <label class="search"><span>⌕</span><input type="search" id="searchInput" placeholder="Search hall, organization or request ID"></label>
+      </div>
+      <div class="filters">
+        <div class="tabs" role="group" aria-label="Filter booking requests">
+          <button class="tab active" data-filter="All" type="button">All <span id="allTabCount">0</span></button>
+          <button class="tab" data-filter="Pending approval" type="button">Pending</button>
+          <button class="tab" data-filter="Approved" type="button">Approved</button>
+          <button class="tab" data-filter="Paid" type="button">Confirmed</button>
+          <button class="tab" data-filter="Rejected" type="button">Rejected</button>
+        </div>
+        <label class="sort-label">Sort by <select id="sortSelect"><option value="newest">Newest first</option><option value="eventDate">Event date</option><option value="oldest">Oldest first</option></select></label>
+      </div>
+      <div class="request-list" id="requestList"></div>
+      <div class="empty-state hidden" id="emptyState"><span>▤</span><b id="emptyTitle">No booking requests yet</b><p id="emptyMessage">Your submitted hall booking requests will appear here.</p><a class="primary-btn" href="hall.html#halls">Explore available halls →</a></div>
+    </section>
+
+    <aside class="side-column">
+      <section class="help-card">
+        <div class="help-icon">▦</div><h3>Your event starts here</h3>
+        <p>Keep track of every hall request in one place. Review the status and follow the next step shown for each booking.</p>
+        <a href="hall.html#halls">Find another hall <span>↗</span></a>
+      </section>
+      <section class="timeline-card">
+        <span class="eyebrow">WHAT HAPPENS NEXT</span><h3>Booking journey</h3>
+        <div class="journey">
+          <div class="journey-step done"><span>✓</span><div><b>Submit request</b><small>Your event details and required documents are sent.</small></div></div>
+          <div class="journey-step current"><span>2</span><div><b>Provider review</b><small>The venue provider reviews your request and documents.</small></div></div>
+          <div class="journey-step"><span>3</span><div><b>Approval and payment</b><small>If approved, the payment option becomes available.</small></div></div>
+          <div class="journey-step"><span>4</span><div><b>Booking confirmed</b><small>Your hall is confirmed after successful payment.</small></div></div>
+        </div>
+      </section>
+      <section class="privacy-card"><span class="privacy-icon">ⓘ</span><div><b>Good to know</b><p>Payment is only available after approval. If your request is still pending, check back later for a status update.</p></div></section>
+    </aside>
+  </section>
+  <footer><span>© 2026 BloodLink</span><span>Every Second Can Save a Life <b>♥</b></span><span>Hall booking center</span></footer>
+</main>
+
+<div class="modal-backdrop hidden" id="detailsModal">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+    <button class="close-modal" data-close="detailsModal" aria-label="Close">×</button>
+    <span class="eyebrow">BOOKING REQUEST DETAILS</span><h2 id="detailsTitle">Request details</h2>
+    <div id="detailsContent"></div>
+    <div class="modal-actions"><button class="outline-btn" data-close="detailsModal">Close</button><a class="primary-btn hidden" id="paymentLink" href="hall.html#halls">Continue to payment →</a></div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/hallRequests.js"></script>
+<script>
+(() => {
+  const menu = document.getElementById('profileMenu');
+  const toggle = document.getElementById('profileMenuToggle');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!menu || !toggle || !dropdown) return;
+  const setOpen = open => {
+    dropdown.hidden = !open;
+    menu.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+  toggle.addEventListener('click', event => {
+    event.preventDefault(); event.stopPropagation(); setOpen(dropdown.hidden);
+  });
+  dropdown.addEventListener('click', event => event.stopPropagation());
+  document.addEventListener('click', event => { if (!menu.contains(event.target)) setOpen(false); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
+})();
+</script>
+</body>
+</html>
