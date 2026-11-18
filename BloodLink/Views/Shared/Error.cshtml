@@ -1,0 +1,21 @@
+@model ErrorViewModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error | BloodLink</title>
+</head>
+<body style="font-family:system-ui,sans-serif;padding:40px;">
+  <h1 style="color:#c91835;">Something went wrong.</h1>
+  <p>An error occurred while processing your request.</p>
+  @if (Model?.ShowRequestId == true)
+  {
+      <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+  }
+  <p><a href="/">Back to home</a></p>
+</body>
+</html>
