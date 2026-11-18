@@ -10,6 +10,7 @@ const demoRequests = [
 ];
 let activeFilter = "All";
 let selectedRequestId = null;
+BloodChat.init({me:"donor"});
 
 function esc(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function readRequests(){
@@ -56,12 +57,13 @@ function renderRequests(){
       </div>
       <div class="request-side">
         <span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span>
-        <div class="request-actions"><button class="small-btn" data-details="${esc(r.id)}">View details</button>${r.status==="Pending"?`<button class="small-btn decline" data-decline="${esc(r.id)}">Decline</button><button class="small-btn accept" data-accept="${esc(r.id)}">Accept</button>`:r.status==="Accepted"?`<button class="small-btn" data-complete="${esc(r.id)}">Mark completed</button>`:""}</div>
+        <div class="request-actions"><button class="small-btn" data-details="${esc(r.id)}">View details</button>${r.status==="Pending"?`<button class="small-btn decline" data-decline="${esc(r.id)}">Decline</button><button class="small-btn accept" data-accept="${esc(r.id)}">Accept</button>`:r.status==="Accepted"?`${BloodChat.buttonHTML(r.id)}<button class="small-btn" data-complete="${esc(r.id)}">Mark completed</button>`:r.status==="Completed"?BloodChat.buttonHTML(r.id):""}</div>
       </div>
     </article>`).join("");
   $("emptyState").classList.toggle("hidden",rows.length>0);
   $("requestList").classList.toggle("hidden",rows.length===0);
   document.querySelectorAll(".tab").forEach(tab=>tab.classList.toggle("active",tab.dataset.filter===activeFilter));
+  BloodChat.refreshBadges();
 }
 function toast(message){$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>$("toast").classList.remove("show"),2800);}
 function openDetails(id){
@@ -72,13 +74,21 @@ function openDetails(id){
   $("acceptDetailBtn").classList.toggle("hidden",r.status!=="Pending");
   $("declineDetailBtn").classList.toggle("hidden",r.status!=="Pending");
   $("completeBtn").classList.toggle("hidden",r.status!=="Accepted");
+  $("chatDetailBtn").classList.toggle("hidden",!["Accepted","Completed"].includes(r.status));
   $("detailsModal").classList.remove("hidden");document.body.style.overflow="hidden";
+}
+function openChat(id){
+  const r=readRequests().find(x=>x.id===id);if(!r||!["Accepted","Completed"].includes(r.status))return;
+  closeModal("detailsModal");
+  BloodChat.open(r.id,{name:r.recipientName,initials:(r.initials||r.recipientName.split(" ").map(n=>n[0]).join("").slice(0,2)),sub:`Blood recipient · ${r.location}`,meta:[["Request",r.id],["Blood",r.bloodType],["Units",r.units],["Priority",r.priority||"Normal"],["Hospital",r.hospital]],readOnly:r.status==="Completed"});
 }
 function closeModal(id){$(id).classList.add("hidden");document.body.style.overflow="";}
 function updateStatus(id,status){
   const rows=readRequests(),r=rows.find(x=>x.id===id);if(!r)return;
   if(status==="Accepted" && !$("availabilityToggle").checked){toast("Turn on your availability before accepting a request.");return;}
   r.status=status;r.updatedAt=new Date().toISOString();saveRequests(rows);
+  if(status==="Accepted")BloodChat.addSystem(id,"Request accepted by the donor. You can now chat to coordinate the donation safely.");
+  if(status==="Completed")BloodChat.addSystem(id,"Donation marked as completed. This conversation is now read-only.");
   closeModal("detailsModal");renderRequests();
   toast(status==="Accepted"?"Request accepted. Coordinate through the hospital.":status==="Declined"?"Request declined.":"Donation marked as completed.");
 }
@@ -87,8 +97,9 @@ $("searchInput").addEventListener("input",renderRequests);
 $("sortSelect").addEventListener("change",renderRequests);
 $("clearFilters").addEventListener("click",()=>{$("searchInput").value="";activeFilter="All";renderRequests();});
 $("requestList").addEventListener("click",e=>{
-  const details=e.target.closest("[data-details]"),accept=e.target.closest("[data-accept]"),decline=e.target.closest("[data-decline]"),complete=e.target.closest("[data-complete]");
+  const details=e.target.closest("[data-details]"),accept=e.target.closest("[data-accept]"),decline=e.target.closest("[data-decline]"),complete=e.target.closest("[data-complete]"),chat=e.target.closest("[data-chat]");
   if(details)openDetails(details.dataset.details);
+  if(chat)openChat(chat.dataset.chat);
   if(accept)updateStatus(accept.dataset.accept,"Accepted");
   if(decline)updateStatus(decline.dataset.decline,"Declined");
   if(complete)updateStatus(complete.dataset.complete,"Completed");
@@ -96,6 +107,7 @@ $("requestList").addEventListener("click",e=>{
 $("acceptDetailBtn").addEventListener("click",()=>selectedRequestId&&updateStatus(selectedRequestId,"Accepted"));
 $("declineDetailBtn").addEventListener("click",()=>selectedRequestId&&updateStatus(selectedRequestId,"Declined"));
 $("completeBtn").addEventListener("click",()=>selectedRequestId&&updateStatus(selectedRequestId,"Completed"));
+$("chatDetailBtn").addEventListener("click",()=>selectedRequestId&&openChat(selectedRequestId));
 document.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",()=>closeModal(btn.dataset.close)));
 $("detailsModal").addEventListener("click",e=>{if(e.target===$("detailsModal"))closeModal("detailsModal");});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-backdrop:not(.hidden)").forEach(m=>closeModal(m.id));});

@@ -3,10 +3,12 @@ const STORAGE_KEY = "bloodlinkRecipientRequests";
 
 const demoRequests = [
   {id:"BR-2026-0184", donorName:"Lina Khalil", donorInitials:"LK", bloodType:"O−", location:"University Street, Irbid", distance:"2.4 km away", sentAt:"Today, 10:42 AM", dateValue:"2026-10-10T10:42:00", status:"Pending", message:"Urgently need O− blood for a family member.", donorPhone:"", donorEmail:"lina@example.com"},
-  {id:"BR-2026-0179", donorName:"Omar Haddad", donorInitials:"OH", bloodType:"A+", location:"Downtown, Irbid", distance:"3.1 km away", sentAt:"Yesterday, 4:15 PM", dateValue:"2026-10-09T16:15:00", status:"Accepted", message:"Thank you for offering to help. Please coordinate with the hospital.", donorPhone:"+962 7 9000 1234", donorEmail:"omar@example.com"},
+  {id:"BR-2026-0198", donorName:"Omar Haddad", donorInitials:"OH", bloodType:"A+", location:"Downtown, Irbid", distance:"3.1 km away", sentAt:"Yesterday, 4:15 PM", dateValue:"2026-10-09T16:15:00", status:"Accepted", message:"Thank you for offering to help. Please coordinate with the hospital.", donorPhone:"+962 7 9000 1234", donorEmail:"omar@example.com"},
 ];
 let activeFilter = "All";
 let selectedRequestId = null;
+let contactRequestId = null;
+BloodChat.init({me:"recipient"});
 
 function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function readRequests(){
@@ -47,12 +49,13 @@ function renderRequests(){
       </div>
       <div class="request-side">
         <span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span>
-        <div class="request-actions"><button class="small-btn" data-details="${escapeHTML(r.id)}">View details</button>${r.status==="Accepted"?`<button class="small-btn contact" data-contact="${escapeHTML(r.id)}">Contact donor</button>`:""}</div>
+        <div class="request-actions"><button class="small-btn" data-details="${escapeHTML(r.id)}">View details</button>${r.status==="Accepted"?`<button class="small-btn contact" data-contact="${escapeHTML(r.id)}">Contact donor</button>${BloodChat.buttonHTML(r.id)}`:r.status==="Completed"?BloodChat.buttonHTML(r.id):""}</div>
       </div>
     </article>`).join("");
   $("emptyState").classList.toggle("hidden",rows.length>0);
   $("requestList").classList.toggle("hidden",rows.length===0);
   document.querySelectorAll(".tab").forEach(tab=>tab.classList.toggle("active",tab.dataset.filter===activeFilter));
+  BloodChat.refreshBadges();
 }
 function showToast(message){$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>$("toast").classList.remove("show"),3000);}
 function openDetails(id){
@@ -69,6 +72,7 @@ function openContact(id){
   const r=readRequests().find(x=>x.id===id);
   if(!r)return;
   if(r.status!=="Accepted"){showToast("Contact details are available after the donor accepts your request.");return;}
+  contactRequestId=id;
   $("contactAvatar").textContent=r.donorInitials||r.donorName.split(" ").map(n=>n[0]).join("").slice(0,2);
   $("contactTitle").textContent=r.donorName;
   $("contactSubtitle").textContent="The donor accepted your request. You can use the details below to coordinate safely.";
@@ -100,24 +104,31 @@ document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("clic
   }
 }));
 
+function openChat(id){
+  const r=readRequests().find(x=>x.id===id);if(!r||!["Accepted","Completed"].includes(r.status))return;
+  closeModal("detailsModal");closeModal("contactModal");
+  BloodChat.open(r.id,{name:r.donorName,initials:(r.donorInitials||r.donorName.split(" ").map(n=>n[0]).join("").slice(0,2)),sub:`Blood donor · ${r.location}`,meta:[["Request",r.id],["Blood",r.bloodType],["Distance",r.distance]],readOnly:r.status==="Completed"});
+}
+$("chatDonorBtn").addEventListener("click",()=>contactRequestId&&openChat(contactRequestId));
 function closeModal(id){$(id).classList.add("hidden");document.body.style.overflow="";}
 document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{activeFilter=tab.dataset.filter;renderRequests();}));
 $("searchInput").addEventListener("input",renderRequests);
 $("sortSelect").addEventListener("change",renderRequests);
 $("clearFilters").addEventListener("click",()=>{$("searchInput").value="";activeFilter="All";renderRequests();});
 $("requestList").addEventListener("click",e=>{
- const details=e.target.closest("[data-details]"),contact=e.target.closest("[data-contact]");
+ const details=e.target.closest("[data-details]"),contact=e.target.closest("[data-contact]"),chat=e.target.closest("[data-chat]");
  if(details)openDetails(details.dataset.details);
  if(contact){openContact(contact.dataset.contact);}
+ if(chat)openChat(chat.dataset.chat);
 });
 $("completeBtn").addEventListener("click",()=>{
  const rows=readRequests(),r=rows.find(x=>x.id===selectedRequestId);if(!r||r.status!=="Accepted")return;
- r.status="Completed";r.completedAt=new Date().toISOString();saveRequests(rows);closeModal("detailsModal");renderRequests();showToast("Request marked as completed.");
+ r.status="Completed";r.completedAt=new Date().toISOString();saveRequests(rows);BloodChat.addSystem(r.id,"Donation marked as completed. This conversation is now read-only.");closeModal("detailsModal");renderRequests();showToast("Request marked as completed.");
 });
 document.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",()=>closeModal(btn.dataset.close)));
 $("detailsModal").addEventListener("click",e=>{if(e.target===$("detailsModal"))closeModal("detailsModal");});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-backdrop:not(.hidden)").forEach(m=>closeModal(m.id));});
-$("findDonorsBtn").addEventListener("click",e=>{e.preventDefault();showToast("Connect this button to your donorSearch.html page.");});
+$("findDonorsBtn")?.addEventListener("click",e=>{e.preventDefault();showToast("Connect this button to your donorSearch.html page.");});
 $("emergencyInfo").addEventListener("click",e=>{e.preventDefault();showToast("For emergencies, contact your hospital or local emergency services immediately.");});
 renderRequests();
 

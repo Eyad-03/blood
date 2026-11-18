@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/donorRequests.css">
+  <link rel="stylesheet" href="/css/chat.css">
 </head>
 <body>
 <header class="topbar">
@@ -20,6 +21,7 @@
   <a href="/html/home.html" class="main-nav-link">Home</a>
   <a href="/html/donorSearch.html" class="main-nav-link">Find Donors</a>
   <a href="/html/bloodRequests.html" class="main-nav-link active" aria-current="page">My Requests</a>
+  <a href="/html/donorAppointments.html" class="main-nav-link">Book Donation</a>
 </nav>
 
   <nav class="top-actions" aria-label="Account">
@@ -109,10 +111,11 @@
     <button class="close-modal" data-close="detailsModal" aria-label="Close">×</button>
     <span class="eyebrow">REQUEST DETAILS</span><h2 id="detailsTitle">Request details</h2>
     <div id="detailsContent"></div>
-    <div class="modal-actions"><button class="outline-btn" data-close="detailsModal">Close</button><button class="outline-btn danger-btn hidden" id="declineDetailBtn">Decline request</button><button class="primary-btn hidden" id="acceptDetailBtn">Accept request</button><button class="primary-btn hidden" id="completeBtn">Mark completed</button></div>
+    <div class="modal-actions"><button class="outline-btn" data-close="detailsModal">Close</button><button class="outline-btn hidden" id="chatDetailBtn">Open chat</button><button class="outline-btn danger-btn hidden" id="declineDetailBtn">Decline request</button><button class="primary-btn hidden" id="acceptDetailBtn">Accept request</button><button class="primary-btn hidden" id="completeBtn">Mark completed</button></div>
   </section>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<script src="/js/chat.js"></script>
 <script src="/js/donorRequests.js"></script>
 <script>
 (() => {

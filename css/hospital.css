@@ -630,3 +630,54 @@ a.record-action{display:inline-block}
   .status-pill{border:1px solid #aaa;background:#fff!important;color:#222!important}
   .record-print-heading{display:block!important;margin:0 0 20px}
 }
+
+/* ---------- Donation appointments ---------- */
+.ap-filters{padding:0 22px 14px}
+.ap-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.ap-tab{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink-2);font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s}
+.ap-tab span{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:7px;background:#f3f1f6;color:var(--muted);font-size:11px}
+.ap-tab:hover{border-color:var(--red-line);color:var(--red)}
+.ap-tab.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 8px 18px rgba(212,29,61,.22)}
+.ap-tab.active span{background:rgba(255,255,255,.22);color:#fff}
+.status-pill.declined{background:#fff0f1;color:var(--red)}
+.status-pill.stopped{background:#f1f0f4;color:#7a7b8d}
+.record-action.review{color:#fff;background:linear-gradient(135deg,var(--red-2),var(--red));border-color:transparent}
+.record-action.review:hover{box-shadow:0 8px 16px rgba(212,29,61,.3)}
+.appt-dialog{width:min(660px,calc(100vw - 28px))}
+.appt-dialog .checkout-inner{display:grid;gap:16px}
+.ap-sec-title{margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:1.3px;color:var(--faint)}
+.ap-donor-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ap-donor-grid>div{padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fcfbfd;min-width:0}
+.ap-donor-grid small{display:block;font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.4px}
+.ap-donor-grid b{display:block;margin-top:2px;font-size:14px;overflow-wrap:anywhere}
+.ap-donor-grid a{color:var(--red)}
+.ap-answers{margin:0;padding:0;list-style:none;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ap-answers li{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #f2f0f5;font-size:13px;color:var(--muted)}
+.ap-answers li:last-child{border-bottom:0}
+.ap-answers li b{color:var(--ink);text-align:right;font-weight:700}
+.ap-answers li.warn{background:var(--amber-soft)}
+.ap-answers li.warn b{color:var(--amber)}
+.ap-answers li.warn span::before{content:"! ";font-weight:800;color:var(--amber)}
+.ap-verdict{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;font-size:13px;font-weight:700}
+.ap-verdict.ok{background:var(--green-soft);color:var(--green)}
+.ap-verdict.review{background:var(--amber-soft);color:var(--amber)}
+.ap-requested{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 15px;border-radius:14px;background:linear-gradient(135deg,#fff7f9,#fff0f3);border:1px solid var(--red-line);font-size:13px;color:var(--muted)}
+.ap-requested b{color:var(--ink)}
+.ap-notes{margin:8px 0 0;font-size:13px;color:var(--ink-2);font-style:italic}
+.ap-decide{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;border-radius:16px;background:#faf9fc;border:1px solid var(--line)}
+.ap-decide label{display:grid;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.ap-decide .wide{grid-column:1/-1}
+.ap-decide input,.ap-decide select,.ap-decide textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:14px;outline:0;transition:border-color .2s,box-shadow .25s}
+.ap-decide input:focus,.ap-decide select:focus,.ap-decide textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(212,29,61,.1)}
+.ap-cap{grid-column:1/-1;margin:0;font-size:12.5px;color:var(--muted)}
+.ap-cap.warn{color:var(--amber);font-weight:700}
+.ap-reason textarea{min-height:76px;resize:vertical}
+.ap-stock{grid-column:1/-1}
+.ap-dialog-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.ap-dialog-actions .danger{color:var(--red);border-color:var(--red-line);background:#fff}
+.ap-summary-done{padding:14px 16px;border-radius:14px;background:#f6f5fa;border:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+.ap-summary-done b{color:var(--ink)}
+@media(max-width:560px){.ap-donor-grid,.ap-decide{grid-template-columns:1fr}}
+
+.ap-decide label:has(.field-hint){grid-template-columns:auto 1fr;align-items:center}
+.ap-decide label:has(.field-hint)>textarea{grid-column:1/-1}

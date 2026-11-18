@@ -32,6 +32,7 @@
   <nav class="side-nav">
     <a class="nav-item active" href="#overview" data-section="overview"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span> Overview</a>
     <a class="nav-item" href="#donation-records" data-section="donation-records"><span><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span> Donation verification <b class="nav-count" id="navRequests">6</b></a>
+    <a class="nav-item" href="#appointments" data-section="appointments"><span><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M9.5 15l2 2 3.5-3.5"/></svg></span> Appointments <b class="nav-count" id="navAppointments">0</b></a>
     <a class="nav-item" href="#donors" data-section="donors"><span><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 010 6.8M18.5 14.8c1.6.7 2.6 2.4 3 5.2"/></svg></span> Donor directory</a>
     <a class="nav-item" href="donorSearch.html" data-external="true"><span><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span> Donor Search</a>
   </nav>
@@ -124,6 +125,29 @@
   </section>
   <section class="panel table-panel records-table-panel"><div class="panel-heading"><div><span class="section-kicker">REGISTER</span><h2>Donation records <span class="small-count" id="recordTableCount">6</span></h2><p>Verify pending transfers, then print a record for hospital documentation or audit.</p></div><input id="recordSearch" class="search-input" placeholder="Search donor, recipient or ID…"></div>
     <div class="table-wrap"><table><thead><tr><th>RECORD ID</th><th>DONOR</th><th>RECIPIENT</th><th>BLOOD TYPE</th><th>UNITS</th><th>DATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="donationRecordsBody"></tbody></table></div>
+  </section>
+</section>
+
+<section class="page-section hidden-section" id="appointments">
+  <div class="subpage-heading">
+    <div><span class="section-kicker">DONOR VISITS</span><h1>Donation appointments</h1><p>Review booking requests from donors, check their eligibility answers, then confirm a date and time.</p></div>
+  </div>
+  <div class="metrics-grid record-metrics">
+    <article class="metric-card"><div class="metric-label">AWAITING APPROVAL</div><div class="metric-value" id="apPending">0</div><div class="metric-foot"><span class="trend warning">Needs a reply</span></div></article>
+    <article class="metric-card"><div class="metric-label">UPCOMING CONFIRMED</div><div class="metric-value" id="apUpcoming">0</div><div class="metric-foot"><span class="trend positive">✓ Scheduled</span><span>donor visits</span></div></article>
+    <article class="metric-card"><div class="metric-label">TODAY</div><div class="metric-value" id="apToday">0</div><div class="metric-foot">Donors expected today</div></article>
+    <article class="metric-card"><div class="metric-label">NEEDS ELIGIBILITY REVIEW</div><div class="metric-value" id="apReview">0</div><div class="metric-foot"><span class="trend warning">Flagged answers</span></div></article>
+  </div>
+  <section class="panel table-panel records-table-panel">
+    <div class="panel-heading"><div><span class="section-kicker">BOOKING REQUESTS</span><h2>Appointments <span class="small-count" id="apCount">0</span></h2><p>Open a request to see the donor's answers, then approve a time or decline with a reason.</p></div><input id="apSearch" class="search-input" type="search" placeholder="Search donor, phone or ID…"></div>
+    <div class="ap-filters"><div class="ap-tabs" role="group" aria-label="Filter appointments">
+      <button class="ap-tab active" type="button" data-ap-filter="All">All <span data-ap-count="All">0</span></button>
+      <button class="ap-tab" type="button" data-ap-filter="Pending">Pending <span data-ap-count="Pending">0</span></button>
+      <button class="ap-tab" type="button" data-ap-filter="Approved">Confirmed <span data-ap-count="Approved">0</span></button>
+      <button class="ap-tab" type="button" data-ap-filter="Completed">Completed <span data-ap-count="Completed">0</span></button>
+      <button class="ap-tab" type="button" data-ap-filter="Closed">Declined / cancelled <span data-ap-count="Closed">0</span></button>
+    </div></div>
+    <div class="table-wrap"><table><thead><tr><th>REQUEST</th><th>DONOR</th><th>BLOOD</th><th>DATE &amp; TIME</th><th>ELIGIBILITY</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="apptBody"></tbody></table></div>
   </section>
 </section>
 
@@ -344,6 +368,11 @@
       <div class="success-actions"><button class="primary-button" type="button" data-hb-close>Done</button></div>
     </div>
   </form>
+</dialog>
+
+<!-- Donation appointment: review & confirm -->
+<dialog class="checkout appt-dialog" id="apptDialog" aria-labelledby="apptTitle">
+  <div class="checkout-inner" id="apptDialogBody"></div>
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>

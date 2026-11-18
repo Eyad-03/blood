@@ -30,6 +30,7 @@
   <div class="nav-caption">CONTROL</div>
   <nav class="side-nav">
     <a class="nav-item active" href="#overview" data-section="overview"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></span> Overview</a>
+    <a class="nav-item" href="#users" data-section="users"><span><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.2-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 010 6.4M18 14.8c2 .6 3.3 2.4 3.8 5.2"/></svg></span> Users <b class="nav-count neutral" id="navUsers">0</b></a>
   </nav>
   <div class="nav-caption">REVIEW QUEUES</div>
   <nav class="side-nav">
@@ -101,6 +102,19 @@
     <section class="panel queue-panel"><div class="panel-heading"><div><span class="section-kicker">ACTION QUEUE</span><h2>Needs your decision</h2><p>Oldest items first across every queue.</p></div><span class="stock-alert-count" id="queueCount">0 items</span></div><div class="queue-list" id="actionQueue"></div></section>
     <section class="panel"><div class="panel-heading"><div><span class="section-kicker">AUDIT LOG</span><h2>Recent admin activity</h2><p>Every decision is recorded here.</p></div></div><ol class="timeline" id="activityLog"></ol></section>
   </div>
+</section>
+
+<!-- ============ USERS ============ -->
+<section class="page-section hidden-section" id="users">
+  <div class="subpage-heading"><div><span class="section-kicker">COMMUNITY</span><h1>All users</h1><p id="usersSubtitle">Everyone registered on the platform.</p></div><input id="userSearch" class="search-input" placeholder="Search name, email, city, blood type…"></div>
+  <div class="tab-bar" id="userTabs" role="tablist">
+    <button class="tab active" data-filter="all">All <b data-count="all">0</b></button>
+    <button class="tab" data-filter="donor">Donors <b data-count="donor">0</b></button>
+    <button class="tab" data-filter="hospital">Hospitals <b data-count="hospital">0</b></button>
+    <button class="tab" data-filter="center">Centers <b data-count="center">0</b></button>
+    <button class="tab" data-filter="suspended">Suspended <b data-count="suspended">0</b></button>
+  </div>
+  <section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>USER</th><th>ROLE</th><th>CITY</th><th>BLOOD TYPE</th><th>JOINED</th><th>LAST ACTIVE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="usersBody"></tbody></table></div></section>
 </section>
 
 <!-- ============ ACCOUNTS ============ -->

@@ -341,6 +341,20 @@
         </button>
        </div>
       </div>
+      <div class="cert-card" id="certCard">
+       <div class="cert-ic" aria-hidden="true">🏅</div>
+       <div class="cert-body">
+        <strong id="certTitle">Certificate of appreciation</strong>
+        <p id="certHint" role="status">Donate 5 times and we will email you a certificate.</p>
+        <div class="track">
+         <span id="certBar" style="width:0"></span>
+        </div>
+       </div>
+       <div class="cert-actions">
+        <button class="secondary" id="certOpen" type="button" hidden>View certificate</button>
+        <button class="primary" id="certGet" type="button" hidden>Get my certificate</button>
+       </div>
+      </div>
       <p class="settings-note" id="donorMsg" role="status">
        Each donation is counted as 450 ml. Demo only: stored in this browser.
       </p>
@@ -409,6 +423,34 @@
      </button>
     </div>
    </form>
+  </div>
+  <div class="backdrop" hidden="" id="certBackdrop">
+   <div aria-labelledby="certModalTitle" aria-modal="true" class="modal cert-modal" role="dialog">
+    <div class="modal-head">
+     <div>
+      <label>
+       CONGRATULATIONS
+      </label>
+      <h2 id="certModalTitle">
+       Your certificate of appreciation
+      </h2>
+     </div>
+     <button class="close" data-close="certBackdrop" type="button">
+      &times;
+     </button>
+    </div>
+    <img alt="Your BloodLink certificate of appreciation" class="cert-preview" id="certPreview"/>
+    <p class="cert-status" id="certModalStatus" role="status">
+    </p>
+    <div class="modal-actions">
+     <button class="secondary" id="certDownload" type="button">
+      Download
+     </button>
+     <button class="primary" id="certSend" type="button">
+      Email me the certificate
+     </button>
+    </div>
+   </div>
   </div>
 <script>
 (() => {

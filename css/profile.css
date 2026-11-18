@@ -1377,3 +1377,89 @@ body {
   .brand-mark,.profile-dropdown{animation:none}
   .main-nav-link,.main-nav-link:after,.chevron,.profile-chip,.dropdown-item{transition:none}
 }
+/* ---------- Certificate: progress card + preview modal ---------- */
+.cert-card {
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px dashed #e8c3cb;
+    border-radius:12px;
+    background:#fffafb;
+}
+.cert-card.is-earned {
+    border-style:solid;
+    border-color:#c9ecdc;
+    background:#f1fbf6;
+}
+.cert-ic {
+    display:grid;
+    place-items:center;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    border-radius:12px;
+    background:#fff0f3;
+    font-size:20px;
+}
+.cert-card.is-earned .cert-ic {
+    background:#dff5ea;
+}
+.cert-body {
+    flex:1;
+    min-width:0;
+}
+.cert-body strong {
+    font-size:12px;
+}
+.cert-body p {
+    font-size:10px;
+    color:#91919c;
+    margin:4px 0 8px;
+    line-height:1.5;
+}
+.cert-card .track {
+    margin:0;
+}
+.cert-card.is-earned .track span {
+    background:linear-gradient(90deg,#16a36f,#52c99c);
+}
+.cert-actions {
+    display:flex;
+    gap:8px;
+    flex-shrink:0;
+}
+.cert-actions [hidden] {
+    display:none;
+}
+.cert-modal {
+    width:min(760px,100%);
+}
+.cert-preview {
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:1600/1130;
+    background:#fff6f7;
+    border:1px solid #f0e5e9;
+    border-radius:10px;
+    box-shadow:0 10px 30px #38212a14;
+}
+.cert-status {
+    font-size:11px;
+    color:#797a86;
+    margin:12px 0 0;
+    line-height:1.6;
+}
+@media(max-width:680px) {
+    .cert-card {
+        flex-wrap:wrap;
+    }
+    .cert-actions {
+        width:100%;
+    }
+    .cert-actions button {
+        flex:1;
+    }
+}

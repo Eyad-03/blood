@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/bloodRequests.css">
+  <link rel="stylesheet" href="/css/chat.css">
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div>
@@ -21,6 +22,7 @@
     <a href="/html/home.html" class="main-nav-link">Home</a>
     <a href="/html/donorSearch.html" class="main-nav-link active" aria-current="page">Find Donors</a>
     <a href="/html/bloodRequests.html" class="main-nav-link">My Requests</a>
+    <a href="/html/donorAppointments.html" class="main-nav-link">Book Donation</a>
   </nav>
 
   <nav class="top-actions" aria-label="Account">
@@ -139,6 +141,7 @@
       <div class="contact-notice"><span>ⓘ</span><p>Coordinate the donation through a licensed hospital or medical facility. Please respect the donor’s privacy and do not share their contact details with others.</p></div>
       <div class="modal-actions contact-actions">
         <button class="outline-btn" data-close="contactModal">Close</button>
+        <button class="primary-btn" id="chatDonorBtn" type="button">Chat with donor</button>
         <a class="primary-btn hidden" id="emailDonorBtn" href="#">Email donor</a>
         <a class="primary-btn hidden" id="callDonorBtn" href="#">Call donor</a>
       </div>
@@ -146,6 +149,7 @@
   </div>
 
   <div class="toast" id="toast" role="status"></div>
+  <script src="/js/chat.js"></script>
   <script src="/js/bloodRequests.js"></script>
   <script>
   (() => {

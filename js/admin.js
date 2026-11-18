@@ -7,7 +7,7 @@
    ===================================================================== */
 const $=id=>document.getElementById(id);
 const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const KEYS={accounts:"bloodlinkAdminAccounts",reports:"bloodlinkAdminReports",log:"bloodlinkAdminLog",demoBookings:"bloodlinkAdminDemoBookings",hallRequests:"mubadartiHallRequests"};
+const KEYS={accounts:"bloodlinkAdminAccounts",reports:"bloodlinkAdminReports",log:"bloodlinkAdminLog",demoBookings:"bloodlinkAdminDemoBookings",hallRequests:"mubadartiHallRequests",users:"bloodlinkAdminUsers",siteUsers:"bloodlinkUsers"};
 const read=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}};
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -71,10 +71,25 @@ const seedLog=()=>[
  {text:"Resolved report RP-3090",icon:"check",color:"#13895f",at:ago(6)}
 ];
 
+const U=(id,name,city,bloodType,joined,last,donations,extra={})=>({id,name,email:`${name.toLowerCase().replace(/[^a-z]+/g,".")}@example.com`,phone:"079"+String(1000000+parseInt(id.slice(4))*137).slice(0,7),city,bloodType,joinedAt:ago(...joined),lastActive:ago(...last),donations,status:"Active",...extra});
+const seedUsers=()=>[
+ U("USR-2031","Reem Tawalbeh","Irbid","A+",[0,6],[0,1],0),
+ U("USR-2029","Hala Mahmoud","Amman","O+",[41],[0,2],4),
+ U("USR-2027","Zaid Fawzi","Amman","B+",[18],[2,1],2),
+ U("USR-2024","Noor Hamdan","Zarqa","AB+",[26],[1],7),
+ U("USR-2022","Omar Haddad","Amman","O-",[55],[1,4],9),
+ U("USR-2019","Yousef Saleh","Jerash","B-",[63],[4],3),
+ U("USR-2016","Dina Abu Zeid","Aqaba","A-",[80],[6],5),
+ U("USR-2012","Tariq Al-Sayed","Mafraq","O+",[97],[12],11),
+ U("USR-2009","Layth Masri","Irbid","AB-",[120],[33],1),
+ U("USR-2005","Basel Omari","Amman","B+",[140],[20],0,{status:"Suspended",suspendReason:"Repeated no-shows and fake appointment requests.",suspendedAt:ago(20)})
+];
+
 let accounts=read(KEYS.accounts,null)||seedAccounts();
 let reports=read(KEYS.reports,null)||seedReports();
 let activity=read(KEYS.log,null)||seedLog();
 if(!read(KEYS.demoBookings,null))save(KEYS.demoBookings,seedBookings());
+if(!read(KEYS.users,null))save(KEYS.users,seedUsers());
 save(KEYS.accounts,accounts);save(KEYS.reports,reports);save(KEYS.log,activity);
 
 /* Bookings: real requests come from hall.html storage; demo ones live in an admin-only key. */
@@ -89,9 +104,26 @@ function updateBooking(id,patch){
   if(r){Object.assign(r,patch,{updatedAt:new Date().toISOString()});(r.history=r.history||[]).push({status:r.status,at:r.updatedAt});save(key,rows);return r}
  }
 }
+/* Users: donors from the public site (KEYS.siteUsers → change the key if your signup page stores them elsewhere),
+   demo donors in an admin-only key, plus every hospital/center account from the verification queue. */
+function allUsers(){
+ const live=read(KEYS.siteUsers,[]).map(u=>({...u,id:String(u.id||u.email||u.name),name:u.name||u.fullName||"Unnamed user",email:u.email||"—",phone:u.phone||"—",city:u.city||"—",bloodType:u.bloodType||"—",joinedAt:u.joinedAt||u.createdAt||new Date(0).toISOString(),lastActive:u.lastActive||null,donations:Number(u.donations)||0,status:u.status==="Suspended"?"Suspended":"Active",role:"donor",_src:"real"}));
+ const demo=read(KEYS.users,[]).map(u=>({...u,role:"donor",_src:"demo"}));
+ const orgs=accounts.map(a=>({id:a.id,name:a.name,email:a.email,phone:a.phone,city:a.city,joinedAt:a.registeredAt,lastActive:null,status:a.status,role:a.type==="Hospital"?"hospital":"center",roleLabel:a.type,_src:"org"}));
+ return [...live,...demo,...orgs];
+}
+function updateUser(id,patch){
+ for(const key of [KEYS.siteUsers,KEYS.users]){
+  const rows=read(key,[]);const r=rows.find(x=>String(x.id||x.email||x.name)===id);
+  if(r){Object.assign(r,patch);save(key,rows);return r}
+ }
+}
 function logAction(text,icon,color){activity.unshift({text,icon,color,at:new Date().toISOString()});activity=activity.slice(0,30);save(KEYS.log,activity)}
 
 /* ---------------- Status helpers ---------------- */
+const roleLabel=u=>u.role==="donor"?"Donor":u.roleLabel;
+const roleTag=u=>`<span class="role-tag ${u.role}">${esc(roleLabel(u))}</span>`;
+const userPill=u=>u._src==="org"?accountPill(u.status):`<span class="status-pill ${u.status==="Suspended"?"rejected":"active"}">${esc(u.status)}</span>`;
 const accountPill=s=>`<span class="status-pill ${s==="Pending"?"pending":s==="Active"?"active":"rejected"}">${s==="Pending"?"Pending review":esc(s)}</span>`;
 const BOOKING_CLASS={"Pending approval":"pending","Approved":"approved","Paid":"paid","Completed":"completed","Rejected":"rejected"};
 const bookingPill=s=>`<span class="status-pill ${BOOKING_CLASS[s]||"pending"}">${esc(s)}</span>`;
@@ -184,6 +216,46 @@ function accountDrawer(a){
  return{body,foot};
 }
 
+/* ---------------- Users ---------------- */
+let userFilter="all";
+const userInTab=(u,f)=>f==="all"||(f==="suspended"?u.status==="Suspended":u.role===f);
+function renderUsers(){
+ const all=allUsers(),q=$("userSearch").value.trim().toLowerCase();
+ document.querySelectorAll("#userTabs [data-count]").forEach(b=>{b.textContent=all.filter(u=>userInTab(u,b.dataset.count)).length});
+ $("navUsers").textContent=all.length;
+ $("usersSubtitle").textContent=`${all.length} registered users — donors, hospitals and centers. Suspend a donor who breaks the rules.`;
+ const rows=all.filter(u=>userInTab(u,userFilter)&&(!q||[u.name,u.email,u.city,u.bloodType,u.id,u.phone,roleLabel(u)].some(v=>String(v||"").toLowerCase().includes(q))))
+  .sort((a,b)=>new Date(b.joinedAt)-new Date(a.joinedAt));
+ $("usersBody").innerHTML=rows.map(u=>`<tr>
+  <td><div class="org-cell">${avatar(u.name)}<div><b>${esc(u.name)}</b><small>${esc(u.email)}</small></div></div></td>
+  <td>${roleTag(u)}</td><td>${esc(u.city)}</td>
+  <td>${u.role==="donor"&&u.bloodType&&u.bloodType!=="—"?`<span class="blood-chip">${esc(u.bloodType)}</span>`:"—"}</td>
+  <td>${fmtDate(u.joinedAt)}<small class="cell-subtext">${timeAgo(u.joinedAt)}${u._src==="real"?" · live":""}</small></td>
+  <td>${u.lastActive?timeAgo(u.lastActive):"—"}</td>
+  <td>${userPill(u)}</td>
+  <td><button class="record-action print" data-open="${u.role==="donor"?"user":"account"}" data-id="${esc(u.id)}">View</button></td></tr>`).join("")
+  ||`<tr><td colspan="8" class="empty-records">No users${q?" match your search":" here"}.</td></tr>`;
+}
+function userDrawer(u){
+ const rel=reports.filter(r=>r.from===u.name),suspended=u.status==="Suspended";
+ const body=`<header class="drawer-head"><svg class="hero-ecg ecg" data-cycles="4" viewBox="0 0 600 60" preserveAspectRatio="none"><path class="ecg-base"/><path class="ecg-trace"/></svg>
+   <div class="org-cell">${avatar(u.name,true)}<div><h2 id="drawerTitle">${esc(u.name)}</h2><p>Donor · ${esc(u.city)} · joined ${timeAgo(u.joinedAt)}</p></div></div>${userPill(u)}</header>
+  <section class="drawer-section"><h3>Profile</h3><div class="info-grid">
+   <div><span>User ID</span><b>${esc(u.id)}</b></div><div><span>Blood type</span><b>${esc(u.bloodType||"—")}</b></div>
+   <div><span>Phone</span><b>${esc(u.phone)}</b></div><div><span>City</span><b>${esc(u.city)}</b></div>
+   <div class="wide"><span>Email</span><b>${esc(u.email)}</b></div></div></section>
+  <section class="drawer-section"><h3>Activity</h3><div class="info-grid">
+   <div><span>Donations</span><b>${Number(u.donations)||0}</b></div><div><span>Last active</span><b>${u.lastActive?timeAgo(u.lastActive):"—"}</b></div>
+   <div><span>Joined</span><b>${fmtDate(u.joinedAt)}</b></div><div><span>Reports filed</span><b>${rel.length}</b></div></div></section>
+  ${rel.length?`<section class="drawer-section"><h3>Reports from this user <small>click to open</small></h3><div class="doc-list">${rel.map(r=>`<div class="doc-row link" data-open="report" data-id="${esc(r.id)}" role="button" tabindex="0"><span class="doc-ic">${ICON.report}</span><div><b>${esc(r.title)}</b><small>${esc(r.id)} · ${esc(r.status)}</small></div></div>`).join("")}</div></section>`:""}
+  ${suspended?`<section class="drawer-section"><div class="final-banner no"><span>${ICON.x}</span><div><b>Account suspended</b><br>${esc(u.suspendReason||"No reason recorded.")}${u.suspendedAt?` · ${timeAgo(u.suspendedAt)}`:""}</div></div></section>`
+   :`<section class="drawer-section"><h3>Suspension reason <small>required to suspend</small></h3><textarea class="note-field" id="decisionNote" placeholder="e.g. Fake appointment requests, abusive messages…"></textarea></section>`}
+  <div style="height:20px"></div>`;
+ const foot=suspended?`<button class="primary-button success" data-act="reactivate-user">Reactivate user <span>→</span></button>`
+  :`<button class="ghost-button danger" data-act="suspend-user">Suspend user</button>`;
+ return{body,foot};
+}
+
 /* ---------------- Bookings ---------------- */
 const STAGES=[["Pending approval","#f0a531",ICON.inbox,"Needs review"],["Approved","#13895f",ICON.check,"Awaiting payment"],["Paid","#3a72c9",ICON.pay,"Ready to complete"],["Completed","#6a4bc4",ICON.star,"Done"],["Rejected","#d41d3d",ICON.x,"Declined"]];
 let bookingFilter="";
@@ -271,9 +343,9 @@ $("reportDetail").addEventListener("click",e=>{
 /* ---------------- Drawer ---------------- */
 let drawerState=null;
 function openDrawer(kind,id){
- const item=kind==="account"?accounts.find(a=>a.id===id):allBookings().find(b=>b.id===id);
+ const item=kind==="account"?accounts.find(a=>a.id===id):kind==="user"?allUsers().find(u=>u.id===id):allBookings().find(b=>b.id===id);
  if(!item)return;drawerState={kind,id};
- const {body,foot}=kind==="account"?accountDrawer(item):bookingDrawer(item);
+ const {body,foot}=kind==="account"?accountDrawer(item):kind==="user"?userDrawer(item):bookingDrawer(item);
  $("drawerBody").innerHTML=body;$("drawerFoot").innerHTML=foot;$("drawerBody").scrollTop=0;
  drawEcg($("drawerBody"));
  $("drawer").classList.add("open");$("drawerBackdrop").classList.add("open");$("drawer").setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
@@ -309,6 +381,10 @@ $("drawer").addEventListener("click",e=>{
   if(a==="revoke"){if(!confirm(`Revoke activation for ${acc.name}? They will lose access until re-verified.`))return;acc.status="Pending";acc.docs.forEach(d=>d.checked=false);logAction(`Revoked activation of ${acc.name}`,"x","#d41d3d");toast(`${acc.name} moved back to pending.`)}
   if(a==="reopen-account"){acc.status="Pending";delete acc.reason;logAction(`Reopened ${acc.name} for review`,"clock","#bd7c12");toast(`${acc.name} moved back to pending.`)}
   save(KEYS.accounts,accounts);
+ }else if(kind==="user"){
+  const u=allUsers().find(x=>x.id===id);
+  if(a==="suspend-user"){if(!note){shakeField($("decisionNote"),"Write the suspension reason so it is on record.");return}updateUser(id,{status:"Suspended",suspendReason:note,suspendedAt:new Date().toISOString()});logAction(`Suspended ${u.name}`,"x","#d41d3d");toast(`${u.name} was suspended.`)}
+  if(a==="reactivate-user"){updateUser(id,{status:"Active",suspendReason:undefined,suspendedAt:undefined});logAction(`Reactivated ${u.name}`,"check","#13895f");bloodBurst("#13895f");toast(`${u.name} is active again.`)}
  }else{
   if(a==="approve"){updateBooking(id,{status:"Approved",adminNote:note||"Your request has been approved. You can now pay to confirm."});logAction(`Approved booking ${id}`,"check","#13895f");bloodBurst("#13895f");toast(`${id} approved — payment is now unlocked for the requester.`)}
   if(a==="reject-booking"){if(!note){shakeField($("decisionNote"),"Add a short reason for the requester.");return}updateBooking(id,{status:"Rejected",adminNote:note});logAction(`Rejected booking ${id}`,"x","#d41d3d");toast(`${id} rejected.`)}
@@ -350,7 +426,7 @@ function updateBookingChart(rows){
 }
 
 /* ---------------- Navigation ---------------- */
-const LABELS={overview:"Overview",accounts:"Account verification",bookings:"Hall bookings",reports:"Reports"};
+const LABELS={overview:"Overview",users:"Users",accounts:"Account verification",bookings:"Hall bookings",reports:"Reports"};
 function navigate(section){
  if(!LABELS[section])section="overview";
  document.querySelectorAll(".page-section").forEach(el=>{const on=el.id===section;el.classList.toggle("hidden-section",!on);el.classList.toggle("visible",on)});
@@ -367,14 +443,15 @@ document.querySelectorAll(".nav-item[data-section]").forEach(a=>a.addEventListen
 document.addEventListener("click",e=>{
  const go=e.target.closest("[data-go]");if(go){e.preventDefault();navigate(go.dataset.go);return}
  const open=e.target.closest("[data-open]");
- if(open){const k=open.dataset.open;if(k==="report"){navigate("reports");openReport(open.dataset.id)}else openDrawer(k,open.dataset.id)}
+ if(open){const k=open.dataset.open;if(k==="report"){closeDrawer();navigate("reports");openReport(open.dataset.id)}else openDrawer(k,open.dataset.id)}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches?.(".queue-item"))e.target.click()});
 $("accountTabs").addEventListener("click",e=>{const t=e.target.closest("[data-filter]");if(!t)return;accountFilter=t.dataset.filter;$("accountTabs").querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===t));renderAccounts()});
 $("reportTabs").addEventListener("click",e=>{const t=e.target.closest("[data-filter]");if(!t)return;reportFilter=t.dataset.filter;$("reportTabs").querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===t));renderReports()});
+$("userTabs").addEventListener("click",e=>{const t=e.target.closest("[data-filter]");if(!t)return;userFilter=t.dataset.filter;$("userTabs").querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===t));renderUsers()});
 $("pipeline").addEventListener("click",e=>{const s=e.target.closest("[data-stage]");if(!s)return;bookingFilter=bookingFilter===s.dataset.stage?"":s.dataset.stage;renderBookings()});
 $("clearBookingFilter").addEventListener("click",()=>{bookingFilter="";renderBookings()});
-$("accountSearch").addEventListener("input",renderAccounts);$("bookingSearch").addEventListener("input",renderBookings);$("reportSearch").addEventListener("input",renderReports);
+$("accountSearch").addEventListener("input",renderAccounts);$("userSearch").addEventListener("input",renderUsers);$("bookingSearch").addEventListener("input",renderBookings);$("reportSearch").addEventListener("input",renderReports);
 $("menuButton").addEventListener("click",()=>{const o=$("sidebar").classList.toggle("open");$("menuButton").setAttribute("aria-expanded",String(o))});
 document.addEventListener("click",e=>{if(window.innerWidth<=760&&$("sidebar").classList.contains("open")&&!$("sidebar").contains(e.target)&&!$("menuButton").contains(e.target)){$("sidebar").classList.remove("open");$("menuButton").setAttribute("aria-expanded","false")}});
 $("notificationButton").addEventListener("click",()=>{const c=counts();toast(`${c.pendingAcc.length} account${c.pendingAcc.length===1?"":"s"} to verify, ${c.todoBookings.length} booking${c.todoBookings.length===1?"":"s"} to process, ${c.openReports.filter(r=>!r.read).length} unread report${c.openReports.filter(r=>!r.read).length===1?"":"s"}.`)});
@@ -382,9 +459,10 @@ const HOME_URL="home.html"; // غيّر هذا السطر إذا كان اسم �
 $("logoutButton").addEventListener("click",()=>{window.location.href=HOME_URL});
 
 // New booking submitted from hall.html in another tab → refresh live.
-window.addEventListener("storage",e=>{if(e.key===KEYS.hallRequests){renderAll();if(drawerState?.kind==="booking")refreshDrawer();toast("Booking requests updated.")}});
+window.addEventListener("storage",e=>{if(e.key===KEYS.siteUsers){renderUsers();if(drawerState?.kind==="user")refreshDrawer()}
+ if(e.key===KEYS.hallRequests){renderAll();if(drawerState?.kind==="booking")refreshDrawer();toast("Booking requests updated.")}});
 
-function renderAll(){renderOverview();renderAccounts();renderBookings();renderReports()}
+function renderAll(){renderOverview();renderUsers();renderAccounts();renderBookings();renderReports()}
 
 /* ---------------- Motion layer (shared with hospital dashboard) ---------------- */
 let toastTimer;

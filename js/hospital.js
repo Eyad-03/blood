@@ -94,11 +94,12 @@ function navigate(section){
  });
  document.querySelectorAll(".nav-item").forEach(a=>a.classList.toggle("active",
    a.dataset.section===section || (section==="all-requests"&&a.dataset.section==="donation-records") || (section==="inventory"&&a.dataset.section==="overview")));
- const labels={overview:"Overview","donation-records":"Donation verification",requests:"Donation verification",inventory:"Blood inventory",donors:"Donor directory",reports:"Reports & analytics",profile:"Hospital profile",settings:"Settings","all-requests":"All blood requests",ads:"Advertisements","hall-bookings":"Hall bookings"};
+ const labels={overview:"Overview","donation-records":"Donation verification",requests:"Donation verification",inventory:"Blood inventory",donors:"Donor directory",reports:"Reports & analytics",profile:"Hospital profile",settings:"Settings","all-requests":"All blood requests",ads:"Advertisements","hall-bookings":"Hall bookings",appointments:"Donation appointments"};
  $("crumbTitle").textContent=labels[section]||"Overview";
  if(section==="donation-records"||section==="all-requests")renderRecords();
  if(section==="inventory")renderInventory();
  if(section==="donors")renderDonors();
+ if(section==="appointments"&&typeof renderAppointments==="function")renderAppointments();
  if(section==="ads"&&typeof renderAds==="function"){renderAds();updateAdPreview()}
  if(section==="hall-bookings"&&typeof window.renderHallBookings==="function")window.renderHallBookings();
  if(section==="reports"&&reportChart)setTimeout(()=>reportChart.resize(),80);
@@ -172,7 +173,7 @@ $("exportReport").addEventListener("click",()=>{
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="bloodlink-donation-verification-report.csv";a.click();URL.revokeObjectURL(url);toast("Donation verification CSV exported.");
 });
 $("dismissAlert").addEventListener("click",()=>{const b=$("overview").querySelector(".alert-banner");if(!b)return;if(reduceMotion){b.remove();return}b.animate([{opacity:1,transform:"none",height:b.offsetHeight+"px",marginBottom:"20px"},{opacity:0,transform:"translateX(30px)",height:"0px",marginBottom:"0px",paddingTop:"0px",paddingBottom:"0px"}],{duration:450,easing:"cubic-bezier(.22,.8,.2,1)"}).onfinish=()=>b.remove();});
-$("notificationButton").addEventListener("click",()=>{const low=BLOOD_TYPES.filter(t=>(Number(inventory[t])||0)<15).length,pending=records.filter(r=>r.status!=="Verified").length;const due=typeof window.hallPaymentsDue==="function"?window.hallPaymentsDue():0;toast(`You have ${low} low-stock alert${low===1?"":"s"}, ${pending} record${pending===1?"":"s"} awaiting verification${due?` and ${due} hall booking${due===1?"":"s"} ready for payment`:""}.`)});
+$("notificationButton").addEventListener("click",()=>{const low=BLOOD_TYPES.filter(t=>(Number(inventory[t])||0)<15).length,pending=records.filter(r=>r.status!=="Verified").length;const due=typeof window.hallPaymentsDue==="function"?window.hallPaymentsDue():0;const apPend=typeof apptPendingCount==="function"?apptPendingCount():0;toast(`You have ${low} low-stock alert${low===1?"":"s"}, ${pending} record${pending===1?"":"s"} awaiting verification${apPend?`, ${apPend} appointment request${apPend===1?"":"s"} to review`:""}${due?` and ${due} hall booking${due===1?"":"s"} ready for payment`:""}.`)});
 $("menuButton").addEventListener("click",()=>{
  const opened=$("sidebar").classList.toggle("open");
  $("menuButton").setAttribute("aria-expanded",String(opened));
@@ -489,5 +490,175 @@ function initAds(){
  window.addEventListener("storage",e=>{if(e.key===ADS.KEY){ads=ADS.load();renderAds()}});
 }
 initAds();
+/* =====================================================================
+   Donation appointments — donors book a visit (donorAppointments.html),
+   the hospital reviews the eligibility answers and confirms a date + time.
+   Shared storage key: bloodlinkDonationAppointments
+   ===================================================================== */
+const APPT_KEY="bloodlinkDonationAppointments",APPT_FACILITY="ORG-1031",APPT_CAPACITY=3,APPT_OPEN="08:00",APPT_CLOSE="16:00";
+let appts=read(APPT_KEY,[]);
+let apptFilter="All",apptCurrent=null,apptAction=null;
+const apptPad=n=>String(n).padStart(2,"0");
+const apptYmd=d=>`${d.getFullYear()}-${apptPad(d.getMonth()+1)}-${apptPad(d.getDate())}`;
+const apptToday=()=>apptYmd(new Date());
+const apptAdd=(s,n)=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return apptYmd(d)};
+const apptIsFri=s=>new Date(s+"T12:00:00").getDay()===5;
+const apptDate=(s,long)=>{if(!s)return "—";const d=new Date(s+"T12:00:00");return Number.isNaN(d.getTime())?esc(s):d.toLocaleDateString("en-GB",long?{weekday:"long",day:"numeric",month:"long",year:"numeric"}:{weekday:"short",day:"numeric",month:"short",year:"numeric"})};
+const apptTime=t=>{if(!/^\d{2}:\d{2}$/.test(t||""))return "—";const [h,m]=t.split(":").map(Number);return `${h%12||12}:${apptPad(m)} ${h<12?"AM":"PM"}`};
+const myAppts=()=>appts.filter(a=>a.facilityId===APPT_FACILITY);
+const apptPendingCount=()=>myAppts().filter(a=>a.status==="Pending").length;
+const apptSave=()=>save(APPT_KEY,appts);
+
+/* Demo requests so the section isn't empty the first time (added once). */
+(function seedAppointments(){
+ try{if(localStorage.getItem("bloodlinkAppointmentsSeeded"))return}catch{return}
+ const t=apptToday(),open=n=>{let d=apptAdd(t,n);while(apptIsFri(d))d=apptAdd(d,1);return d},iso=n=>new Date(Date.now()-n*3600e3).toISOString();
+ const base=(id,name,phone,email,type,rd,rt,el,rest)=>({id,ownerId:"demo",facilityId:APPT_FACILITY,facilityName:"Al Hayat Hospital",facilityType:"Hospital",facilityCity:"Irbid",donor:{name,phone,email,type},requestedDate:rd,requestedTime:rt,notes:"",eligibility:el,status:"Pending",confirmedDate:"",confirmedTime:"",hospitalNote:"",declineReason:"",donorNotified:true,createdAt:iso(5),updatedAt:iso(5),...rest});
+ const clean={age:29,weight:78,lastDonation:"",well:"yes",meds:"no",medsDetail:"",travel:"no",travelDetail:"",procedure:"no",state:"ok",flags:[]};
+ const demo=[
+  base("AP-2026-011","Omar Haddad","0795551122","omar.haddad@example.com","A-",open(2),"09:00",{...clean,age:34,weight:84,lastDonation:apptAdd(t,-120)},{createdAt:iso(2),notes:"I can only come in the morning."}),
+  base("AP-2026-012","Hala Mahmoud","0786667744","hala.mahmoud@example.com","B+",open(3),"11:30",{...clean,age:26,weight:61,meds:"yes",medsDetail:"Antibiotics (finished 3 days ago)",travel:"yes",travelDetail:"Turkey, 2 months ago",state:"review",flags:["Takes medication: Antibiotics (finished 3 days ago)","Travelled abroad in the last 3 months: Turkey, 2 months ago"]},{createdAt:iso(9)}),
+  base("AP-2026-013","Zaid Fawzi","0777894561","zaid.fawzi@example.com","AB+",open(1),"10:30",{...clean,age:41,weight:92,lastDonation:apptAdd(t,-200)},{status:"Approved",confirmedDate:open(1),confirmedTime:"10:30",hospitalNote:"Please bring your ID.",createdAt:iso(30),updatedAt:iso(20)}),
+  base("AP-2026-014","Sara Nasser","0798123400","sara.nasser@example.com","O-",apptAdd(t,-5),"09:30",{...clean,age:31,weight:65},{status:"Completed",confirmedDate:apptAdd(t,-5),confirmedTime:"09:30",createdAt:iso(190),updatedAt:iso(120)})
+ ];
+ const have=new Set(appts.map(a=>a.id));
+ appts=[...appts,...demo.filter(d=>!have.has(d.id))];apptSave();
+ try{localStorage.setItem("bloodlinkAppointmentsSeeded","1")}catch{}
+})();
+
+function apptStatusPill(s){const m={Pending:["pending","Pending"],Approved:["verified","Confirmed"],Completed:["matched","Completed"],Declined:["declined","Declined"],Cancelled:["stopped","Cancelled"]}[s]||["pending",s];return `<span class="status-pill ${m[0]}">${m[1]}</span>`}
+function apptEligPill(e){const s=e&&e.state;return s==="ok"?'<span class="status-pill fulfilled">Eligible</span>':s==="review"?'<span class="status-pill pending">Needs review</span>':'<span class="status-pill stopped">—</span>'}
+const apptGroup=a=>a.status==="Declined"||a.status==="Cancelled"?"Closed":a.status;
+function renderAppointments(){
+ const list=myAppts(),t=apptToday();
+ const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
+ const pending=list.filter(a=>a.status==="Pending");
+ set("apPending",pending.length);
+ set("apUpcoming",list.filter(a=>a.status==="Approved"&&a.confirmedDate>=t).length);
+ set("apToday",list.filter(a=>a.status==="Approved"&&a.confirmedDate===t).length);
+ set("apReview",pending.filter(a=>a.eligibility&&a.eligibility.state==="review").length);
+ set("navAppointments",pending.length);
+ document.querySelectorAll("[data-ap-count]").forEach(el=>{const k=el.dataset.apCount;el.textContent=k==="All"?list.length:list.filter(a=>apptGroup(a)===k).length});
+ const q=($("apSearch")?.value||"").trim().toLowerCase();
+ const rows=list.filter(a=>(apptFilter==="All"||apptGroup(a)===apptFilter)&&(!q||[a.id,a.donor?.name,a.donor?.phone,a.donor?.email,a.donor?.type].some(v=>String(v||"").toLowerCase().includes(q))))
+  .sort((a,b)=>{const pa=a.status==="Pending"?0:1,pb=b.status==="Pending"?0:1;if(pa!==pb)return pa-pb;return pa===0?(a.requestedDate+a.requestedTime).localeCompare(b.requestedDate+b.requestedTime):String(b.updatedAt||"").localeCompare(String(a.updatedAt||""))});
+ set("apCount",rows.length);
+ $("apptBody").innerHTML=rows.length?rows.map(a=>{
+  const when=a.status==="Approved"?`<b>${apptDate(a.confirmedDate)}</b><small class="cell-subtext">Confirmed · ${apptTime(a.confirmedTime)}</small>`:`<b>${apptDate(a.requestedDate)}</b><small class="cell-subtext">Requested · ${apptTime(a.requestedTime)}</small>`;
+  const label=a.status==="Pending"?"Review":a.status==="Approved"?"Manage":"View";
+  return `<tr><td><span class="request-id">${esc(a.id)}</span></td><td><b>${esc(a.donor?.name)}</b><small class="cell-subtext">${esc(a.donor?.phone)}</small></td><td><span class="blood-type">${esc(a.donor?.type)}</span></td><td>${when}</td><td>${apptEligPill(a.eligibility)}</td><td>${apptStatusPill(a.status)}</td><td><div class="record-actions"><button class="record-action ${a.status==="Pending"?"review":"print"}" data-appt-open="${esc(a.id)}">${label}</button></div></td></tr>`}).join(""):'<tr><td colspan="7" class="empty-records">No appointment requests here yet.</td></tr>';
+}
+
+/* ---------- Review dialog ---------- */
+const apptDlg=$("apptDialog");
+function apptTimeOptions(selected){
+ const [oh,om]=APPT_OPEN.split(":").map(Number),[ch,cm]=APPT_CLOSE.split(":").map(Number);const out=[];
+ for(let m=oh*60+om;m<=ch*60+cm-30;m+=30){const t=`${apptPad(Math.floor(m/60))}:${apptPad(m%60)}`;out.push(t)}
+ if(selected&&!out.includes(selected)){out.push(selected);out.sort()}
+ return out.map(t=>`<option value="${t}"${t===selected?" selected":""}>${apptTime(t)}</option>`).join("");
+}
+function openAppointment(id){
+ apptCurrent=id;apptAction=null;renderApptDialog();
+ if(typeof apptDlg.showModal==="function")apptDlg.showModal();else apptDlg.setAttribute("open","");
+}
+function closeAppointment(){if(apptDlg.open)apptDlg.close();else apptDlg.removeAttribute("open");apptCurrent=null;apptAction=null}
+function renderApptDialog(){
+ const a=appts.find(x=>x.id===apptCurrent);if(!a)return;
+ const e=a.eligibility||{},d=a.donor||{};
+ const row=(l,v,warn)=>`<li class="${warn?"warn":""}"><span>${l}</span><b>${v}</b></li>`;
+ const yn=(v,detail)=>v==="yes"?`Yes${detail?` — ${esc(detail)}`:""}`:"No";
+ const answers=[
+  row("Age",`${Number(e.age)||"—"} years`),row("Weight",`${Number(e.weight)||"—"} kg`),
+  row("Last donation",e.lastDonation?apptDate(e.lastDonation):"Never donated"),
+  row("Feeling well today",e.well==="no"?"No":"Yes",e.well==="no"),
+  row("Taking medication",yn(e.meds,e.medsDetail),e.meds==="yes"),
+  row("Travelled abroad (3 months)",yn(e.travel,e.travelDetail),e.travel==="yes"),
+  row("Tattoo, surgery or dental (6 months)",yn(e.procedure),e.procedure==="yes")].join("");
+ const verdict=e.state==="review"?`<div class="ap-verdict review">! Flagged answers — check these before approving.</div>`:`<div class="ap-verdict ok">✓ All eligibility answers look fine.</div>`;
+ const editable=a.status==="Pending"||a.status==="Approved";
+ const t=apptToday();
+ let decide="",foot="";
+ if(editable){
+  const cd=a.confirmedDate||(a.requestedDate<t?t:a.requestedDate),ct=a.confirmedTime||a.requestedTime;
+  decide=`<div><h3 class="ap-sec-title">${a.status==="Pending"?"CONFIRM A DATE AND TIME":"CONFIRMED APPOINTMENT"}</h3>
+   <div class="ap-decide">
+    <label>Date<input type="date" id="apptConfDate" min="${t}" value="${esc(cd)}"></label>
+    <label>Time<select id="apptConfTime">${apptTimeOptions(ct)}</select></label>
+    <p class="ap-cap" id="apptCap"></p>
+    <label class="wide">Message to the donor <small class="field-hint">optional</small><textarea id="apptNote" rows="2" maxlength="160" placeholder="e.g. Please bring your ID and arrive 10 minutes early.">${esc(a.hospitalNote||"")}</textarea></label>
+    ${a.status==="Approved"?`<label class="check-label ap-stock"><input type="checkbox" id="apptStock" checked> When marked completed: add 1 unit to the ${esc(d.type)} stock and create a donation record</label>`:""}
+    ${apptAction?`<label class="wide ap-reason">${apptAction==="decline"?"Reason for declining":"Reason for cancelling"} <small class="field-hint">shown to the donor</small><textarea id="apptReason" rows="2" maxlength="160" placeholder="${apptAction==="decline"?"e.g. Please wait 2 weeks after finishing antibiotics.":"e.g. We are closed that day due to maintenance."}"></textarea></label>`:""}
+   </div></div>`;
+  if(apptAction)foot=`<button class="secondary-button" type="button" data-appt-act="back">Back</button><button class="primary-button" type="button" data-appt-act="${apptAction}-go">${apptAction==="decline"?"Confirm decline":"Confirm cancellation"}</button>`;
+  else if(a.status==="Pending")foot=`<button class="secondary-button danger" type="button" data-appt-act="decline">Decline…</button><button class="primary-button" type="button" data-appt-act="approve">Approve &amp; notify donor <span>→</span></button>`;
+  else foot=`<button class="secondary-button danger" type="button" data-appt-act="cancel">Cancel appointment…</button><button class="secondary-button" type="button" data-appt-act="complete">Mark completed</button><button class="primary-button" type="button" data-appt-act="approve">Update time &amp; notify <span>→</span></button>`;
+ }else{
+  const msg=a.status==="Declined"?`Declined. Reason sent to the donor: <b>${esc(a.declineReason||"—")}</b>`:a.status==="Cancelled"?`Cancelled${a.cancelledBy==="donor"?" by the donor":" by the hospital"}.${a.declineReason?` Reason: <b>${esc(a.declineReason)}</b>`:""}`:`Completed. Donation took place on <b>${apptDate(a.confirmedDate||a.requestedDate)}</b> at <b>${apptTime(a.confirmedTime)}</b>.`;
+  decide=`<div class="ap-summary-done">${msg}</div>`;
+  foot=`<button class="primary-button" type="button" data-appt-act="close">Close</button>`;
+ }
+ $("apptDialogBody").innerHTML=`<header class="checkout-head"><div><span class="section-kicker">DONATION APPOINTMENT · ${esc(a.id)}</span><h2 id="apptTitle">${esc(d.name)}</h2></div><button class="checkout-close" type="button" data-appt-act="close" aria-label="Close">×</button></header>
+  <div class="ap-donor-grid"><div><small>PHONE</small><b><a href="tel:${esc(d.phone)}">${esc(d.phone)}</a></b></div><div><small>BLOOD TYPE</small><b>${esc(d.type)}</b></div><div><small>EMAIL</small><b>${d.email?`<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>`:"—"}</b></div><div><small>STATUS</small><b>${apptStatusPill(a.status)}</b></div></div>
+  <div class="ap-requested"><span>Requested <b>${apptDate(a.requestedDate,true)} · ${apptTime(a.requestedTime)}</b></span>${a.notes?`<p class="ap-notes" style="flex-basis:100%;margin:0">“${esc(a.notes)}”</p>`:""}</div>
+  <div><h3 class="ap-sec-title">ELIGIBILITY ANSWERS</h3><ul class="ap-answers">${answers}</ul><div style="margin-top:10px">${verdict}</div></div>
+  ${decide}<div class="ap-dialog-actions">${foot}</div>`;
+ updateApptCapacity();
+}
+function updateApptCapacity(){
+ const el=$("apptCap");if(!el)return;
+ const d=$("apptConfDate")?.value,t=$("apptConfTime")?.value;if(!d||!t){el.textContent="";return}
+ const n=myAppts().filter(x=>x.id!==apptCurrent&&x.status==="Approved"&&x.confirmedDate===d&&x.confirmedTime===t).length;
+ el.className="ap-cap"+(n>=APPT_CAPACITY?" warn":"");
+ el.textContent=n===0?"No other donors are booked at this time.":n>=APPT_CAPACITY?`This slot is full (${n} donors already confirmed). Consider another time.`:`${n} other donor${n===1?" is":"s are"} already confirmed at this time.`;
+}
+function apptNextDvId(){return `DV-${new Date().getFullYear()}-${String(Math.max(0,...records.map(r=>Number(String(r.id).split("-").pop())||0))+1).padStart(3,"0")}`}
+function apptDecide(act){
+ const a=appts.find(x=>x.id===apptCurrent);if(!a)return;
+ const now=new Date().toISOString(),t=apptToday();
+ if(act==="approve"){
+  const d=$("apptConfDate").value,tm=$("apptConfTime").value;
+  if(!d||!tm){toast("Please choose a date and time.");return}
+  if(d<t){toast("The date can't be in the past.");return}
+  if(apptIsFri(d)){toast("Fridays are closed. Please choose another day.");return}
+  const wasPending=a.status==="Pending";
+  Object.assign(a,{status:"Approved",confirmedDate:d,confirmedTime:tm,hospitalNote:$("apptNote").value.trim(),declineReason:"",donorNotified:false,updatedAt:now});
+  apptSave();renderAppointments();closeAppointment();bloodBurst("#13895f");
+  toast(`${wasPending?"Approved":"Updated"}. ${a.donor.name} will see ${apptDate(d)} at ${apptTime(tm)}.`);return;
+ }
+ if(act==="decline"||act==="cancel"){apptAction=act;renderApptDialog();$("apptReason")?.focus();return}
+ if(act==="back"){apptAction=null;renderApptDialog();return}
+ if(act==="decline-go"||act==="cancel-go"){
+  const reason=($("apptReason")?.value||"").trim();
+  if(reason.length<3){toast("Please write a short reason for the donor.");$("apptReason")?.focus();return}
+  const declining=act==="decline-go";
+  Object.assign(a,{status:declining?"Declined":"Cancelled",declineReason:reason,cancelledBy:declining?a.cancelledBy:"hospital",donorNotified:false,updatedAt:now});
+  apptSave();renderAppointments();closeAppointment();toast(declining?`Request ${a.id} declined. The donor was notified.`:`Appointment ${a.id} cancelled. The donor was notified.`);return;
+ }
+ if(act==="complete"){
+  const addStock=!!$("apptStock")?.checked,type=a.donor.type;
+  Object.assign(a,{status:"Completed",donorNotified:false,updatedAt:now});apptSave();
+  if(addStock){
+   const known=BLOOD_TYPES.includes(type);
+   if(known){inventory[type]=(Number(inventory[type])||0)+1;save("bloodlinkHospitalInventory",inventory);renderInventory()}
+   records.unshift({id:apptNextDvId(),donor:a.donor.name,recipient:"Blood bank stock",type:known?type:"—",units:1,date:a.confirmedDate||t,status:"Verified",notes:`Appointment ${a.id}`});
+   save("bloodlinkDonationRecords",records);renderRecords();
+  }
+  renderAppointments();closeAppointment();bloodBurst("#13895f");toast(`${a.donor.name}'s donation was completed${addStock?" and added to stock":""}.`);return;
+ }
+ if(act==="close")closeAppointment();
+}
+function initAppointments(){
+ if(!$("apptBody"))return;
+ $("apptBody").addEventListener("click",e=>{const b=e.target.closest("[data-appt-open]");if(b)openAppointment(b.dataset.apptOpen)});
+ document.querySelectorAll("[data-ap-filter]").forEach(b=>b.addEventListener("click",()=>{apptFilter=b.dataset.apFilter;document.querySelectorAll("[data-ap-filter]").forEach(x=>x.classList.toggle("active",x===b));renderAppointments()}));
+ $("apSearch")?.addEventListener("input",renderAppointments);
+ apptDlg.addEventListener("click",e=>{const b=e.target.closest("[data-appt-act]");if(b){apptDecide(b.dataset.apptAct);return}if(e.target===apptDlg)closeAppointment()});
+ apptDlg.addEventListener("change",e=>{if(e.target.id==="apptConfDate"||e.target.id==="apptConfTime")updateApptCapacity()});
+ apptDlg.addEventListener("close",()=>{apptCurrent=null;apptAction=null});
+ window.addEventListener("storage",e=>{if(e.key===APPT_KEY){appts=read(APPT_KEY,[]);renderAppointments();if(apptDlg.open&&apptCurrent&&!apptAction)renderApptDialog()}});
+ renderAppointments();
+}
+initAppointments();
+
 // Open a section directly from the URL (e.g. hospital.html#ads from the public page).
 (function(){const h=location.hash.slice(1);if(h&&document.querySelector(`.nav-item[data-section="${CSS.escape(h)}"]`))navigate(h)})();
